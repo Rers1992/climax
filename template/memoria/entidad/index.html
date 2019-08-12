@@ -1,0 +1,43 @@
+{% extends "memoria/base.html" %}
+{% load staticfiles %}
+{% block content %}
+<h1>Entidades</h1>
+{% if empresas %}
+<div class="table-responsive">
+    <table class="table table-striped table-bordered dataTable no-footer" id="tabla">
+        <thead>
+            <tr>
+                <th>Rut</th>
+                <th>Nombre</th>
+                <th>Razon Social</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for empresa in empresas %}
+            <tr>
+                <td>{{ empresa.rutempresa }}</td>
+                <td>{{ empresa.nombreempresa }}</td>
+                <td>{{ empresa.razonsocialempresa }}</td>
+                <td><input type="button" name="edit" value="Editar" onclick="fn_abreFormModificar('{{ empresa.rutempresa }}')"
+                        class="btn btn-primary">
+                    <input type="button" name="delete" value="Eliminar" onclick="fn_Eliminar('{{ empresa.rutempresa }}')"
+                        class="btn btn-danger"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<h1>no existen empresas registradas</h1>
+{% endif %}
+<input type="button" name="add" value="Agregar Entidad" onclick="fn_abreForm()" class="btn btn-primary">
+<div id="dataModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="employee_detail">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
