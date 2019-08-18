@@ -12,5 +12,5 @@ urlpatterns = [
     path('editarEntidad/<slug:v_rut>', editarEntidad, name = 'editarEntidad'),
     path('editarUsuario/<slug:v_rut>', editarUsuario, name = 'editarUsuario'),
     path('eliminarEntidad/<slug:v_rut>', eliminarEntidad, name = 'eliminarEntidad'),
-    path('login', login_page, name = 'login')
+    path('login', login_page, name = 'login'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

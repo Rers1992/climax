@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import (
+    BaseUserManager, AbstractBaseUser
+)
 
 # Create your models here.
 class MemAno(models.Model):
@@ -42,7 +45,7 @@ class MemDia(models.Model):
         managed = False
         db_table = 'mem_dia'
 
-
+"""
 class MemEmpresa(models.Model):
     rutempresa = models.CharField(primary_key=True, max_length=20)
     nombreempresa = models.CharField(max_length=50, blank=True, null=True)
@@ -52,7 +55,65 @@ class MemEmpresa(models.Model):
 
     class Meta:
         db_table = 'mem_empresa'
+"""
+class MemEmpresa(BaseUserManager):
+    def create_user(rutempresa, self, nombreempresa, razonsocialempresa, estadoempresa, contrasenaempresa=None):
+        if not rutempresa:
+            raise ValueError('la entidad tiene que tener rut')
 
+        user = self.model(
+            rutempresa=self.models.CharField(primary_key=True, max_length=20),
+            nombreempresa = models.CharField(max_length=50, blank=True, null=True),
+            razonsocialempresa = models.CharField(max_length=20, blank=True, null=True),
+            estadoempresa = models.BooleanField('estadoempresa', default = True ),
+        )
+
+        user.set_password(contrasenaempresa)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(rutempresa,self, nombreempresa, razonsocialempresa, estadoempresa, contrasenaempresa):
+        user = self.create_user(
+            rutempresa= models.CharField(primary_key=True, max_length=20),
+            contrasenaempresa=models.CharField(max_length=20, blank=True, null=True),
+            nombreempresa = models.CharField(max_length=50, blank=True, null=True),
+            razonsocialempresa = models.CharField(max_length=20, blank=True, null=True),
+            estadoempresa = models.BooleanField('estadoempresa', default = True ),
+        )
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+    class Meta:
+        db_table = 'mem_empresa'
+
+class MyUser(AbstractBaseUser):
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
+    objects = MemEmpresa()
+
+    USERNAME_FIELD = 'rutempresa'
+    REQUIRED_FIELDS = ['nombreempresa']
+
+    def __str__(self):
+        return self.rutempresa
+    
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        # Simplest possible answer: All admins are staff
+        return self.is_admin
 
 class MemEstacionmeteorologica(models.Model):
     codigoestacion = models.CharField(primary_key=True, max_length=20)
