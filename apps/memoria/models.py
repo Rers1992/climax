@@ -56,45 +56,44 @@ class MemEmpresa(models.Model):
     class Meta:
         db_table = 'mem_empresa'
 """
-class MemEmpresa(BaseUserManager):
-    def create_user(rutempresa, self, nombreempresa, razonsocialempresa, estadoempresa, contrasenaempresa=None):
+class MyUserManager(BaseUserManager):
+    def create_user(self, rutempresa,nombreempresa, razonsocialempresa, password=None):
         if not rutempresa:
             raise ValueError('la entidad tiene que tener rut')
 
         user = self.model(
-            rutempresa=self.models.CharField(primary_key=True, max_length=20),
-            nombreempresa = models.CharField(max_length=50, blank=True, null=True),
-            razonsocialempresa = models.CharField(max_length=20, blank=True, null=True),
-            estadoempresa = models.BooleanField('estadoempresa', default = True ),
+            rutempresa= rutempresa,
+            nombreempresa = nombreempresa,
+            razonsocialempresa = razonsocialempresa,
         )
 
-        user.set_password(contrasenaempresa)
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(rutempresa,self, nombreempresa, razonsocialempresa, estadoempresa, contrasenaempresa):
+    def create_superuser(self, rutempresa, nombreempresa, razonsocialempresa, password):
         user = self.create_user(
-            rutempresa= models.CharField(primary_key=True, max_length=20),
-            contrasenaempresa=models.CharField(max_length=20, blank=True, null=True),
-            nombreempresa = models.CharField(max_length=50, blank=True, null=True),
-            razonsocialempresa = models.CharField(max_length=20, blank=True, null=True),
-            estadoempresa = models.BooleanField('estadoempresa', default = True ),
+            rutempresa,
+            nombreempresa = nombreempresa,
+            razonsocialempresa = razonsocialempresa,
+            password=password,
         )
         user.is_admin = True
         user.save(using=self._db)
         return user
 
-    class Meta:
-        db_table = 'mem_empresa'
-
-class MyUser(AbstractBaseUser):
+class MemEmpresa(AbstractBaseUser):
+    rutempresa= models.CharField(primary_key=True, max_length=20)
+    nombreempresa = models.CharField(max_length=50, blank=True, null=True)
+    razonsocialempresa = models.CharField(max_length=20, blank=True, null=True)
+    #password=models.CharField(max_length=20, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
-    objects = MemEmpresa()
+    objects = MyUserManager()
 
     USERNAME_FIELD = 'rutempresa'
-    REQUIRED_FIELDS = ['nombreempresa']
+    REQUIRED_FIELDS = ['nombreempresa', 'razonsocialempresa']
 
     def __str__(self):
         return self.rutempresa
@@ -114,6 +113,9 @@ class MyUser(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+    class Meta:
+        db_table = 'mem_empresa'
 
 class MemEstacionmeteorologica(models.Model):
     codigoestacion = models.CharField(primary_key=True, max_length=20)

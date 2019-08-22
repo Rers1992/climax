@@ -1,15 +1,15 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import MemEmpresa, MemUsuario
 
-class MemEmpresaForm(forms.ModelForm):
-    class Meta:
+class MemEmpresaForm(UserCreationForm):
+    class Meta(UserCreationForm):
         model = MemEmpresa
-        fields = ['rutempresa', 'nombreempresa', 'razonsocialempresa', 'contrasenaempresa']
+        fields = ['rutempresa', 'nombreempresa', 'razonsocialempresa']
         labels={
             'rutempresa':'Rut',
             'nombreempresa':'Nombre',
-            'razonsocialempresa':'Razón social',
-            'contrasenaempresa':'Contraseña',
+            'razonsocialempresa':'Razón social'
         }
 
 class MemUsurioForm(forms.ModelForm):

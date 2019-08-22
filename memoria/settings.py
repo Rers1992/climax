@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.memoria',
     'crispy_forms',
+    'apps.usuario',
 ]
 
 MIDDLEWARE = [
@@ -70,6 +71,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'memoria.wsgi.application'
+
+AUTH_USER_MODEL = 'memoria.MemEmpresa'
 
 
 # Database
@@ -129,3 +132,6 @@ STATIC_URL = '/static/'
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+LOGIN_REDIRECT_URL = 'entidad'
+LOGOUT_REDIRECT_URL = 'login'

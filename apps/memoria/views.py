@@ -1,3 +1,5 @@
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, View, FormView
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import MemEmpresaForm, MemUsurioForm, LoginForm
@@ -5,10 +7,12 @@ from .models import MemEmpresa, MemUsuario
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
+
+from .forms import MemEmpresa
 # Create your views here.
 
-def Home(request):
-    empresas = MemEmpresa.objects.filter(estadoempresa = True)
+def entidad(request):
+    empresas = MemEmpresa.objects.filter(is_active = True)
     return render(request, 'memoria/entidad/index.html', {'empresas':empresas})
 
 def usuario(request):
@@ -20,7 +24,7 @@ def crearEntidad(request):
         empresaForm = MemEmpresaForm(request.POST)
         if empresaForm.is_valid():
             empresaForm.save()
-            return redirect('memoria:index')
+            return redirect('memoria:entidad')
     else:
         empresaForm = MemEmpresaForm()
         return render (request, 'memoria/entidad/modal.html', {'empresaForm':empresaForm})
@@ -47,7 +51,7 @@ def editarEntidad(request, v_rut):
             empresaForm = MemEmpresaForm(request.POST, instance = empresa)
         if empresaForm.is_valid():
             empresaForm.save()
-            return redirect('memoria:index')
+            return redirect('memoria:entidad')
     except ObjectDoesNotExist as e:
         error = e
     return render(request, 'memoria/entidad/modal.html', {'empresaForm':empresaForm, 'empresa':empresa, 'error':error })
@@ -71,29 +75,11 @@ def editarUsuario(request, v_rut):
 
 def eliminarEntidad(request, v_rut):
     empresa = MemEmpresa.objects.get(rutempresa = v_rut)
-    empresa.estadoempresa = False
+    empresa.is_active = False
     empresa.save()
-    return redirect('memoria:index')
+    return redirect('memoria:entidad')
 
-def login_page(request):
-    message = None
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            try:
-                user = authenticate(request, MemEmpresa.objects.get(rutempresa = username), MemEmpresa.objects.get(contrasenaempresa = password))
-            except MemEmpresa.DoesNotExist:
-                user = None
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    message = "Te has identificado de modo correcto"
-                else:
-                    message = "Tu usuario esta inactivo"
-            else: 
-                message = "Nombre de usuario y/o password incorrecto"
-    else:
-        form = LoginForm()
-    return render(request, 'memoria/login.html', {'message': message, 'form': form})
+class SignUpView(CreateView):
+    form_class = MemEmpresaForm
+    success_url = reverse_lazy('login')
+    template_name = 'signup.html'
