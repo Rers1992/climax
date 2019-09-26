@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'apps.memoria',
     'crispy_forms',
     'apps.usuario',
+    'apps.estacion',
+    'apps.ubicacion',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -134,4 +137,4 @@ STATIC_URL = '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 LOGIN_REDIRECT_URL = 'entidad'
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'logout'

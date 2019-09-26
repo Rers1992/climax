@@ -1,29 +1,4 @@
 $(document).ready(function () {
-
-    /* $('#tablaEntidades').DataTable({
-     language: {
-     "decimal": "",
-     "emptyTable": "No hay información",
-     "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-     "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-     "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-     "infoPostFix": "",
-     "thousands": ",",
-     "lengthMenu": "Mostrar _MENU_ Entradas",
-     "loadingRecords": "Cargando...",
-     "processing": "Procesando...",
-     "search": "Buscar:",
-     "zeroRecords": "Sin resultados encontrados",
-     "paginate": {
-     "first": "Primero",
-     "last": "Ultimo",
-     "next": "Siguiente",
-     "previous": "Anterior"
-     
-     }
-     }
-     });*/
-
     $('#a-agregar').click(function (e) {
         e.preventDefault();
         $('#modalProductoHeader').html('Nueva Entidad');
@@ -105,85 +80,6 @@ function fn_ModificarEntidad(v_rut) {
     });
 }
 
-/*Vue.component('data-table', {
-    render: function (createElement) {
-        return createElement(
-                "table", null, []
-                )
-    },
-    props: ['comments'],
-    data() {
-        return {
-            headers: [
-                {title: 'Rut'},
-                {title: 'Nombre'},
-                {title: 'Razon Social'},
-                {title: 'Contraseña'},
-                {title: 'Opciones'}
-            ],
-            rows: [],
-            dtHandle: null
-        }
-    },
-    watch: {
-        comments(val, oldVal) {
-            let vm = this;
-            vm.rows = [];
-            val.forEach(function (entidad) {
-                let row = [];
-                row.push(entidad.rutEmpresa);
-                row.push(entidad.nombreEmpresa);
-                row.push(entidad.razonSocialEmpresa);
-                row.push(entidad.contrasenaEmpresa);
-                vm.rows.push(row);
-            });
-            vm.dtHandle.clear();
-            vm.dtHandle.rows.add(vm.rows);
-            vm.dtHandle.draw();
-        }
-    },
-    mounted() {
-        let vm = this;
-        vm.dtHandle = $(this.$el).DataTable({
-            columns: vm.headers,
-            data: vm.rows,
-            searching: true,
-            paging: true,
-            info: false
-        });
-    }
-});
-
-new Vue({
-    el: '#tabledemo',
-    data: {
-        comments: [],
-        search: ''
-    },
-    computed: {
-        filteredComments: function () {
-            let self = this;
-            let search = self.search.toLowerCase();
-            return self.comments.filter(function (comments) {
-                return  comments.rutEmpresa.toLowerCase().indexOf(search) !== -1 ||
-                        comments.nombreEmpresa.toLowerCase().indexOf(search) !== -1 ||
-                        comments.razonSocialEmpresa.toLowerCase().indexOf(search) !== -1 ||
-                        comments.contrasenaEmpresa.toLowerCase().indexOf(search) !== -1;
-            });
-        }
-    },
-    mounted() {
-        let vm = this;
-        fetch("consulta/listar")
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (myJson) {
-                    vm.comments = myJson;
-                });
-    }
-});*/
-
 var app = new Vue({
     el: "#app",
     data: {
@@ -203,6 +99,3 @@ var app = new Vue({
         }
     }
 });
-
-
-

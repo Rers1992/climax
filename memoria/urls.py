@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from django.views.generic.base import TemplateView
-#from apps.memoria.views import login
+from apps.usuario.views import logoutUsuario
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +25,9 @@ urlpatterns = [
     path('', auth_views.LoginView.as_view()),
     path('admin/', admin.site.urls),
     path('memoria/', include('apps.memoria.urls')),
+    path('memoria/', include(('apps.ubicacion.urls', 'ubicacion'))),
+    path('memoria/', include(('apps.estacion.urls', 'estacion'))),
     path('memoria/', include('django.contrib.auth.urls')),
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
+    path('memoria/login.html/', logoutUsuario, name = 'logout')
 ]

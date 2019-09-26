@@ -1,7 +1,6 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import SignUpView
-from .views import crearEntidad, editarEntidad, eliminarEntidad, usuario, crearUsuario, editarUsuario, entidad
+from .views import crearEntidad, editarEntidad, eliminarEntidad, usuario, crearUsuario, editarUsuario, entidad, logoutUsuario
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -13,5 +12,4 @@ urlpatterns = [
     path('editarEntidad/<slug:v_rut>', login_required(editarEntidad), name = 'editarEntidad'),
     path('editarUsuario/<slug:v_rut>', login_required(editarUsuario), name = 'editarUsuario'),
     path('eliminarEntidad/<slug:v_rut>', login_required(eliminarEntidad), name = 'eliminarEntidad'),
-    path('signup/', SignUpView.as_view(), name='signup'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

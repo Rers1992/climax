@@ -5,7 +5,7 @@ from django.contrib.auth.models import (
 
 # Create your models here.
 class MemAno(models.Model):
-    codigoano = models.CharField(primary_key=True, max_length=20)
+    codigoano = models.AutoField(primary_key=True)
     ano = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
 
     class Meta:
@@ -14,14 +14,14 @@ class MemAno(models.Model):
 
 
 class MemBitacora(models.Model):
-    codigobitacora = models.CharField(primary_key=True, max_length=20)
+    codigobitacora = models.AutoField(primary_key=True)
     codigoestacion = models.ForeignKey('MemEstacionmeteorologica', models.DO_NOTHING, db_column='codigoestacion')
     descripcionbitacora = models.CharField(max_length=1000, blank=True, null=True)
     fechainiciobitacora = models.DateField(blank=True, null=True)
     fechafinbitacora = models.DateField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'mem_bitacora'
 
 
@@ -32,30 +32,19 @@ class MemDesextremosclimaticos(models.Model):
     medidaindicador = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'mem_desextremosclimaticos'
 
 
 class MemDia(models.Model):
-    codigodia = models.CharField(primary_key=True, max_length=20)
+    codigodia = models.AutoField(primary_key=True)
     codigomes = models.ForeignKey('MemMes', models.DO_NOTHING, db_column='codigomes')
-    dia = models.DateField()
+    dia = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'mem_dia'
 
-"""
-class MemEmpresa(models.Model):
-    rutempresa = models.CharField(primary_key=True, max_length=20)
-    nombreempresa = models.CharField(max_length=50, blank=True, null=True)
-    razonsocialempresa = models.CharField(max_length=20, blank=True, null=True)
-    contrasenaempresa = models.CharField(max_length=20, blank=True, null=True)
-    estadoempresa = models.BooleanField('estadoempresa', default = True )
-
-    class Meta:
-        db_table = 'mem_empresa'
-"""
 class MyUserManager(BaseUserManager):
     def create_user(self, rutempresa,nombreempresa, razonsocialempresa, password=None):
         if not rutempresa:
@@ -86,7 +75,6 @@ class MemEmpresa(AbstractBaseUser):
     rutempresa= models.CharField(primary_key=True, max_length=20)
     nombreempresa = models.CharField(max_length=50, blank=True, null=True)
     razonsocialempresa = models.CharField(max_length=20, blank=True, null=True)
-    #password=models.CharField(max_length=20, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
@@ -115,12 +103,12 @@ class MemEmpresa(AbstractBaseUser):
         return self.is_admin
 
     class Meta:
+        managed = True
         db_table = 'mem_empresa'
 
 class MemEstacionmeteorologica(models.Model):
-    codigoestacion = models.CharField(primary_key=True, max_length=20)
+    codigoestacion = models.AutoField(primary_key=True)
     codigoubicacion = models.ForeignKey('MemUbicacion', models.DO_NOTHING, db_column='codigoubicacion', blank=True, null=True)
-    codigoserie = models.ForeignKey('MemSeriedetiempo', models.DO_NOTHING, db_column='codigoserie', blank=True, null=True)
     rutusuario = models.ForeignKey('MemUsuario', models.DO_NOTHING, db_column='rutusuario')
     nombreestacion = models.CharField(max_length=20, blank=True, null=True)
     longitudestacion = models.CharField(max_length=20, blank=True, null=True)
@@ -130,16 +118,17 @@ class MemEstacionmeteorologica(models.Model):
     estadoestacion = models.BooleanField('EstadoEstacion', default = True )
 
     class Meta:
+        managed = True
         db_table = 'mem_estacionmeteorologica'
 
 
 class MemHora(models.Model):
-    codigohora = models.CharField(primary_key=True, max_length=20)
+    codigohora = models.AutoField(primary_key=True)
     codigodia = models.ForeignKey(MemDia, models.DO_NOTHING, db_column='codigodia')
-    hora = models.TimeField()
+    hora = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'mem_hora'
 
 
@@ -176,22 +165,22 @@ class MemIndicesextremosclimaticos(models.Model):
     wsdi = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'mem_indicesextremosclimaticos'
 
 
 class MemMes(models.Model):
-    codigomes = models.CharField(primary_key=True, max_length=20)
+    codigomes = models.AutoField(primary_key=True)
     codigoano = models.ForeignKey(MemAno, models.DO_NOTHING, db_column='codigoano')
     nombremes = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'mem_mes'
 
 
 class MemSeriedetiempo(models.Model):
-    codigoserie = models.CharField(primary_key=True, max_length=20)
+    codigoserie = models.AutoField(primary_key=True)
     codigoestacion = models.ForeignKey(MemEstacionmeteorologica, models.DO_NOTHING, db_column='codigoestacion', blank=True, null=True)
     fechaserie = models.DateField(blank=True, null=True)
     temperaturamaxserie = models.CharField(max_length=20, blank=True, null=True)
@@ -200,16 +189,16 @@ class MemSeriedetiempo(models.Model):
     precipitacionserie = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'mem_seriedetiempo'
 
 
 class MemUbicacion(models.Model):
-    codigoubicacion = models.CharField(primary_key=True, max_length=20)
+    codigoubicacion = models.AutoField(primary_key=True)
     nombreubicacion = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'mem_ubicacion'
 
 

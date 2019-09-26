@@ -1,12 +1,13 @@
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, View, FormView
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import MemEmpresaForm, MemUsurioForm, LoginForm
 from .models import MemEmpresa, MemUsuario
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, logout
 
 from .forms import MemEmpresa
 # Create your views here.
@@ -79,7 +80,6 @@ def eliminarEntidad(request, v_rut):
     empresa.save()
     return redirect('memoria:entidad')
 
-class SignUpView(CreateView):
-    form_class = MemEmpresaForm
-    success_url = reverse_lazy('login')
-    template_name = 'signup.html'
+def logoutUsuario(request):
+    logout(request)
+    return HttpResponseRedirect('accounts/login/')
