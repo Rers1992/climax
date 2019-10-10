@@ -77,6 +77,8 @@ WSGI_APPLICATION = 'memoria.wsgi.application'
 
 AUTH_USER_MODEL = 'memoria.MemEmpresa'
 
+IMPORT_EXPORT_USE_TRANSACTIONS = True  
+
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases

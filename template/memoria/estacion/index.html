@@ -25,9 +25,11 @@
                 <td>{{ estacion.latitudestacion }}</td>
                 <td>{{ estacion.alturaestacion }}</td>
                 <td>{{ estacion.medicionestacion }}</td>
-                <td><input type="button" name="edit" value="Editar" onclick="fn_abreFormModificar('{{ estacion.codigoubicacion }}')"
+                <td><input type="button" name="import" value="Importar" onclick="fn_abreFormImportar('{{ estacion.codigoestacion }}')"
+                        class="btn btn-success">
+                    <input type="button" name="edit" value="Editar" onclick="fn_abreFormModificar('{{ estacion.codigoestacion }}')"
                         class="btn btn-primary">
-                    <input type="button" name="delete" value="Eliminar" onclick="fn_Eliminar('{{ estacion.codigoubicacion }}')"
+                    <input type="button" name="delete" value="Eliminar" onclick="fn_Eliminar('{{ estacion.codigoestacion }}')"
                         class="btn btn-danger"></td>
             </tr>
             {% endfor %}
