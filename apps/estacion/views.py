@@ -20,7 +20,7 @@ def crearEstacion(request):
         estacionForm = MemEstacionForm()
         return render (request, 'memoria/estacion/modal.html', {'estacionForm':estacionForm})
 
-def importarEstacion(request, v_rut):
+def importarEstacion(request):
    if request.method == 'POST':  
      persona_resource = AnoResource()  
      dataset = Dataset()
@@ -28,7 +28,5 @@ def importarEstacion(request, v_rut):
      imported_data = dataset.load(nuevas_personas.read())
      result = persona_resource.import_data(dataset, dry_run=True) # Test the data import
      if not result.has_errors():  
-       persona_resource.import_data(dataset, dry_run=False) # Actually import now  
-   else:
-       persona_resource = AnoResource()  
+       persona_resource.import_data(dataset, dry_run=False) # Actually import now
    return render(request, 'memoria/estacion/importar.html')

@@ -1,5 +1,5 @@
 {% load crispy_forms_tags %}
-<form method="POST" action="{% url 'memoria:editarEntidad' v_rut=empresa.rutempresa%}" enctype="multipart/form-data">
+<form method="POST" action="{% url 'estacion:importarEstacion' %}" enctype="multipart/form-data">
     <div class="modal-header" id="div-results">
         <h4 class="modal-title">Importar</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -12,6 +12,7 @@
         {% else %}    
             <input type="file" name="xlsfile">
         {% endif %}
+        <br>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </div>
     <div class="modal-footer">

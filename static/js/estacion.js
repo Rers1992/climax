@@ -21,13 +21,13 @@ function fn_abreFormModificarUsuario(v_rut) {
     });
 }
 
-function fn_abreFormImportar(v_rut) {
+function fn_abreFormImportar() {
     $.ajax({
         type: 'GET',
-        url: 'importarEstacion/'+v_rut,
+        url: 'importarEstacion/',
         success: function (data) {
             $('#employee_detail').html(data);
-            $('#div_id_contrasenausuario').hide();
+         //   $('#div_id_contrasenausuario').hide();
             $('#dataModal').modal("show");
         }
     });
