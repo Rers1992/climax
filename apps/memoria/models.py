@@ -6,10 +6,10 @@ from django.contrib.auth.models import (
 # Create your models here.
 class MemAno(models.Model):
     codigoano = models.AutoField(primary_key=True)
-    ano = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    ano = models.DecimalField(max_digits=65535, decimal_places=65535)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'mem_ano'
 
 
