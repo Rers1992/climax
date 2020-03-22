@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from tablib import Dataset
-from apps.estacion.resources import AnoResource
+from .resources import SerieTiempoResource
 from apps.memoria.models import MemEstacionmeteorologica
 from .forms import MemEstacionForm
 
 # Create your views here.
 
 def estacion(request):
-    estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True)
+    estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True).select_related('codigoubicacion')
     return render(request, 'memoria/estacion/index.html', {'estaciones':estaciones})
 
 def crearEstacion(request):
@@ -22,18 +22,16 @@ def crearEstacion(request):
 
 def importarEstacion(request):
    if request.method == 'POST':  
-     persona_resource = AnoResource()  
+     ano_resource = SerieTiempoResource()  
      dataset = Dataset()
-     print("holi")  
-     print(dataset)
-     nuevas_personas = request.FILES['xlsfile']
-     print("holi2")
-     print(nuevas_personas)
-     imported_data = dataset.load(nuevas_personas.read())
-     print(dataset)  
-     result = persona_resource.import_data(dataset, dry_run=True) # Test the data import
-     print(result.has_errors())
-     return redirect('estacion:estacion')
+     nuevas_anos = request.FILES['myfile']
+     print(nuevas_anos) 
+     imported_data = dataset.load(nuevas_anos.read())
+     print(dataset) 
+     print(imported_data) 
+     result = ano_resource.import_data(dataset, dry_run=True) # Test the data import
+     print(result.has_errors())  
+     return redirect ('estacion:estacion')
      if not result.has_errors():  
-       persona_resource.import_data(dataset, dry_run=False) # Actually import now
+       ano_resource.import_data(dataset, dry_run=False) # Actually import now
    return render(request, 'memoria/estacion/importar.html')

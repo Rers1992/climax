@@ -1,7 +1,7 @@
 {% load crispy_forms_tags %}
 <form method="POST" action="{% url 'estacion:importarEstacion' %}" enctype="multipart/form-data">
     <div class="modal-header" id="div-results">
-        <h4 class="modal-title">Importar</h4>
+        <h4 class="modal-title">Importar Serie de Tiempo</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                 aria-hidden="true">&times;</span></button>
     </div>
@@ -10,7 +10,7 @@
         {% if error %}
             <h2>{{ error }}</h2>
         {% else %}    
-            <input type="file" name="xlsfile">
+            <input type="file" name="myfile">
         {% endif %}
         <br>
         <button type="submit" class="btn btn-primary">Guardar</button>

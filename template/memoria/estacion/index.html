@@ -7,6 +7,7 @@
     <table class="table table-striped table-bordered dataTable no-footer" id="tabla">
         <thead>
             <tr>
+                <th>Unicación</th>
                 <th>Codigo</th>
                 <th>Nombre</th>
                 <th>Longitud</th>
@@ -19,7 +20,8 @@
         <tbody>
             {% for estacion in estaciones %}
             <tr>
-                <td>{{ estacion.codigoubicacion }}</td>
+                <td>{{ estacion.codigoubicacion.nombreubicacion }}</td>
+                <td>{{ estacion.codigoestacion }}</td>
                 <td>{{ estacion.nombreestacion }}</td>
                 <td>{{ estacion.longitudestacion }}</td>
                 <td>{{ estacion.latitudestacion }}</td>

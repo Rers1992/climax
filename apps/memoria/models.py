@@ -5,8 +5,8 @@ from django.contrib.auth.models import (
 
 # Create your models here.
 class MemAno(models.Model):
-    codigoano = models.AutoField(primary_key=True)
-    ano = models.DecimalField(max_digits=65535, decimal_places=65535)
+    #codigoano = models.AutoField(primary_key=True)
+    ano = models.CharField(max_length=30)
 
     class Meta:
         managed = True
@@ -39,7 +39,7 @@ class MemDesextremosclimaticos(models.Model):
 class MemDia(models.Model):
     codigodia = models.AutoField(primary_key=True)
     codigomes = models.ForeignKey('MemMes', models.DO_NOTHING, db_column='codigomes')
-    dia = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    dia = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
 
     class Meta:
         managed = True
@@ -136,33 +136,33 @@ class MemIndicesextremosclimaticos(models.Model):
     codigoano = models.ForeignKey(MemAno, models.DO_NOTHING, db_column='codigoano', blank=True, null=True)
     codigoindicador = models.ForeignKey(MemDesextremosclimaticos, models.DO_NOTHING, db_column='codigoindicador', blank=True, null=True)
     codigoestacion = models.ForeignKey(MemEstacionmeteorologica, models.DO_NOTHING, db_column='codigoestacion', blank=True, null=True)
-    cdd = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    csdi = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    cwd = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    dtr = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    fd0 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    gsl = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    id0 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    prcptot = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    r10mm = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    r20mm = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    r95p = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    r99p = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    r50mm = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    rx1day = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    rx5day = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    sdii = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    su25 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    tn10p = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    tn90p = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    tnn = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    txn = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    tr20 = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    tx10p = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    tx90p = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    tnx = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    txx = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    wsdi = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    cdd = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    csdi = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    cwd = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    dtr = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    fd0 = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    gsl = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    id0 = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    prcptot = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    r10mm = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    r20mm = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    r95p = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    r99p = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    r50mm = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    rx1day = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    rx5day = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    sdii = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    su25 = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    tn10p = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    tn90p = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    tnn = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    txn = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    tr20 = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    tx10p = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    tx90p = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    tnx = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    txx = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
+    wsdi = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
 
     class Meta:
         managed = True

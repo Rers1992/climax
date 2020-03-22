@@ -76,8 +76,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'memoria.wsgi.application'
 
 AUTH_USER_MODEL = 'memoria.MemEmpresa'
-
-IMPORT_EXPORT_USE_TRANSACTIONS = True  
+ 
 
 
 # Database
@@ -86,13 +85,24 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rruiz',
-        'USER': 'rruiz',
-        'PASSWORD': 'rsd43ed',
-        'HOST': 'magallanes.inf.unap.cl',
+        'NAME': 'memoria',
+        'USER': 'postgres',
+        'PASSWORD': 'memoria2020',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'rruiz',
+#        'USER': 'rruiz',
+#        'PASSWORD': 'rsd43ed',
+#        'HOST': 'magallanes.inf.unap.cl',
+#        'PORT': '5432',
+#    }
+#}
 
 
 # Password validation
@@ -140,3 +150,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 LOGIN_REDIRECT_URL = 'entidad'
 LOGOUT_REDIRECT_URL = 'logout'
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True 

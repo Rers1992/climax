@@ -5,11 +5,13 @@ from .models import MemEmpresa, MemUsuario
 class MemEmpresaForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = MemEmpresa
-        fields = ['rutempresa', 'nombreempresa', 'razonsocialempresa']
+        fields = ['rutempresa', 'nombreempresa', 'razonsocialempresa', 'is_active', 'is_admin']
         labels={
             'rutempresa':'Rut',
             'nombreempresa':'Nombre',
-            'razonsocialempresa':'Razón social'
+            'razonsocialempresa':'Razón social',
+            'is_active': 'Activado',
+            'is_admin': 'Admin',
         }
 
 class MemUsurioForm(forms.ModelForm):
