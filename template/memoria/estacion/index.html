@@ -10,10 +10,15 @@
                 <th>Unicación</th>
                 <th>Codigo</th>
                 <th>Nombre</th>
+                <th>Fecha Instalación</th>
+                <th>Fecha Termino</th>
                 <th>Longitud</th>
                 <th>Latitud</th>
                 <th>Altura</th>
+                <th>Cuenca</th>
+                <th>Rio</th>
                 <th>Medición</th>
+                <th>Comentario</th>
                 <th>Opciones</th>
             </tr>
         </thead>
@@ -23,10 +28,15 @@
                 <td>{{ estacion.codigoubicacion.nombreubicacion }}</td>
                 <td>{{ estacion.codigoestacion }}</td>
                 <td>{{ estacion.nombreestacion }}</td>
+                <td>{{ estacion.fechainstalacion }}</td>
+                <td>{{ estacion.fechatermino }}</td>
                 <td>{{ estacion.longitudestacion }}</td>
                 <td>{{ estacion.latitudestacion }}</td>
                 <td>{{ estacion.alturaestacion }}</td>
+                <td>{{ estacion.cuenca }}</td>
+                <td>{{ estacion.rio }}</td>
                 <td>{{ estacion.medicionestacion }}</td>
+                <td>{{ estacion.comentario }}</td>
                 <td><input type="button" name="import" value="Importar" onclick="fn_abreFormImportar('{{ estacion.codigoestacion }}')"
                         class="btn btn-success">
                     <input type="button" name="edit" value="Editar" onclick="fn_abreFormModificar('{{ estacion.codigoestacion }}')"

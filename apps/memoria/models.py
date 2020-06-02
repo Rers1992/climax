@@ -5,8 +5,8 @@ from django.contrib.auth.models import (
 
 # Create your models here.
 class MemAno(models.Model):
-    #codigoano = models.AutoField(primary_key=True)
-    ano = models.CharField(max_length=30)
+    codigoano = models.AutoField(primary_key=True)
+    ano = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
 
     class Meta:
         managed = True
@@ -36,14 +36,6 @@ class MemDesextremosclimaticos(models.Model):
         db_table = 'mem_desextremosclimaticos'
 
 
-class MemDia(models.Model):
-    codigodia = models.AutoField(primary_key=True)
-    codigomes = models.ForeignKey('MemMes', models.DO_NOTHING, db_column='codigomes')
-    dia = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'mem_dia'
 
 class MyUserManager(BaseUserManager):
     def create_user(self, rutempresa,nombreempresa, razonsocialempresa, password=None):
@@ -111,10 +103,15 @@ class MemEstacionmeteorologica(models.Model):
     codigoubicacion = models.ForeignKey('MemUbicacion', models.DO_NOTHING, db_column='codigoubicacion', blank=True, null=True)
     rutusuario = models.ForeignKey('MemUsuario', models.DO_NOTHING, db_column='rutusuario')
     nombreestacion = models.CharField(max_length=20, blank=True, null=True)
+    fechainstalacion = models.DateField(blank=True, null=True)
+    fechatermino = models.DateField(blank=True, null=True)
     longitudestacion = models.CharField(max_length=20, blank=True, null=True)
     latitudestacion = models.CharField(max_length=20, blank=True, null=True)
     alturaestacion = models.CharField(max_length=20, blank=True, null=True)
+    cuenca = models.CharField(max_length=20)
+    rio = models.CharField(max_length=20)
     medicionestacion = models.CharField(max_length=20)
+    comentario = models.CharField(max_length=20)
     estadoestacion = models.BooleanField('EstadoEstacion', default = True )
 
     class Meta:
@@ -122,19 +119,8 @@ class MemEstacionmeteorologica(models.Model):
         db_table = 'mem_estacionmeteorologica'
 
 
-class MemHora(models.Model):
-    codigohora = models.AutoField(primary_key=True)
-    codigodia = models.ForeignKey(MemDia, models.DO_NOTHING, db_column='codigodia')
-    hora = models.CharField(max_length=20, blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'mem_hora'
-
-
 class MemIndicesextremosclimaticos(models.Model):
     codigoano = models.ForeignKey(MemAno, models.DO_NOTHING, db_column='codigoano', blank=True, null=True)
-    codigoindicador = models.ForeignKey(MemDesextremosclimaticos, models.DO_NOTHING, db_column='codigoindicador', blank=True, null=True)
     codigoestacion = models.ForeignKey(MemEstacionmeteorologica, models.DO_NOTHING, db_column='codigoestacion', blank=True, null=True)
     cdd = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
     csdi = models.DecimalField(max_digits=1000, decimal_places=1000, blank=True, null=True)
@@ -172,15 +158,23 @@ class MemIndicesextremosclimaticos(models.Model):
 class MemMes(models.Model):
     codigomes = models.AutoField(primary_key=True)
     codigoano = models.ForeignKey(MemAno, models.DO_NOTHING, db_column='codigoano')
-    nombremes = models.CharField(max_length=20, blank=True, null=True)
+    nombremes = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
 
     class Meta:
         managed = True
         db_table = 'mem_mes'
 
+class MemDia(models.Model):
+    codigodia = models.AutoField(primary_key=True)
+    codigomes = models.ForeignKey(MemMes, models.DO_NOTHING, db_column='codigomes')
+    dia = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'mem_dia'
+
 
 class MemSeriedetiempo(models.Model):
-    codigoserie = models.AutoField(primary_key=True)
     codigoestacion = models.ForeignKey(MemEstacionmeteorologica, models.DO_NOTHING, db_column='codigoestacion', blank=True, null=True)
     fechaserie = models.DateField(blank=True, null=True)
     temperaturamaxserie = models.CharField(max_length=20, blank=True, null=True)

@@ -21,10 +21,10 @@ function fn_abreFormModificarUsuario(v_rut) {
     });
 }
 
-function fn_abreFormImportar() {
+function fn_abreFormImportar(codigoEstacion) {
     $.ajax({
         type: 'GET',
-        url: 'importarEstacion/',
+        url: 'importarEstacion/'+codigoEstacion,
         success: function (data) {
             $('#employee_detail').html(data);
          //   $('#div_id_contrasenausuario').hide();
