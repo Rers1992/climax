@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('entidad', entidad, name = 'entidad'),
+    path('entidad', login_required(entidad), name = 'entidad'),
     path('usuario', login_required(usuario), name = 'usuario'),
     path('crearEntidad/', crearEntidad, name = 'crearEntidad'),
     path('crearUsuario/', login_required(crearUsuario), name = 'crearUsuario'),
