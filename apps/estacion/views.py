@@ -1,23 +1,15 @@
 from django.shortcuts import render, redirect
 from tablib import Dataset
 from .resources import SerieTiempoResource
+from .indicadores import *
 from apps.memoria.models import MemEstacionmeteorologica, MemSeriedetiempo, MemAno, MemMes
 from .forms import MemEstacionForm
 import tablib
 from import_export import resources  
 from django.db.models import Q
-import math
+
 
 # Create your views here.
-def FUNCION_PERCENTIL_10(datos):
-      datos2 = datos.sort('temperaturaminserie')
-      n = len(datos2)
-      i = n * 0.1
-      if(i % 1 == 0):
-          p = (datos2['temperaturaminserie'][int(i)] + datos2['temperaturaminserie'][int(i+1)])/2
-          return p
-      else:
-          return datos2['temperaturaminserie'][math.ceil(i)]
 
 def estacion(request):
     estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True).select_related('codigoubicacion')
@@ -39,36 +31,32 @@ def importarEstacion(request, codigoEstacion):
      dataset = Dataset()
      nuevas_anos = request.FILES['xlsfile'] 
      imported_data = dataset.load(nuevas_anos.read())
-     contador = 0
-     cddcount = 0
-     cdd = 0
-     ciclo = 0
-     percentil_10 = FUNCION_PERCENTIL_10(imported_data)
+     contador = 0; ciclo = 0; largo = len(imported_data)
+     cddCount = [0, 0]; csdiCount = [0, 0]; cwdCount= [0, 0]; fd0 = 0; id0 = 0; prcptot = 0
+     temperaturasMaxMin = [0,0]
+     percentil_10 = funcion_percentil_10(imported_data)
+     #me salte el indicador 6
      for x in imported_data:
-         imported_data['temperaturaminserie'][contador] = float(codigoEstacion)
-         ciclo += 1
-         if( float(imported_data['precipitacionserie'][contador]) < 1):
-             cddcount += 1
-         if(float(imported_data['precipitacionserie'][contador]) >= 1 or ciclo == len(imported_data)):
-             if(cdd < cddcount):
-                 cdd = cddcount  
-             cddcount = 0
-         data2 = imported_data['fechaserie'][contador].split('-')
-         existeAno = MemAno.objects.filter(ano = data2[0])
-         existeMes = []
-         contador += 1
-         if(len(existeAno) > 0):
-            existeMes = MemMes.objects.filter(codigoano = existeAno[0].codigoano, nombremes= data2[1])
-         if(len(existeAno) == 0):
-             ano = MemAno(ano=data2[0])
-             ano.save()
-             if(len(existeMes) == 0):
-                 mes = MemMes(codigoano = MemAno.objects.get(codigoano=ano.codigoano), nombremes= data2[1])
-                 mes.save()
-         else:
-             if(len(existeMes) == 0):
-                 mes = MemMes(codigoano = MemAno.objects.get(codigoano=existeAno[0].codigoano), nombremes= data2[1])
-                 mes.save()
+        imported_data['codigoestacion'][contador] = codigoEstacion
+        ciclo += 1
+        cddCount = funcion_cdd(imported_data['precipitacionserie'][contador], largo, cddCount, ciclo)
+        csdiCount = funcion_csdi(imported_data['temperaturaminserie'][contador], largo, csdiCount, ciclo, percentil_10)
+        cwdCount = funcion_cwd(imported_data['precipitacionserie'][contador], largo, cwdCount, ciclo)
+        temperaturasMaxMin = funcion_dtr(temperaturasMaxMin, imported_data['temperaturamaxserie'][contador], imported_data['temperaturaminserie'][contador])
+        fd0 = funcion_fd0(imported_data['temperaturaminserie'][contador], fd0)
+        id0 = funcion_id0(imported_data['temperaturamaxserie'][contador], id0)
+        prcptot = funcion_prcptot(imported_data['precipitacionserie'][contador], prcptot)
+        data2 = imported_data['fechaserie'][contador].split('-')
+        anos_meses(data2)
+        contador += 1
+     dtr = (temperaturasMaxMin[0] - temperaturasMaxMin[1])/largo
+     print(cddCount[1])
+     print(csdiCount[1])
+     print(cwdCount[1])
+     print(dtr)
+     print(fd0)
+     print(id0)
+     print(prcptot)
      result = serie_resource.import_data(dataset, dry_run=True) # Test the data import
      if not result.has_errors():  
        serie_resource.import_data(dataset, dry_run=False) # Actually import now
