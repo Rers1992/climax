@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.usuario',
     'apps.estacion',
     'apps.ubicacion',
+    'apps.bitacora',
     'import_export',
 ]
 

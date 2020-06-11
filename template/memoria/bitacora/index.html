@@ -1,0 +1,39 @@
+{% extends "memoria/base.html" %}
+{% load staticfiles %}
+{% block content %}
+<h1>Bitacoras</h1>
+{% if bitacoras %}
+<div class="table-responsive">
+    <table class="table table-striped table-bordered dataTable no-footer" id="tabla">
+        <thead>
+            <tr>
+                <th>Fecha de Registro</th>
+                <th>Rut Usuario</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bitacora in bitacoras %}
+            <tr>
+                <td>{{ bitacora.fechainiciobitacora }}</td>
+                <td>{{ bitacora.rutusuario }}</td>
+                <td>{{ bitacora.descripcionbitacora }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<h1>no existen bitacoras registradas</h1>
+{% endif %}
+<input type="button" name="add" value="Agregar Bitacora" onclick="fn_abreFormBitacora({{estacion}})" class="btn btn-primary">
+<div id="dataModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="employee_detail">
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/bitacora.js' %}"></script>
+{% endblock %}

@@ -15,6 +15,7 @@ class MemAno(models.Model):
 
 class MemBitacora(models.Model):
     codigobitacora = models.AutoField(primary_key=True)
+    rutusuario = models.ForeignKey('MemUsuario', models.DO_NOTHING, db_column='rutusuario')
     codigoestacion = models.ForeignKey('MemEstacionmeteorologica', models.DO_NOTHING, db_column='codigoestacion')
     descripcionbitacora = models.CharField(max_length=1000, blank=True, null=True)
     fechainiciobitacora = models.DateField(blank=True, null=True)
