@@ -7,7 +7,7 @@ class DateInput(forms.DateInput):
 class MemBitacoraForm(forms.ModelForm):
     class Meta:
         model = MemBitacora
-        fields = ['rutusuario', 'codigoestacion', 'descripcionbitacora', 'fechainiciobitacora']
+        fields = ['rutusuario', 'codigoestacion', 'descripcionbitacora']
         widgets = {
             'fechainiciobitacora': DateInput(),
         }
@@ -15,5 +15,4 @@ class MemBitacoraForm(forms.ModelForm):
             'rutusuario':'Rut Usuario',
             'codigoestacion':'Estación',
             'descripcionbitacora':'Detalle',
-            'fechainiciobitacora': 'Fecha de Detalle',
         }

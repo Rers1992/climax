@@ -21,7 +21,12 @@ function fn_abreFormModificarUsuario(v_rut) {
     });
 }
 
+function fn_Bitacora(codigoEstacion){
+    location.href = 'bitacora/'+codigoEstacion;
+}
+
 function fn_abreFormImportar(codigoEstacion) {
+    console.log(new Date)
     $.ajax({
         type: 'GET',
         url: 'importarEstacion/'+codigoEstacion,

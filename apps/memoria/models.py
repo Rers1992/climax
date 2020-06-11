@@ -18,7 +18,7 @@ class MemBitacora(models.Model):
     rutusuario = models.ForeignKey('MemUsuario', models.DO_NOTHING, db_column='rutusuario')
     codigoestacion = models.ForeignKey('MemEstacionmeteorologica', models.DO_NOTHING, db_column='codigoestacion')
     descripcionbitacora = models.CharField(max_length=1000, blank=True, null=True)
-    fechainiciobitacora = models.DateField(blank=True, null=True)
+    fechainiciobitacora = models.DateField(blank=True, null=True, auto_now_add=True)
     fechafinbitacora = models.DateField(blank=True, null=True)
 
     class Meta:
