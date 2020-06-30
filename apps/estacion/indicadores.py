@@ -7,9 +7,9 @@ def funcion_percentil(datos, percentil, columna):
       i = n * percentil
       if(i % 1 == 0):
           p = (datos2[columna][int(i)] + datos2[columna][int(i-1)])/2
-          return p
       else:
-          return datos2[columna][math.ceil(i-1)]
+          p = datos2[columna][math.ceil(i-1)]
+      return p
 
 def anos_meses(data2):
     existeAno = MemAno.objects.filter(ano = data2[0])
@@ -26,42 +26,37 @@ def anos_meses(data2):
         if(len(existeMes) == 0):
             mes = MemMes(codigoano = MemAno.objects.get(codigoano=existeAno[0].codigoano), nombremes= data2[1])
             mes.save()
+    if(len(existeAno) == 0):
+        return ano.codigoano
+    else:
+        return existeAno[0].codigoano
 
 def funcion_cdd(precipitacionserie, largoExcel, cddCount, ciclo):
-    if( float(precipitacionserie) < 1 and ciclo != largoExcel):
+    if( float(precipitacionserie) < 1):
          cddCount[0] += 1
-         return cddCount
     if(float(precipitacionserie) >= 1 or ciclo == largoExcel):
-         if( float(precipitacionserie) < 1):
-             cddCount[0] += 1
          if(cddCount[1] < cddCount[0]):
              cddCount[1] = cddCount[0]
          cddCount[0] = 0
-         return cddCount
+    return cddCount
 
 def funcion_csdi(temperaturaminserie, largoExcel, csdiCount, ciclo, percentil_10):
-    if( float(temperaturaminserie) < percentil_10 and ciclo != largoExcel):
+    if( float(temperaturaminserie) < percentil_10):
          csdiCount[0] += 1
-         return csdiCount
     if(float(temperaturaminserie) >= percentil_10 or ciclo == largoExcel):
-         if( float(temperaturaminserie) < percentil_10):
-             csdiCount[0] += 1
          if(csdiCount[1] < csdiCount[0]):
              csdiCount[1] = csdiCount[0]
          csdiCount[0] = 0
-         return csdiCount
+    return csdiCount
 
 def funcion_cwd(precipitacionserie, largoExcel, cwdCount, ciclo):
-    if( float(precipitacionserie) >= 1 and ciclo != largoExcel):
+    if( float(precipitacionserie) >= 1):
          cwdCount[0] += 1
-         return cwdCount
     if(float(precipitacionserie) < 1 or ciclo == largoExcel):
-         if( float(precipitacionserie) >= 1):
-             cwdCount[0] += 1
          if(cwdCount[1] < cwdCount[0]):
              cwdCount[1] = cwdCount[0]
          cwdCount[0] = 0
-         return cwdCount
+    return cwdCount
 
 def funcion_dtr(temperaturasMaxMin, temMaxima, temMinima):
     temperaturasMaxMin[0] +=  temMaxima
@@ -73,15 +68,43 @@ def funcion_fd0(temperaturaMin, fd):
         fd += 1
     return fd
 
+def funcion_gls(temMedia, largoExcel, glsCount, ciclo):
+    if( float(temMedia) < 5):
+         glsCount[0] += 1
+    if(float(temMedia) >= 5 or ciclo == largoExcel):
+         if(glsCount[1] < glsCount[0]):
+             glsCount[1] = glsCount[0]
+         glsCount[0] = 0
+    return glsCount
+
+def funcion_gls1(temMedia, largoExcel, gls1Count, ciclo):
+    if( float(temMedia) > 5):
+         gls1Count[0] += 1
+    if(float(temMedia) <= 5 or ciclo == largoExcel):
+         if(gls1Count[1] < gls1Count[0]):
+             gls1Count[1] = gls1Count[0]
+         gls1Count[0] = 0
+    return gls1Count
+
 def funcion_id0(temMaxima, id0):
     if(temMaxima < 0):
         id0 += 1
     return id0
 
-def funcion_prcptot(precipitacion,prcptot):
+def funcion_prcptot(precipitacion, prcptot):
     if(precipitacion >= 1):
         prcptot += precipitacion
     return prcptot
+
+def funcion_r10mm(precipitacion, r10mm):
+    if(precipitacion >= 10):
+        r10mm += 1
+    return r10mm
+
+def funcion_r20mm(precipitacion, r20mm):
+    if(precipitacion >= 20):
+        r20mm += 1
+    return r20mm
 
 def funcion_r95p(precipitacion, r95p, percentil95):
     if(precipitacion > percentil95):
@@ -93,9 +116,28 @@ def funcion_r99p(precipitacion, r99p, percentil99):
         r99p += precipitacion
     return r99p
 
+def funcion_r50mm(precipitacion, r50mm):
+    if(precipitacion >= 50):
+        r50mm += 1
+    return r50mm
+
 def funcion_rx1day(datos):
     datos.sort('precipitacionserie')
     return datos['precipitacionserie'][0]
+
+def funcion_rx5day(precipitacion, rx5day): 
+    ciclo = 0
+    largo = len(precipitacion) 
+    for x in precipitacion:
+        if(ciclo+4 != largo-1):
+            suma = precipitacion[ciclo] + precipitacion[ciclo+1] + precipitacion[ciclo+2] 
+            + precipitacion[ciclo+3] + precipitacion[ciclo+4]
+            if(rx5day < suma):
+                rx5day = suma
+        else: 
+            break
+        ciclo += 1
+    return rx5day
 
 def funcion_sdii(precipitacion, sdii):
     if(precipitacion >= 1):
@@ -133,6 +175,15 @@ def funcion_tnn(datos):
 def funcion_txn(datos):
     datos2= datos.sort('temperaturamaxserie')
     return datos2['temperaturamaxserie'][0]
+
+def funcion_tr20(temMin, largoExcel, tr20Count, ciclo):
+    if( float(temMin) > 20):
+         tr20Count[0] += 1
+    if(float(temMin) <= 20 or ciclo == largoExcel):
+         if(tr20Count[1] < tr20Count[0]):
+             tr20Count[1] = tr20Count[0]
+         tr20Count[0] = 0
+    return tr20Count
 
 def funcion_tx10p(percentil_10, temMaxima, ciclo, largo, tx10p):
     if(temMaxima < percentil_10 and ciclo != largo):
