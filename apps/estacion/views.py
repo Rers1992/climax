@@ -16,6 +16,27 @@ def estacion(request):
     estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True).select_related('codigoubicacion')
     return render(request, 'memoria/estacion/index.html', {'estaciones':estaciones})
 
+def dashboard(request):
+    estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True).select_related('codigoubicacion')
+    return render(request, 'memoria/dashboard/index.html', {'estaciones':estaciones})
+
+def tablaHecho(request):
+    indicesJson = []
+    ciclo = 0
+    indices = MemIndicesextremosclimaticos.objects.all().select_related('codigoano')
+    for x in indices:
+        indicesJson.append({'ano': indices[ciclo].codigoano.ano,'cdd' : indices[ciclo].cdd, 'csdi' : indices[ciclo].csdi, 'cwd' : indices[ciclo].cwd, 
+        'dtr' : indices[ciclo].dtr, 'fd0' : indices[ciclo].fd0, 'gsl' : indices[ciclo].gsl,
+        'gsl2' : indices[ciclo].gsl2, 'id0' : indices[ciclo].id0, 'prcptot' : indices[ciclo].prcptot, 
+        'r10mm' : indices[ciclo].r10mm, 'r20mm' : indices[ciclo].r20mm, 'r95p' : indices[ciclo].r95p,
+        'r99p' : indices[ciclo].r99p, 'r50mm' : indices[ciclo].r50mm, 'rx1day' : indices[ciclo].rx1day, 'rx5day' : indices[ciclo].rx5day,
+        'sdii' : indices[ciclo].sdii, 'su25' : indices[ciclo].su25,
+        'tn10p' : indices[ciclo].tn10p, 'tn90p' : indices[ciclo].tn90p, 'tnn' : indices[ciclo].tnn, 'txn' : indices[ciclo].txn, 
+        'tr20' : indices[ciclo].tr20, 'tx10p' : indices[ciclo].tx10p,
+        'tx90p' : indices[ciclo].tx90p, 'tnx' : indices[ciclo].tnx, 'txx' : indices[ciclo].txx, 'wsdi' : indices[ciclo].wsdi})
+        ciclo +=1
+    return JsonResponse({'indices':indicesJson})
+
 def crearEstacion(request):
     if request.method == 'POST':
         estacionForm = MemEstacionForm(request.POST)

@@ -1,0 +1,26 @@
+{% extends "memoria/base.html" %}
+{% load staticfiles %}
+{% block content %}
+<h1>DashBoard</h1>
+{% if estaciones %}
+<div class="row">
+    <div class="col-12">
+        <div id="like_button_container"></div>
+    </div>
+</div>
+{% else %}
+<h1>no existen empresas registradas</h1>
+{% endif %}
+
+<!-- Load React. -->
+<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+<!-- Don't use this in production: -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<!-- Cargamos nuestro componente de React. -->
+<script type="text/babel" src="{% static 'js/like_button.js' %}"></script>
+
+{% endblock %}
