@@ -1,11 +1,11 @@
-{% extends "memoria/base.html" %}
+{% extends "memoria/base2.html" %}
 {% load staticfiles %}
 {% block content %}
 <h1>DashBoard</h1>
 {% if estaciones %}
 <div class="row">
     <div class="col-12">
-        <div id="like_button_container"></div>
+        <div id="react"></div>
     </div>
 </div>
 {% else %}
@@ -21,6 +21,6 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <!-- Cargamos nuestro componente de React. -->
-<script type="text/babel" src="{% static 'js/like_button.js' %}"></script>
+<script type="text/babel" src="{% static 'js/react.js' %}"></script>
 
 {% endblock %}
