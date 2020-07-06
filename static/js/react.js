@@ -3,12 +3,19 @@ class Dashboard extends React.Component {
         super(props)
         this.myRef = React.createRef();
         this.state = {
-            data: []
+            data: [],
+            indicesOrdenados: [],
+            vectorAños: [],
+            nombreIndicesOrdenados: [],
+            nombreIndices: ['cdd', 'csdi', 'cwd', 'dtr', 'fd0', 'gsl', 'gsl2', 'id0', 
+              'prcptot', 'r10mm', 'r20mm', 'r95p', 'r99p', 'r50mm',
+              'rx1day', 'rx5day', 'sdii', 'su25', 'tn10p', 'tn90p', 
+              'tnn', 'txn', 'tr20', 'tx10p', 'tx90p', 'tnx', 'txx', 'wsdi']
         }
     }
 
     renderTabla(data){
-        return <table className="table">
+        return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <thead>
           <tr>
             <th>año</th>
@@ -81,62 +88,191 @@ class Dashboard extends React.Component {
         
     }
 
-    renderBotonesAños(data){
-       return data.map((dato)=>
-       <button className="btn btn-primary">{dato.ano}</button>
-       )
+    componentDidMount() {
+        fetch('../indices2/'+$("#codigo").val())
+          .then(response => response.json())
+          .then(data => this.setState({data:data.indices}))
+          .then(data => this.ordenarIndicesFuncion())
+          
+      }
+
+  ordenarIndicesFuncion(){
+    var indices = []
+    var años = []
+    var nombreIndices = [this.cdd, this.csdi, this.cwd, this.dtr, this.fd0, this.gsl, this.gsl2, this.id0, 
+      this.prcptot, this.r10mm, this.r20mm, this.r95p, this.r99p, this.r50mm,
+      this.rx1day, this.rx5day, this.sdii, this.su25, this.tn10p, this.tn90p, 
+      this.tnn, this.txn, this.tr20, this.tx10p, this.tx90p, this.tnx, this.txx, this.wsdi]
+    this.setState({nombreIndicesOrdenados:nombreIndices})
+    for(let i = 0; i < 28; i++){
+      indices[i] = []
+    }
+    for(let i = 0; i < this.state.data.length; i++){
+      años.push(this.state.data[i]['ano'])
+      indices[0].push(this.state.data[i]['cdd'])
+      indices[1].push(this.state.data[i]['csdi'])
+      indices[2].push(this.state.data[i]['cwd'])
+      indices[3].push(this.state.data[i]['dtr'])
+      indices[4].push(this.state.data[i]['fd0'])
+      indices[5].push(this.state.data[i]['gsl'])
+      indices[6].push(this.state.data[i]['gsl2'])
+      indices[7].push(this.state.data[i]['id0'])
+      indices[8].push(this.state.data[i]['prcptot'])
+      indices[9].push(this.state.data[i]['r10mm'])
+      indices[10].push(this.state.data[i]['r20mm'])
+      indices[11].push(this.state.data[i]['r95p'])
+      indices[12].push(this.state.data[i]['r99p'])
+      indices[13].push(this.state.data[i]['r50mm'])
+      indices[14].push(this.state.data[i]['rx1day'])
+      indices[15].push(this.state.data[i]['rx5day'])
+      indices[16].push(this.state.data[i]['sdii'])
+      indices[17].push(this.state.data[i]['su25'])
+      indices[18].push(this.state.data[i]['tn10p'])
+      indices[19].push(this.state.data[i]['tn90p'])
+      indices[20].push(this.state.data[i]['tnn'])
+      indices[21].push(this.state.data[i]['txn'])
+      indices[22].push(this.state.data[i]['tr20'])
+      indices[23].push(this.state.data[i]['tx10p'])
+      indices[24].push(this.state.data[i]['tx90p'])
+      indices[25].push(this.state.data[i]['tnx'])
+      indices[26].push(this.state.data[i]['txx'])
+      indices[27].push(this.state.data[i]['wsdi'])
     }
 
-    componentDidMount() {
-      const ctx = this.ctx;
+    this.setState({indicesOrdenados:indices})
+    this.setState({vectorAños:años})
+    for(let i = 0; i < 28; i++){
+      this.crearGrafico(this.state.nombreIndicesOrdenados[i], i)
+    }
+  }
 
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-        fetch('indices2')
-          .then(response => response.json())
-          .then(data => this.setState({ data: data.indices})
-          );
+  crearGrafico(valor, i){
+    new Chart(valor, {
+      type: 'line',
+      data: {
+          labels: this.state.vectorAños,
+          datasets: [{
+              label: this.state.nombreIndices[i],
+              data: this.state.indicesOrdenados[i],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
       }
+  })
+  }    
 
   render() {
     return  <div>
-     {this.renderBotonesAños(this.state.data)}   
-     {this.renderTabla(this.state.data)}
-     <canvas width="400" height="400" ref={ctx => (this.ctx = ctx)}/>
+      {this.renderTabla(this.state.data)}
+      <div className="row">
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.cdd = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.csdi = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.cwd = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.dtr = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.fd0 = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.gsl = ctx}/>
+          </div>
+          </div>
+          <div className="row">
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.gsl2 = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.id0 = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.prcptot = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.r10mm = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.r20mm = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.r95p = ctx}/>
+          </div>
+          </div>
+          <div className="row">
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.r99p = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.r50mm = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.rx1day = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.rx5day = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.sdii = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.su25 = ctx}/>
+          </div>
+          </div>
+          <div className="row">
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tn10p = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tn90p = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tnn = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.txn = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tr20 = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tx10p = ctx}/>
+          </div>
+          </div>
+          <div className="row">
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tx90p = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tnx = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.txx = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.wsdi = ctx}/>
+          </div>
+      </div>
      </div>;
   }
 }

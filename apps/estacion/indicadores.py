@@ -1,14 +1,36 @@
 from apps.memoria.models import MemAno, MemMes
 import math
+from operator import itemgetter
 
-def funcion_percentil(datos, percentil, columna):
-      datos2 = datos.sort(columna)
-      n = len(datos2)
+def takeTemMin(elem):
+    return elem[4]
+
+def takeTemMax(elem):
+    return elem[3]
+
+def takePrecipitacion(elem):
+    return elem[5]
+
+def funcion_percentil(datos, percentil, columna, largo):
+      print('holi')
+      if(columna == 'temperaturaminserie'):
+          datos.sort(key = takeTemMin)
+          columna = 4
+      elif(columna == 'temperaturamaxserie'):
+          datos.sort(key = takeTemMax)
+          columna = 3
+      else:
+          datos.sort(key = takePrecipitacion)
+          columna = 5
+      print(datos)
+      n = largo
       i = n * percentil
       if(i % 1 == 0):
-          p = (datos2[columna][int(i)] + datos2[columna][int(i-1)])/2
+          print(columna)
+          p = (datos[int(i)][columna] + datos[int(i-1)][columna])/2
       else:
-          p = datos2[columna][math.ceil(i-1)]
+          print(columna)
+          p = datos[math.ceil(i-1)][columna]
       return p
 
 def anos_meses(data2):
@@ -122,16 +144,16 @@ def funcion_r50mm(precipitacion, r50mm):
     return r50mm
 
 def funcion_rx1day(datos):
-    datos.sort('precipitacionserie')
-    return datos['precipitacionserie'][0]
+    datos.sort(key = takePrecipitacion)
+    return datos[0][5]
 
 def funcion_rx5day(precipitacion, rx5day): 
     ciclo = 0
     largo = len(precipitacion) 
     for x in precipitacion:
         if(ciclo+4 != largo-1):
-            suma = precipitacion[ciclo] + precipitacion[ciclo+1] + precipitacion[ciclo+2] 
-            + precipitacion[ciclo+3] + precipitacion[ciclo+4]
+            suma = precipitacion[ciclo][5] + precipitacion[ciclo+1][5] + precipitacion[ciclo+2][5] 
+            + precipitacion[ciclo+3][5] + precipitacion[ciclo+4][5]
             if(rx5day < suma):
                 rx5day = suma
         else: 
@@ -169,12 +191,12 @@ def funcion_tn90p(percentil_90, temMinima, ciclo, largo, tn90p):
     return tn90p
 
 def funcion_tnn(datos):
-    datos2= datos.sort('temperaturaminserie')
-    return datos2['temperaturaminserie'][0] 
+    datos.sort(key = takeTemMin)
+    return datos[0][4] 
 
 def funcion_txn(datos):
-    datos2= datos.sort('temperaturamaxserie')
-    return datos2['temperaturamaxserie'][0]
+    datos.sort(key = takeTemMax)
+    return datos[0][3]
 
 def funcion_tr20(temMin, largoExcel, tr20Count, ciclo):
     if( float(temMin) > 20):
@@ -204,12 +226,12 @@ def funcion_tx90p(percentil_90, temMaxima, ciclo, largo, tx90p):
     return tx90p
 
 def funcion_tnx(datos):
-    datos2= datos.sort('temperaturaminserie')
-    return datos2['temperaturaminserie'][len(datos2)-1] 
+    datos.sort(key = takeTemMin)
+    return datos[len(datos)-1][4] 
 
 def funcion_txx(datos):
-    datos2= datos.sort('temperaturamaxserie')
-    return datos2['temperaturamaxserie'][len(datos2)-1]
+    datos.sort(key = takeTemMax)
+    return datos[len(datos)-1][3]
 
 def funcion_wsdi(percentil_90, temMax, wsdi):
     if(percentil_90 < temMax):

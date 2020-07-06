@@ -1,8 +1,9 @@
 {% extends "memoria/base2.html" %}
 {% load staticfiles %}
 {% block content %}
-<h1>DashBoard</h1>
+<h1>Indices</h1>
 {% if estaciones %}
+<input type="hidden" id="codigo" name="codigo" value={{codigoEstacion}}>
 <div class="row">
     <div class="col-12">
         <div id="react"></div>

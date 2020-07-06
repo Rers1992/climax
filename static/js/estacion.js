@@ -21,6 +21,10 @@ function fn_abreFormModificarUsuario(v_rut) {
     });
 }
 
+function fn_Indicadores(codigoEstacion){
+    location.href = 'dashboard/'+codigoEstacion;
+}
+
 function fn_Bitacora(codigoEstacion){
     location.href = 'bitacora/'+codigoEstacion;
 }

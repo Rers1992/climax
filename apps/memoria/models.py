@@ -181,7 +181,6 @@ class MemSeriedetiempo(models.Model):
     fechaserie = models.DateField(blank=True, null=True)
     temperaturamaxserie = models.CharField(max_length=20, blank=True, null=True)
     temperaturaminserie = models.CharField(max_length=20, blank=True, null=True)
-    temperaturamediaserie = models.CharField(max_length=20, blank=True, null=True)
     precipitacionserie = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
