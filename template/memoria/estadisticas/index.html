@@ -1,7 +1,7 @@
 {% extends "memoria/base2.html" %}
 {% load staticfiles %}
 {% block content %}
-<h1>Indices</h1>
+<h1>Estadisticas Serie Temporal</h1>
 <input type="hidden" id="codigo" name="codigo" value={{codigoEstacion}}>
 <div class="row">
     <div class="col-12">
@@ -18,6 +18,6 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <!-- Cargamos nuestro componente de React. -->
-<script type="text/babel" src="{% static 'js/react.js' %}"></script>
+<script type="text/babel" src="{% static 'js/reactEs.js' %}"></script>
 
 {% endblock %}

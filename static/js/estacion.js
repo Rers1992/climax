@@ -25,6 +25,10 @@ function fn_Indicadores(codigoEstacion){
     location.href = 'dashboard/'+codigoEstacion;
 }
 
+function fn_Estadisticas(codigoEstacion){
+    location.href = 'estadisticas/'+codigoEstacion;
+}
+
 function fn_Bitacora(codigoEstacion){
     location.href = 'bitacora/'+codigoEstacion;
 }

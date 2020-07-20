@@ -1,6 +1,5 @@
 from apps.memoria.models import MemAno, MemMes
 import math
-from operator import itemgetter
 
 def takeTemMin(elem):
     return elem[4]
@@ -12,7 +11,6 @@ def takePrecipitacion(elem):
     return elem[5]
 
 def funcion_percentil(datos, percentil, columna, largo):
-      print('holi')
       if(columna == 'temperaturaminserie'):
           datos.sort(key = takeTemMin)
           columna = 4
@@ -22,14 +20,11 @@ def funcion_percentil(datos, percentil, columna, largo):
       else:
           datos.sort(key = takePrecipitacion)
           columna = 5
-      print(datos)
       n = largo
       i = n * percentil
       if(i % 1 == 0):
-          print(columna)
           p = (datos[int(i)][columna] + datos[int(i-1)][columna])/2
       else:
-          print(columna)
           p = datos[math.ceil(i-1)][columna]
       return p
 

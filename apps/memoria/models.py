@@ -166,6 +166,30 @@ class MemMes(models.Model):
         managed = True
         db_table = 'mem_mes'
 
+class MemEstadisticas(models.Model):
+    codigoestadisticas = models.AutoField(primary_key=True)
+    codigoano = models.ForeignKey(MemAno, models.DO_NOTHING, db_column='codigoano')
+    codigoestacion = models.ForeignKey(MemEstacionmeteorologica, models.DO_NOTHING, db_column='codigoestacion', blank=True, null=True)
+    mediamax = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True)
+    mediamin = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True)
+    mediapre = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True)
+    medianamax = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True) 
+    medianamin = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True)
+    medianapre = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True)
+    modamax = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True) 
+    modamin = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True) 
+    modapre = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True) 
+    desviacionesmax = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True) 
+    desviacionesmin = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True) 
+    desviacionespre = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True) 
+    varianzamax = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True) 
+    varianzamin = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True) 
+    varianzapre = models.DecimalField(max_digits=1000, decimal_places=3, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'mem_estadisticas'
+
 class MemDia(models.Model):
     codigodia = models.AutoField(primary_key=True)
     codigomes = models.ForeignKey(MemMes, models.DO_NOTHING, db_column='codigomes')
