@@ -1,5 +1,6 @@
 from apps.memoria.models import MemAno, MemMes
 import math
+import numpy as np
 
 def takeTemMin(elem):
     return elem[4]
@@ -10,22 +11,29 @@ def takeTemMax(elem):
 def takePrecipitacion(elem):
     return elem[5]
 
-def funcion_percentil(datos, percentil, columna, largo):
-      if(columna == 'temperaturaminserie'):
-          datos.sort(key = takeTemMin)
-          columna = 4
-      elif(columna == 'temperaturamaxserie'):
-          datos.sort(key = takeTemMax)
-          columna = 3
-      else:
-          datos.sort(key = takePrecipitacion)
-          columna = 5
-      n = largo
+def funcion_percentil(datos, percentil):
+      mayores = datos
+      mayores.sort()
+      n = len(mayores)
       i = n * percentil
       if(i % 1 == 0):
-          p = (datos[int(i)][columna] + datos[int(i-1)][columna])/2
+          p = (mayores[int(i)] + mayores[int(i-1)])/2
       else:
-          p = datos[math.ceil(i-1)][columna]
+          p = mayores[math.ceil(i-1)]
+      return p
+
+def funcion_percentil_95(datos, percentil):
+      mayores = []
+      for x in datos:
+          if(x >= 1):
+              mayores.append(x)
+      mayores.sort()
+      n = len(mayores)
+      i = n * percentil
+      if(i % 1 == 0):
+          p = (mayores[int(i)] + mayores[int(i-1)])/2
+      else:
+          p = mayores[math.ceil(i-1)]
       return p
 
 def anos_meses(data2):
@@ -138,9 +146,9 @@ def funcion_r50mm(precipitacion, r50mm):
         r50mm += 1
     return r50mm
 
-def funcion_rx1day(datos):
+def funcion_rx1day(datos, largo):
     datos.sort(key = takePrecipitacion)
-    return datos[0][5]
+    return datos[largo-1][5]
 
 def funcion_rx5day(precipitacion, rx5day): 
     ciclo = 0
@@ -196,10 +204,6 @@ def funcion_txn(datos):
 def funcion_tr20(temMin, largoExcel, tr20Count, ciclo):
     if( float(temMin) > 20):
          tr20Count[0] += 1
-    if(float(temMin) <= 20 or ciclo == largoExcel):
-         if(tr20Count[1] < tr20Count[0]):
-             tr20Count[1] = tr20Count[0]
-         tr20Count[0] = 0
     return tr20Count
 
 def funcion_tx10p(percentil_10, temMaxima, ciclo, largo, tx10p):
@@ -233,7 +237,7 @@ def funcion_wsdi(percentil_90, temMax, wsdi):
         wsdi[0] += 1
     elif(percentil_90 > temMax and wsdi[0] != 6):
         wsdi[0] = 0
-    if(wsdi[0] == 6):
-        wsdi[1] += 1
+    if(wsdi[0] >= 6):
+        wsdi[1] += wsdi[0]
         wsdi[0] = 0
     return wsdi

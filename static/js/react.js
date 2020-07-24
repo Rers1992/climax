@@ -3,6 +3,8 @@ class Dashboard extends React.Component {
         super(props)
         this.myRef = React.createRef();
         this.state = {
+            latitud: 0,
+            longitud: 0,
             data: [],
             indicesOrdenados: [],
             vectorAños: [],
@@ -91,7 +93,7 @@ class Dashboard extends React.Component {
     componentDidMount() {
         fetch('../indices2/'+$("#codigo").val())
           .then(response => response.json())
-          .then(data => this.setState({data:data.indices}))
+          .then(data => this.setState({data:data.indices, longitud:data.long, latitud:data.lat}))
           .then(data => this.ordenarIndicesFuncion())
           
       }
@@ -284,6 +286,7 @@ class Dashboard extends React.Component {
       },
       data: {
           labels: this.state.vectorAños,
+          fill: false,
           datasets: [{
               label: this.state.nombreIndices[i],
               data: this.state.indicesOrdenados[i],
@@ -292,6 +295,7 @@ class Dashboard extends React.Component {
               borderWidth: 1
           }, {
             label: "Ajuste",
+            backgroundColor: 'rgba(63, 121, 191, 0.2)',
             borderColor: 'rgba(63, 121, 191, 1)',
             borderWidth: 1,
             data: vectorB
@@ -304,26 +308,29 @@ class Dashboard extends React.Component {
     return  <div>
       {this.renderTabla(this.state.data)}
       <div className="row">
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.cdd = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.csdi = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.cwd = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.dtr = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.fd0 = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.gsl = ctx}/>
-          </div>
-          </div>
-          <div className="row">
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-4">
+          <h2 className="text-center"><b>Ubicación estación</b></h2>
+          <iframe width="450" height="400" src={'https://www.google.com/maps/embed/v1/place?key=AIzaSyDx_FE31SZ6Ow8iI57vMSTOHJ823in0k3c&q='+
+        this.state.latitud+','+this.state.longitud}></iframe>
+            </div>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.cdd = ctx}/>
+            </div>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.csdi = ctx}/>
+            </div>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.cwd = ctx}/>
+            </div>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.dtr = ctx}/>
+            </div>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.fd0 = ctx}/>
+            </div>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.gsl = ctx}/>
+            </div>
           <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
             <canvas width="400" height="400" ref={ctx => this.gsl2 = ctx}/>
           </div>

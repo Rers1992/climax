@@ -44,6 +44,7 @@ def tablaHecho(request, codigoEstacion):
     indicesJson = []
     ciclo = 0
     indices = MemIndicesextremosclimaticos.objects.filter(codigoestacion = codigoEstacion).select_related('codigoano')
+    estaciones = MemEstacionmeteorologica.objects.filter(codigoestacion = codigoEstacion)
     for x in indices:
         indicesJson.append({'ano': indices[ciclo].codigoano.ano,'cdd' : indices[ciclo].cdd, 'csdi' : indices[ciclo].csdi, 'cwd' : indices[ciclo].cwd, 
         'dtr' : indices[ciclo].dtr, 'fd0' : indices[ciclo].fd0, 'gsl' : indices[ciclo].gsl,
@@ -56,7 +57,7 @@ def tablaHecho(request, codigoEstacion):
         'tx90p' : indices[ciclo].tx90p, 'tnx' : indices[ciclo].tnx, 'txx' : indices[ciclo].txx, 'wsdi' : indices[ciclo].wsdi})
         ciclo +=1
     indicesJson.sort(key=get_my_key)
-    return JsonResponse({'indices':indicesJson})
+    return JsonResponse({'indices':indicesJson, 'long': estaciones[0].longitudestacion, 'lat':estaciones[0].latitudestacion})
 
 def crearEstacion(request):
     if request.method == 'POST':
@@ -67,6 +68,9 @@ def crearEstacion(request):
     else:
         estacionForm = MemEstacionForm()
         return render (request, 'memoria/estacion/modal.html', {'estacionForm':estacionForm})
+
+def takeFecha(elem):
+    return elem[2]
 
 def importarEstacion(request, codigoEstacion):
    if request.method == 'POST':  
@@ -81,6 +85,9 @@ def importarEstacion(request, codigoEstacion):
         temperaturaMinEs = []
         precipitacionEs = []
         años = []
+        preciPercentiles = []
+        temMaxPercentiles = []
+        temMinPercentiles = []
         contador = 0
         fecha_año = imported_data['fechaserie'][0].split('-')
         año_cambio= fecha_año[0]
@@ -103,9 +110,20 @@ def importarEstacion(request, codigoEstacion):
                     temperaturaMaxEs[largoAños].append(k[3])
                     temperaturaMinEs[largoAños].append(k[4])
                     precipitacionEs[largoAños].append(k[5])
+                    if(int(j) >= 1961 and int(j) <= 1990):
+                        preciPercentiles.append(k[5])
+                        temMaxPercentiles.append(k[3])
+                        temMinPercentiles.append(k[4])
             largoAños +=1
         contAños = 0
+        percentil_10 = funcion_percentil(temMinPercentiles, 0.1)
+        percentil_10TemMAX = funcion_percentil(temMaxPercentiles, 0.1)
+        percentil_90 = funcion_percentil(temMinPercentiles, 0.9)
+        percentil_90TemMax = funcion_percentil(temMaxPercentiles, 0.9)
+        percentil_95 = funcion_percentil_95(preciPercentiles, 0.95)
+        percentil_99 = funcion_percentil_95(preciPercentiles, 0.99)
         for z in separar_anos:
+            print(contAños)
             mediaMax = np.mean(temperaturaMaxEs[contAños])
             mediaMin = np.mean(temperaturaMinEs[contAños])
             mediaPre = np.mean(precipitacionEs[contAños])
@@ -128,54 +146,47 @@ def importarEstacion(request, codigoEstacion):
             glsCount = [0,0]; glsCount1 = [0,0]; tr20Count = [0,0]; rx5day = 0
             temperaturasMaxMin = [0,0]
             ciclo = 0; largo = len(z)
-            percentil_10 = funcion_percentil(z, 0.1, 'temperaturaminserie', largo)
-            percentil_10TemMAX = funcion_percentil(z, 0.1, 'temperaturamaxserie', largo)
-            percentil_90 = funcion_percentil(z, 0.9, 'temperaturaminserie', largo)
-            percentil_90TemMax = funcion_percentil(z, 0.9, 'temperaturamaxserie', largo)
-            percentil_95 = funcion_percentil(z, 0.95, 'precipitacionserie', largo)
-            percentil_99 = funcion_percentil(z, 0.99, 'precipitacionserie', largo)
-            rx1day = funcion_rx1day(z)
+            rx1day = funcion_rx1day(z, largo)
             rx5day = funcion_rx5day(z, rx5day)
             tnn = funcion_tnn(z)
             txn = funcion_txn(z)
             tnx = funcion_tnx(z)
             txx = funcion_txx(z)
+            z.sort(key = takeFecha)
             for x in z:
                 ciclo += 1
-                cddCount = funcion_cdd(imported_data['precipitacionserie'][contador], largo, cddCount, ciclo)
-                csdiCount = funcion_csdi(imported_data['temperaturaminserie'][contador], largo, csdiCount, ciclo, percentil_10)
-                cwdCount = funcion_cwd(imported_data['precipitacionserie'][contador], largo, cwdCount, ciclo)
-                temperaturasMaxMin = funcion_dtr(temperaturasMaxMin, imported_data['temperaturamaxserie'][contador], imported_data['temperaturaminserie'][contador])
-                fd0 = funcion_fd0(imported_data['temperaturaminserie'][contador], fd0)
-                fecha_mes = imported_data['fechaserie'][contador].split('-')
-                temMedia = (imported_data['temperaturaminserie'][contador]+imported_data['temperaturamaxserie'][contador])/2
-                if(int(fecha_mes[1]) < 6):
-                    glsCount = funcion_gls(temMedia, largo, glsCount, ciclo)
-                else:
+                cddCount = funcion_cdd(x[5], largo, cddCount, ciclo)
+                csdiCount = funcion_csdi(x[4], largo, csdiCount, ciclo, percentil_10)
+                cwdCount = funcion_cwd(x[5], largo, cwdCount, ciclo)
+                temperaturasMaxMin = funcion_dtr(temperaturasMaxMin, x[3], x[4])
+                fd0 = funcion_fd0(x[4], fd0)
+                fecha_mes = x[2].split('-')
+                temMedia = (x[4]+x[3])/2
+                glsCount = funcion_gls(temMedia, largo, glsCount, ciclo)
+                if(int(fecha_mes[1]) > 6):
                     glsCount1 = funcion_gls1(temMedia, largo, glsCount1, ciclo)
-                id0 = funcion_id0(imported_data['temperaturamaxserie'][contador], id0)
-                prcptot = funcion_prcptot(imported_data['precipitacionserie'][contador], prcptot)
-                r10mm = funcion_r10mm(imported_data['precipitacionserie'][contador], r10mm)
-                r20mm = funcion_r20mm(imported_data['precipitacionserie'][contador], r20mm)
-                r95p = funcion_r95p(imported_data['precipitacionserie'][contador], r95p, percentil_95)
-                r99p = funcion_r99p(imported_data['precipitacionserie'][contador], r99p, percentil_99)
-                r50mm = funcion_r50mm(imported_data['precipitacionserie'][contador], r50mm)
-                sdiiCount = funcion_sdii(imported_data['precipitacionserie'][contador], sdiiCount)
-                su25 = funcion_su25(imported_data['temperaturamaxserie'][contador], su25)
-                tn10p = funcion_tn10p(percentil_10, imported_data['temperaturaminserie'][contador], ciclo, largo, tn10p)
-                tn90p = funcion_tn90p(percentil_90, imported_data['temperaturaminserie'][contador], ciclo, largo, tn90p)
-                tr20Count = funcion_tr20(imported_data['temperaturaminserie'][contador], largo, tr20Count, ciclo)
-                tx10p = funcion_tx10p(percentil_10TemMAX, imported_data['temperaturamaxserie'][contador], ciclo, largo, tx10p)
-                tx90p = funcion_tx90p(percentil_90TemMax, imported_data['temperaturamaxserie'][contador], ciclo, largo, tx90p)
-                wsdi = funcion_wsdi(percentil_90TemMax, imported_data['temperaturamaxserie'][contador], wsdi)
-                data2 = imported_data['fechaserie'][contador].split('-')
-                año = anos_meses(data2)
-                MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion).filter(fechaserie=imported_data['fechaserie'][contador]).delete()
+                id0 = funcion_id0(x[3], id0)
+                prcptot = funcion_prcptot(x[5], prcptot)
+                r10mm = funcion_r10mm(x[5], r10mm)
+                r20mm = funcion_r20mm(x[5], r20mm)
+                r95p = funcion_r95p(x[5], r95p, percentil_95)
+                r99p = funcion_r99p(x[5], r99p, percentil_99)
+                r50mm = funcion_r50mm(x[5], r50mm)
+                sdiiCount = funcion_sdii(x[5], sdiiCount)
+                su25 = funcion_su25(x[3], su25)
+                tn10p = funcion_tn10p(percentil_10, x[4], ciclo, largo, tn10p)
+                tn90p = funcion_tn90p(percentil_90, x[4], ciclo, largo, tn90p)
+                tr20Count = funcion_tr20(x[4], largo, tr20Count, ciclo)
+                tx10p = funcion_tx10p(percentil_10TemMAX, x[3], ciclo, largo, tx10p)
+                tx90p = funcion_tx90p(percentil_90TemMax, x[3], ciclo, largo, tx90p)
+                wsdi = funcion_wsdi(percentil_90TemMax, x[3], wsdi)
+                año = anos_meses(fecha_mes)
+                MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion).filter(fechaserie=x[2]).delete()
                 serieTiempo = MemSeriedetiempo(codigoestacion = MemEstacionmeteorologica.objects.get(codigoestacion = codigoEstacion), 
-                fechaserie = imported_data['fechaserie'][contador], 
-                temperaturamaxserie = imported_data['temperaturamaxserie'][contador],
-                temperaturaminserie = imported_data['temperaturaminserie'][contador], 
-                precipitacionserie = imported_data['precipitacionserie'][contador])
+                fechaserie = x[2], 
+                temperaturamaxserie = x[3],
+                temperaturaminserie = x[4], 
+                precipitacionserie = x[5])
                 contador += 1
             dtr = (temperaturasMaxMin[0] - temperaturasMaxMin[1])/largo
             if(sdiiCount[0] != 0):
@@ -189,7 +200,7 @@ def importarEstacion(request, codigoEstacion):
             cdd = cddCount[1], csdi = csdiCount[1], cwd = cwdCount[1], dtr = dtr, fd0 = fd0, gsl = glsCount[1],
             gsl2 = glsCount1[1], id0 = id0, prcptot = prcptot, r10mm = r10mm, r20mm = r20mm, r95p = r95p,
             r99p = r99p, r50mm = r50mm, rx1day = rx1day, rx5day = rx5day, sdii = sdii, su25 = su25,
-            tn10p = tn10p, tn90p = tn90p, tnn = tnn, txn = txn, tr20 = tr20Count[1], tx10p = tx10p,
+            tn10p = tn10p, tn90p = tn90p, tnn = tnn, txn = txn, tr20 = tr20Count[0], tx10p = tx10p,
             tx90p = tx90p, tnx = tnx, txx = txx, wsdi = wsdi[1])
             indices.save()
             estadisticas = MemEstadisticas(codigoano = MemAno.objects.get(codigoano=año),
