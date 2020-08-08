@@ -3,4 +3,4 @@ from django.http import HttpResponseRedirect
 
 def logoutUsuario(request):
     logout(request)
-    return HttpResponseRedirect('accounts/login/')
+    return HttpResponseRedirect('../../inicio')

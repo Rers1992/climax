@@ -34,13 +34,11 @@ function fn_Bitacora(codigoEstacion){
 }
 
 function fn_abreFormImportar(codigoEstacion) {
-    console.log(new Date)
     $.ajax({
         type: 'GET',
         url: 'importarEstacion/'+codigoEstacion,
         success: function (data) {
             $('#employee_detail').html(data);
-         //   $('#div_id_contrasenausuario').hide();
             $('#dataModal').modal("show");
         }
     });

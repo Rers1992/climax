@@ -1,0 +1,21 @@
+.textoColor{
+    color: black
+}
+
+.textoColor2{
+    color: red
+}
+
+.shadow{
+   background-color:rgb(129, 143, 143) !important;
+   top: -150px
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(87deg, white 0, white 100%) !important;
+    height:400px;
+}
+
+.bg-default{
+    background-color: rgba(10, 9, 9, 0.137) !important;
+}

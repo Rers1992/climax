@@ -3,11 +3,75 @@ class Dashboard extends React.Component {
         super(props)
         this.myRef = React.createRef();
         this.state = {
-            data: []
+            data: [],
+            estacion: [],
+            latitud: 0,
+            longitud: 0,
+            fechas: [],
+            temMaximas: [],
+            temMinimas: [],
+            precipitaciones: []
         }
     }
 
-    renderTabla(data){
+    renderDatosEstacion(dato){
+      return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <thead>
+          <tr>
+            <th>Dato</th>
+            <th>Información</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>Codigo</td>
+              <td>{dato.codigo}</td>
+            </tr>
+            <tr>
+              <td>Ubicacion</td>
+              <td>{dato.ubicacion}</td>
+            </tr>
+            <tr>
+              <td>Nombre</td>
+              <td>{dato.nombre}</td>
+            </tr>
+            <tr>
+              <td>Fecha de Instalación</td>
+              <td>{dato.fechaI}</td>
+            </tr>
+            <tr>
+              <td>Longitud</td>
+              <td>{dato.long}</td>
+            </tr>
+            <tr>
+              <td>Latitud</td>
+              <td>{dato.lat}</td>
+            </tr>
+            <tr>
+              <td>Altura</td>
+              <td>{dato.altura}</td>
+            </tr>
+            <tr>
+              <td>Cuenca</td>
+              <td>{dato.cuenca}</td>
+            </tr>
+            <tr>
+              <td>Rio</td>
+              <td>{dato.rio}</td>
+            </tr>
+            <tr>
+              <td>Medición</td>
+              <td>{dato.medi}</td>
+            </tr>
+            <tr>
+              <td>Comentarios</td>
+              <td>{dato.comentario}</td>
+            </tr>
+        </tbody>
+      </table>;
+    }
+
+    renderTabla(){
         return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <thead>
           <tr>
@@ -30,7 +94,7 @@ class Dashboard extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {data.map((dato) => (
+          {this.state.data.map((dato) => (
             <tr>
               <td>{dato.ano}</td>
               <td>{dato.mediamax}</td>
@@ -52,7 +116,6 @@ class Dashboard extends React.Component {
           ))}
         </tbody>
       </table>;
-        
     }
 
     ordenarFuncion(){
@@ -79,6 +142,7 @@ class Dashboard extends React.Component {
             varianzamin.push(this.state.data[i]['varianzamin'])
             varianzapre.push(this.state.data[i]['varianzapre'])
         }
+        this.crearGrafico(this.tiempo, this.state.temMaximas, this.state.temMinimas, this.state.precipitaciones, this.state.fechas)
         this.crearGrafico(this.mediaG, mediamax, mediamin, mediapre, años)
         this.crearGrafico(this.medianaG, medianamax, medianamin, medianapre, años)
         this.crearGrafico(this.modaG, modamax, modamin, modapre, años)
@@ -88,7 +152,7 @@ class Dashboard extends React.Component {
 
     crearGrafico(valor, temMax, temMin, Pre, años){
         new Chart(valor, {
-          type: 'bar',
+          type: 'line',
           data: {
               labels: años,
               datasets: [{
@@ -96,19 +160,22 @@ class Dashboard extends React.Component {
                   backgroundColor: 'rgba(255, 99, 132, 0.2)',
                   borderColor: 'rgba(255, 99, 132, 1)',
                   borderWidth: 1,
-                  data: temMax
+                  data: temMax,
+                  fill: false,
                 }, {
                     label: "Tem. Minima",
                     backgroundColor: 'rgba(63, 121, 191, 0.2)',
                     borderColor: 'rgba(63, 121, 191, 1)',
                     borderWidth: 1,
-                    data: temMin
+                    data: temMin,
+                    fill: false,
                 }, {
                     label: "Precipitación",
                     data: Pre,
                     backgroundColor: 'rgba(21, 255, 5, 0.2)',
                     borderColor: 'rgba(21, 255, 5, 1)',
-                    borderWidth: 1
+                    borderWidth: 1,
+                    fill: false,
                 },
             ]
           }
@@ -118,11 +185,32 @@ class Dashboard extends React.Component {
     componentDidMount() {
         fetch('../estadisticasJson/'+$("#codigo").val())
           .then(response => response.json())
-          .then(data => this.setState({data:data.estadisticas}))
+          .then(data => this.setState({data:data.estadisticas, estacion:data.estacion, longitud:data.estacion.long, latitud:data.estacion.lat, 
+          fechas: data.fechas, temMaximas: data.temMax, temMinimas: data.temMin, precipitaciones: data.preci}))
           .then(data => this.ordenarFuncion())
       }
       render() {
-        return  <div>{this.renderTabla(this.state.data)}
+        return  <div>
+          <div className="row">
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-5">
+            <h2 className="text-center"><b>Información de la Estación Meteorológica</b></h2>
+              {this.renderDatosEstacion(this.state.estacion)}
+            </div>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-7 col-lg-7">
+            <h2 className="text-center"><b>Ubicación estación</b></h2>
+            <iframe width="800" height="250" src={'https://www.google.com/maps/embed/v1/place?key=AIzaSyDx_FE31SZ6Ow8iI57vMSTOHJ823in0k3c&q='+
+            this.state.latitud+','+this.state.longitud}></iframe>
+            </div>
+          </div>
+            <div className="row">
+              <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <br></br>
+                <div className="form-control text-center"><b>Serie de Tiempo</b></div>
+                <canvas width="400" height="100" ref={ctx => this.tiempo = ctx}/>
+              </div>
+            </div>
+            <div></div>
+          {this.renderTabla()}
         <div className="row">
           <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
               <br></br>

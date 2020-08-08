@@ -18,6 +18,14 @@ def estacion(request):
     estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True).select_related('codigoubicacion')
     return render(request, 'memoria/estacion/index.html', {'estaciones':estaciones})
 
+def estacionJson(request):
+    json = []
+    estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True).select_related('rutusuario')
+    for x in estaciones:
+        json.append({'codigo': x.codigoestacion, 'nombre' : x.nombreestacion, 'propietario': x.rutusuario.nombreusuario})
+
+    return JsonResponse({'estacionesJson': json})
+
 def dashboard(request, codigoEstacion):
     return render(request, 'memoria/dashboard/index.html', {'codigoEstacion':codigoEstacion})
 
@@ -26,7 +34,22 @@ def estadisticas(request, codigoEstacion):
 
 def estadisticasJson(request, codigoEstacion):
     estadisticasJson = []
+    años = []
+    temMax = []
+    temMin = []
+    preci = []
+    serie = MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion)
+    for i in serie:
+        años.append(i.fechaserie)
+        temMax.append(i.temperaturamaxserie)
+        temMin.append(i.temperaturaminserie)
+        preci.append(i.precipitacionserie)
     estadisticas = MemEstadisticas.objects.filter(codigoestacion = codigoEstacion).select_related('codigoano')
+    estaciones = MemEstacionmeteorologica.objects.filter(codigoestacion = codigoEstacion).select_related('codigoubicacion')
+    estacionJson = {'codigo': codigoEstacion, 'ubicacion': estaciones[0].codigoubicacion.nombreubicacion, 'nombre': estaciones[0].nombreestacion,
+    'fechaI': estaciones[0].fechainstalacion, 'fechaT': estaciones[0].fechatermino, 'long': estaciones[0].longitudestacion, 
+    'lat': estaciones[0].latitudestacion, 'altura': estaciones[0].alturaestacion, 'cuenca': estaciones[0].cuenca, 'rio': estaciones[0].rio, 
+    'medi': estaciones[0].medicionestacion, 'comentario': estaciones[0].comentario}
     for x in estadisticas:
         estadisticasJson.append({'ano': x.codigoano.ano,'mediamax' : x.mediamax, 'mediamin' : x.mediamin, 
         'mediapre' : x.mediapre, 'medianamax' : x.medianamax, 'medianamin' : x.medianamin, 
@@ -35,29 +58,43 @@ def estadisticasJson(request, codigoEstacion):
         'desviacionespre' : x.desviacionespre, 'varianzamax' : x.varianzamax, 
         'varianzamin' : x.varianzamin, 'varianzapre' : x.varianzapre})
     estadisticasJson.sort(key=get_my_key)
-    return JsonResponse({'estadisticas': estadisticasJson})
+    return JsonResponse({'estadisticas': estadisticasJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
+    'preci': preci})
 
 def get_my_key(obj):
   return obj['ano']
 
 def tablaHecho(request, codigoEstacion):
     indicesJson = []
-    ciclo = 0
+    años = []
+    temMax = []
+    temMin = []
+    preci = []
+    serie = MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion)
+    for i in serie:
+        años.append(i.fechaserie)
+        temMax.append(i.temperaturamaxserie)
+        temMin.append(i.temperaturaminserie)
+        preci.append(i.precipitacionserie)
     indices = MemIndicesextremosclimaticos.objects.filter(codigoestacion = codigoEstacion).select_related('codigoano')
-    estaciones = MemEstacionmeteorologica.objects.filter(codigoestacion = codigoEstacion)
+    estaciones = MemEstacionmeteorologica.objects.filter(codigoestacion = codigoEstacion).select_related('codigoubicacion')
+    estacionJson = {'codigo': codigoEstacion, 'ubicacion': estaciones[0].codigoubicacion.nombreubicacion, 'nombre': estaciones[0].nombreestacion,
+    'fechaI': estaciones[0].fechainstalacion, 'fechaT': estaciones[0].fechatermino, 'long': estaciones[0].longitudestacion, 
+    'lat': estaciones[0].latitudestacion, 'altura': estaciones[0].alturaestacion, 'cuenca': estaciones[0].cuenca, 'rio': estaciones[0].rio, 
+    'medi': estaciones[0].medicionestacion, 'comentario': estaciones[0].comentario}
     for x in indices:
-        indicesJson.append({'ano': indices[ciclo].codigoano.ano,'cdd' : indices[ciclo].cdd, 'csdi' : indices[ciclo].csdi, 'cwd' : indices[ciclo].cwd, 
-        'dtr' : indices[ciclo].dtr, 'fd0' : indices[ciclo].fd0, 'gsl' : indices[ciclo].gsl,
-        'gsl2' : indices[ciclo].gsl2, 'id0' : indices[ciclo].id0, 'prcptot' : indices[ciclo].prcptot, 
-        'r10mm' : indices[ciclo].r10mm, 'r20mm' : indices[ciclo].r20mm, 'r95p' : indices[ciclo].r95p,
-        'r99p' : indices[ciclo].r99p, 'r50mm' : indices[ciclo].r50mm, 'rx1day' : indices[ciclo].rx1day, 'rx5day' : indices[ciclo].rx5day,
-        'sdii' : indices[ciclo].sdii, 'su25' : indices[ciclo].su25,
-        'tn10p' : indices[ciclo].tn10p, 'tn90p' : indices[ciclo].tn90p, 'tnn' : indices[ciclo].tnn, 'txn' : indices[ciclo].txn, 
-        'tr20' : indices[ciclo].tr20, 'tx10p' : indices[ciclo].tx10p,
-        'tx90p' : indices[ciclo].tx90p, 'tnx' : indices[ciclo].tnx, 'txx' : indices[ciclo].txx, 'wsdi' : indices[ciclo].wsdi})
-        ciclo +=1
+        indicesJson.append({'ano': x.codigoano.ano,'cdd' : x.cdd, 'csdi' : x.csdi, 'cwd' : x.cwd, 
+        'dtr' : x.dtr, 'fd0' : x.fd0, 'gsl' : x.gsl,
+        'gsl2' : x.gsl2, 'id0' : x.id0, 'prcptot' : x.prcptot, 
+        'r10mm' : x.r10mm, 'r20mm' : x.r20mm, 'r95p' : x.r95p,
+        'r99p' : x.r99p, 'r50mm' : x.r50mm, 'rx1day' : x.rx1day, 'rx5day' : x.rx5day,
+        'sdii' : x.sdii, 'su25' : x.su25,
+        'tn10p' : x.tn10p, 'tn90p' : x.tn90p, 'tnn' : x.tnn, 'txn' : x.txn, 
+        'tr20' : x.tr20, 'tx10p' : x.tx10p,
+        'tx90p' : x.tx90p, 'tnx' : x.tnx, 'txx' : x.txx, 'wsdi' : x.wsdi})
     indicesJson.sort(key=get_my_key)
-    return JsonResponse({'indices':indicesJson, 'long': estaciones[0].longitudestacion, 'lat':estaciones[0].latitudestacion})
+    return JsonResponse({'indices':indicesJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
+    'preci': preci})
 
 def crearEstacion(request):
     if request.method == 'POST':
@@ -76,6 +113,8 @@ def importarEstacion(request, codigoEstacion):
    if request.method == 'POST':  
      serie_resource = SerieTiempoResource()  
      dataset = Dataset()
+     fechaInicio= request.POST['fecha1']
+     fechaFin= request.POST['fecha2']
      nuevas_anos = request.FILES['xlsfile'] 
      imported_data = dataset.load(nuevas_anos.read())
      result = serie_resource.import_data(dataset, dry_run=True) # Test the data import
@@ -110,7 +149,7 @@ def importarEstacion(request, codigoEstacion):
                     temperaturaMaxEs[largoAños].append(k[3])
                     temperaturaMinEs[largoAños].append(k[4])
                     precipitacionEs[largoAños].append(k[5])
-                    if(int(j) >= 1961 and int(j) <= 1990):
+                    if(int(j) > int(fechaInicio) and int(j) < int(fechaFin)):
                         preciPercentiles.append(k[5])
                         temMaxPercentiles.append(k[3])
                         temMinPercentiles.append(k[4])
@@ -183,10 +222,8 @@ def importarEstacion(request, codigoEstacion):
                 año = anos_meses(fecha_mes)
                 MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion).filter(fechaserie=x[2]).delete()
                 serieTiempo = MemSeriedetiempo(codigoestacion = MemEstacionmeteorologica.objects.get(codigoestacion = codigoEstacion), 
-                fechaserie = x[2], 
-                temperaturamaxserie = x[3],
-                temperaturaminserie = x[4], 
-                precipitacionserie = x[5])
+                fechaserie = x[2], temperaturamaxserie = x[3], temperaturaminserie = x[4], precipitacionserie = x[5])
+                serieTiempo.save()
                 contador += 1
             dtr = (temperaturasMaxMin[0] - temperaturasMaxMin[1])/largo
             if(sdiiCount[0] != 0):

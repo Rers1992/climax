@@ -9,8 +9,24 @@
         {% csrf_token %}
         {% if error %}
             <h2>{{ error }}</h2>
-        {% else %}    
-            <input type="file" name="xlsfile">
+        {% else %}
+        <div class="row">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <input class="form-control" type="file" name="xlsfile">
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <br>
+                <label class="form-control text-center">Periodo</label>
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <label class="form-control text-center">Año de Inicio</label>
+                <input class="form-control" type="number" name="fecha1" required>
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <label class="form-control text-center">Año de Fin</label>
+                <input class="form-control" type="number" name="fecha2" required>
+            </div>
+        </div>
         {% endif %}
         <br>
         <button type="submit" class="btn btn-primary">Guardar</button>
