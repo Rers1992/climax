@@ -12,5 +12,5 @@ urlpatterns = [
     path('dashboard/<int:codigoEstacion>', login_required(dashboard), name = 'dashboard'),
     path('estadisticas/<int:codigoEstacion>', login_required(estadisticas), name = 'estadisticas'),
     path('indices2/<int:codigoEstacion>', tablaHecho, name = 'indices2'),
-    path('estadisticasJson/<int:codigoEstacion>', login_required(estadisticasJson), name = 'estadisticasJson'),
+    path('estadisticasJson/<int:codigoEstacion>', estadisticasJson, name = 'estadisticasJson'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

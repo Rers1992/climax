@@ -3,16 +3,10 @@ class Dashboard extends React.Component {
         super(props)
         this.myRef = React.createRef();
         this.state = {
-            inicio: -1,
-            fin: -1,
-            codigoGrafico: -1,
-            vectorC1: [],
-            codigoEstacion: 0,
-            codigoEstacion2: 0,
-            estaciones:[],
             estacion: [],
             latitud: 0,
             longitud: 0,
+            cambio: 1,
             fechas: [],
             temMaximas: [],
             temMinimas: [],
@@ -21,13 +15,11 @@ class Dashboard extends React.Component {
             indicesOrdenados: [],
             vectorAños: [],
             nombreIndicesOrdenados: [],
-            rcuadrado: [],
             nombreIndices: ['cdd', 'csdi', 'cwd', 'dtr', 'fd0', 'gsl', 'gsl2', 'id0', 
               'prcptot', 'r10mm', 'r20mm', 'r95p', 'r99p', 'r50mm',
               'rx1day', 'rx5day', 'sdii', 'su25', 'tn10p', 'tn90p', 
               'tnn', 'txn', 'tr20', 'tx10p', 'tx90p', 'tnx', 'txx', 'wsdi']
         }
-        this.handleChange = this.handleChange.bind(this);
     }
 
     renderDatosEstacion(dato){
@@ -194,11 +186,11 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount() {
-        fetch('../memoria/estacionJson')
+        fetch('../memoria/indices2/'+$("#codigo").val())
           .then(response => response.json())
-          .then(data => this.setState({estaciones:data.estacionesJson, codigoEstacion:data.estacionesJson[0].codigo, 
-            codigoEstacion2:data.estacionesJson[0].codigo}))
-
+          .then(data => this.setState({data:data.indices, estacion:data.estacion, longitud:data.estacion.long, latitud:data.estacion.lat, 
+            fechas: data.fechas, temMaximas: data.temMax, temMinimas: data.temMin, precipitaciones: data.preci}))
+          .then(data => this.ordenarIndicesFuncion())
           
       }
 
@@ -219,6 +211,11 @@ class Dashboard extends React.Component {
     var b = []
     var n = 0
     var r2 = []
+    var nombreIndices = [this.cdd, this.csdi, this.cwd, this.dtr, this.fd0, this.gsl, this.gsl2, this.id0, 
+      this.prcptot, this.r10mm, this.r20mm, this.r95p, this.r99p, this.r50mm,
+      this.rx1day, this.rx5day, this.sdii, this.su25, this.tn10p, this.tn90p, 
+      this.tnn, this.txn, this.tr20, this.tx10p, this.tx90p, this.tnx, this.txx, this.wsdi]
+    this.setState({nombreIndicesOrdenados:nombreIndices})
     for(let i = 0; i < 28; i++){
       indices[i] = []
       sumy[i] = 0
@@ -361,29 +358,27 @@ class Dashboard extends React.Component {
       r2[i] = (sigmaxy[i]/(sigmax*sigmay[i]))**2
     }
     var vectorB = []
-    var vectorC = []
+
     años.push(String(Number(años[n-1]) + 1))
     this.setState({indicesOrdenados:indices})
     this.setState({vectorAños:años})
-    this.setState({rcuadrado:r2})
     this.crearGrafico2(this.tiempo, this.state.temMaximas, this.state.temMinimas, this.state.precipitaciones, this.state.fechas)
     for(let i = 0; i < 28; i++){
       vectorB = []
       for(let j = 0; j< años.length; j++){
           vectorB.push(m[i] * años[j] + b[i])
       }
-      vectorC.push(vectorB)
+      this.crearGrafico(this.state.nombreIndicesOrdenados[i], i, vectorB, r2)
     }
-    this.setState({vectorC1:vectorC})
   }
-  
-  crearGrafico3(i){
-    new Chart(this.cdd, {
+
+  crearGrafico(valor, i, vectorB, r2){
+    new Chart(valor, {
       type: 'line',
       options: {
         title: {
           display: true,
-          text: 'R2 = '+ this.state.rcuadrado[i]
+          text: 'R2 = '+ r2[i]
         }
       },
       data: {
@@ -399,164 +394,128 @@ class Dashboard extends React.Component {
             backgroundColor: 'rgba(63, 121, 191, 0.2)',
             borderColor: 'rgba(63, 121, 191, 1)',
             borderWidth: 1,
-            data: this.state.vectorC1[i],
+            data: vectorB,
             fill: false,
         }]
       }
   })
-  }   
-
-  cargarListaEstaciones(data){
-      return <div className="row">
-          {data.map((dato) => (
-              <div className="col-12 col-12 col-md-12 col-lg-12 col-xl-12">
-              <div className="card card-photo contenedor" onClick={() => this.setState({ codigoEstacion: dato.codigo, codigoEstacion2: dato.codigo })}>
-                <div  className="card-body">
-                    <h5 className="card-title">Nombre Estación: { dato.nombre}</h5>
-                    <h5 className="card-title">Propietario: { dato.propietario}</h5>
-                </div>
-              </div>
-            </div>
-          ))}
-      </div>
-  }
-
-  handleChange(event) {
-      var val = (event.target.value).split("-")
-      if(val[1] == 3){
-        this.setState({codigoGrafico: val[0]});
-      } else if(val[1] == 2){
-        this.setState({fin: val[0]});
-      } else{
-        this.setState({inicio: val[0]});
-      }
-  }
-
-  filtroGrafico3(){
-    $('#serie').removeData();
-    var temMax = []
-    var temMin = []
-    var pre = []
-    var fechas = []
-     var val = this.state.inicio - this.state.fin
-     if(val > 0){
-         for(let i = this.state.fin; i < val; i++){
-            temMax.push(this.state.temMaximas[i])
-            temMin.push(this.state.temMinimas[i])
-            pre.push(this.state.precipitaciones[i])
-            fechas.push(this.state.fechas[i])
-         }
-        this.crearGrafico2(this.tiempo, temMax, temMin, pre, fechas)
-     }else{
-         alert("La fecha de fin no puede ser menor a la de inicio")
-     }
-  }
+  }    
 
   render() {
-    if(this.state.codigoEstacion != 0){
-        fetch('../memoria/indices2/'+this.state.codigoEstacion)
-          .then(response => response.json())
-          .then(data => this.setState({data:data.indices, estacion:data.estacion, longitud:data.estacion.long, latitud:data.estacion.lat, 
-          fechas: data.fechas, temMaximas: data.temMax, temMinimas: data.temMin, precipitaciones: data.preci}))
-          .then(data => this.ordenarIndicesFuncion()) 
-          this.setState({ codigoEstacion: 0 })
-        }
-        if(this.state.codigoGrafico != -1){
-            this.crearGrafico3(this.state.codigoGrafico)
-            this.setState({ codigoGrafico: -1 })
-          }
-    return  <div className="row">
-           <div className="col-3 col-12 col-md-12 col-lg-6 col-xl-3 pb-4">
-        <div className="card card-style overflow-auto altoMax">
-          <div  className="card-body">
-            <h5 className="card-title">Lista de Estaciones</h5>
-            <div className="row">
-                {this.cargarListaEstaciones(this.state.estaciones)}
+    return  <div>
+      <div className="row">
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-5">
+            <h2 className="text-center"><b>Información de la Estación Meteorológica</b></h2>
+              {this.renderDatosEstacion(this.state.estacion)}
             </div>
-          </div>
-        </div>
-      </div>
-      <div className="col-3 col-12 col-md-12 col-lg-6 col-xl-6 pb-4">
-        <div className="card card-style">
-          <div  className="card-body">
-            <h5 className="card-title">Ubicación Estación</h5>
-            <div className="row">
-            <iframe width="1000" height="450" src={'https://www.google.com/maps/embed/v1/place?key=AIzaSyDx_FE31SZ6Ow8iI57vMSTOHJ823in0k3c&q='+
+            <div className="col-12 col-xs-12 col-sm-6 col-md-7 col-lg-7">
+            <h2 className="text-center"><b>Ubicación estación</b></h2>
+            <iframe width="800" height="250" src={'https://www.google.com/maps/embed/v1/place?key=AIzaSyDx_FE31SZ6Ow8iI57vMSTOHJ823in0k3c&q='+
             this.state.latitud+','+this.state.longitud}></iframe>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="col-3 col-12 col-md-12 col-lg-6 col-xl-3 pb-4">
-        <div className="card card-style">
-          <div  className="card-body">
-            <h5 className="card-title">Información de la Estación Meteorológica</h5>
             <div className="row">
-            {this.renderDatosEstacion(this.state.estacion)}
+              <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <br></br>
+                <div className="form-control text-center"><b>Serie de Tiempo</b></div>
+                <canvas width="400" height="100" ref={ctx => this.tiempo = ctx}/>
+              </div>
             </div>
-            <br></br>
-            <div className="row col-12 col-12 col-md-12 col-lg-12 col-xl-12 pb-4">
-                <div className="col-3 col-md-3 col-lg-3 col-xl-3">
-                    <a href={"bitacoraInicio/"+this.state.codigoEstacion2} className="btn btn-info">Bitacora</a>
-                </div>
-                <div className="col-3 col-md-3 col-lg-3 col-xl-3">
-                    <a href={"indices/"+this.state.codigoEstacion2} className="btn btn-danger">Indices</a>
-                </div>
-                <div className="col-3 col-md-3 col-lg-3 col-xl-3">
-                    <a href={"estadisticos/"+this.state.codigoEstacion2} className="btn btn-success">Estadisticas</a>
-                </div>
+            <div></div>
+      {this.renderTabla(this.state.data)}
+      <div className="row">
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.cdd = ctx}/>
             </div>
-          </div>
-        </div>
-      </div>
-      <div className="col-3 col-12 col-md-12 col-lg-12 col-xl-8 pb-4">
-        <div className="card card-style">
-          <div  className="card-body">
-            <h5 className="card-title">Serie Temporal Estación</h5>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.csdi = ctx}/>
+            </div>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.cwd = ctx}/>
+            </div>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.dtr = ctx}/>
+            </div>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.fd0 = ctx}/>
+            </div>
+            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+              <canvas width="400" height="400" ref={ctx => this.gsl = ctx}/>
+            </div>
+            </div>
             <div className="row">
-                <div className="col-3 col-12 col-md-4 col-lg-4 col-xl-4 pb-4">
-                <select className="form-control" value={this.state.inicio + "-1"} onChange={this.handleChange}>
-            <option value="-1" >Fecha Inicio...</option>
-            {this.state.fechas.map((dato, index) => (
-                <option value={index + "-1"}>{dato}</option>
-                ))}
-            </select>
-                </div>
-                <div className="col-3 col-12 col-md-4 col-lg-4 col-xl-4 pb-4">
-                <select className="form-control" value={this.state.fin+ "-2"} onChange={this.handleChange}>
-            <option value="-1" >Fecha Fin...</option>
-            {this.state.fechas.map((dato, index) => (
-                <option value={index + "-2"}>{dato}</option>
-                ))}
-            </select>
-                </div>
-                <div className="col-3 col-12 col-md-4 col-lg-4 col-xl-4 pb-4">
-                <button className="btn btn-primary" onClick={() => this.filtroGrafico3()}>Filtrar</button>
-                </div>
-            </div>
-            <div className="row" id="seriecon">
-            <canvas width="400" height="200" id="serie" ref={ctx2 => this.tiempo = ctx2}/>
-            </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.gsl2 = ctx}/>
           </div>
-        </div>
-      </div>
-      <div className="col-3 col-12 col-md-12 col-lg-12 col-xl-4 pb-4">
-        <div className="card card-style">
-          <div  className="card-body">
-            <h5>Seleccione un Indicador</h5>
-            <select className="form-control" value={this.state.codigoGrafico} onChange={this.handleChange}>
-            <option value="-1" >Seleccione...</option>
-            {this.state.nombreIndices.map((dato, index) => (
-                <option value={index + "-3"}>{dato}</option>
-                ))}
-            </select>
-            <br></br>
-            <h5 className="card-title">Indicador Seleccionado</h5>
-            <div className="row">
-            <canvas width="400" height="400" ref={ctx => this.cdd = ctx}/>
-            </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.id0 = ctx}/>
           </div>
-        </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.prcptot = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.r10mm = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.r20mm = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.r95p = ctx}/>
+          </div>
+          </div>
+          <div className="row">
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.r99p = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.r50mm = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.rx1day = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.rx5day = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.sdii = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.su25 = ctx}/>
+          </div>
+          </div>
+          <div className="row">
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tn10p = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tn90p = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tnn = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.txn = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tr20 = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tx10p = ctx}/>
+          </div>
+          </div>
+          <div className="row">
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tx90p = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.tnx = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.txx = ctx}/>
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <canvas width="400" height="400" ref={ctx => this.wsdi = ctx}/>
+          </div>
       </div>
      </div>;
   }
@@ -565,5 +524,3 @@ class Dashboard extends React.Component {
 // Find all DOM containers, and render Like buttons into them.
 const domContainer = document.querySelector('#react');
 ReactDOM.render(<Dashboard/>, domContainer);
-
-$(".chosen").chosen();
