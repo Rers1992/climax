@@ -72,6 +72,14 @@ class Dashboard extends React.Component {
               <td>{dato.medi}</td>
             </tr>
             <tr>
+              <td>Fecha de Inicio de Datos</td>
+              <td>{this.state.fechas[this.state.fechas.length -1]}</td>
+            </tr>
+            <tr>
+              <td>Fecha de Fin de Datos</td>
+              <td>{this.state.fechas[0]}</td>
+            </tr>
+            <tr>
               <td>Comentarios</td>
               <td>{dato.comentario}</td>
             </tr>
@@ -410,7 +418,7 @@ class Dashboard extends React.Component {
             </div>
             <div className="col-12 col-xs-12 col-sm-6 col-md-7 col-lg-7">
             <h2 className="text-center"><b>Ubicación estación</b></h2>
-            <iframe width="800" height="250" src={'https://www.google.com/maps/embed/v1/place?key=AIzaSyDx_FE31SZ6Ow8iI57vMSTOHJ823in0k3c&q='+
+            <iframe width="1150" height="350" src={'https://www.google.com/maps/embed/v1/place?key=AIzaSyDx_FE31SZ6Ow8iI57vMSTOHJ823in0k3c&q='+
             this.state.latitud+','+this.state.longitud}></iframe>
             </div>
           </div>

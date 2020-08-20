@@ -19,3 +19,6 @@ def getBitacora(request, codigoEstacion):
 
 def detalle(request, codigoEstacion):
     return render(request, 'memoria/detallesInicio/index.html', {'codigoEstacion': codigoEstacion})
+
+def estadisticos(request, codigoEstacion):
+    return render(request, 'memoria/estadisticos/index.html', {'codigoEstacion': codigoEstacion})

@@ -162,7 +162,6 @@ def importarEstacion(request, codigoEstacion):
         percentil_95 = funcion_percentil_95(preciPercentiles, 0.95)
         percentil_99 = funcion_percentil_95(preciPercentiles, 0.99)
         for z in separar_anos:
-            print(contAños)
             mediaMax = np.mean(temperaturaMaxEs[contAños])
             mediaMin = np.mean(temperaturaMinEs[contAños])
             mediaPre = np.mean(precipitacionEs[contAños])

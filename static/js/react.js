@@ -71,6 +71,14 @@ class Dashboard extends React.Component {
               <td>{dato.medi}</td>
             </tr>
             <tr>
+              <td>Fecha de Inicio de Datos</td>
+              <td>{this.state.fechas[this.state.fechas.length -1]}</td>
+            </tr>
+            <tr>
+              <td>Fecha de Fin de Datos</td>
+              <td>{this.state.fechas[0]}</td>
+            </tr>
+            <tr>
               <td>Comentarios</td>
               <td>{dato.comentario}</td>
             </tr>
