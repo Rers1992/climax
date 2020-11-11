@@ -22,7 +22,8 @@ def estacionJson(request):
     json = []
     estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True).select_related('rutusuario')
     for x in estaciones:
-        json.append({'codigo': x.codigoestacion, 'nombre' : x.nombreestacion, 'propietario': x.rutusuario.nombreusuario})
+        json.append({'codigo': x.codigoestacion, 'nombre' : x.nombreestacion, 'propietario': x.rutusuario.nombreusuario, 'latitud': x.latitudestacion,
+        'longitud': x.longitudestacion})
 
     return JsonResponse({'estacionesJson': json})
 
@@ -38,7 +39,7 @@ def estadisticasJson(request, codigoEstacion):
     temMax = []
     temMin = []
     preci = []
-    serie = MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion)
+    serie = MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion).order_by('fechaserie')
     for i in serie:
         años.append(i.fechaserie)
         temMax.append(i.temperaturamaxserie)
@@ -56,7 +57,8 @@ def estadisticasJson(request, codigoEstacion):
         'medianapre' : x.medianapre, 'modamax' : x.modamax, 'modamin' : x.modamin, 'modapre' : x.modapre, 
         'desviacionesmax' : x.desviacionesmax, 'desviacionesmin' : x.desviacionesmin, 
         'desviacionespre' : x.desviacionespre, 'varianzamax' : x.varianzamax, 
-        'varianzamin' : x.varianzamin, 'varianzapre' : x.varianzapre})
+        'varianzamin' : x.varianzamin, 'varianzapre' : x.varianzapre, 'q1max': x.cuartil1max, 'q1min': x.cuartil1min,
+        'q1pre': x.cuartil1pre, 'q3max': x.cuartil3max, 'q3min': x.cuartil3min, 'q3pre': x.cuartil3pre})
     estadisticasJson.sort(key=get_my_key)
     return JsonResponse({'estadisticas': estadisticasJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci})
@@ -70,7 +72,7 @@ def tablaHecho(request, codigoEstacion):
     temMax = []
     temMin = []
     preci = []
-    serie = MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion)
+    serie = MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion).order_by('fechaserie')
     for i in serie:
         años.append(i.fechaserie)
         temMax.append(i.temperaturamaxserie)
@@ -91,7 +93,7 @@ def tablaHecho(request, codigoEstacion):
         'sdii' : x.sdii, 'su25' : x.su25,
         'tn10p' : x.tn10p, 'tn90p' : x.tn90p, 'tnn' : x.tnn, 'txn' : x.txn, 
         'tr20' : x.tr20, 'tx10p' : x.tx10p,
-        'tx90p' : x.tx90p, 'tnx' : x.tnx, 'txx' : x.txx, 'wsdi' : x.wsdi})
+        'tx90p' : x.tx90p, 'tnx' : x.tnx, 'txx' : x.txx, 'wsdi' : x.wsdi, 'temmax': x.temmax, 'temmin': x.temmin, 'premax': x.premax})
     indicesJson.sort(key=get_my_key)
     return JsonResponse({'indices':indicesJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci})
@@ -177,6 +179,15 @@ def importarEstacion(request, codigoEstacion):
             varianzaMax = np.var(temperaturaMaxEs[contAños])
             varianzaMin = np.var(temperaturaMinEs[contAños])
             varianzaPre = np.var(precipitacionEs[contAños])
+            q1max = funcion_percentil(temperaturaMaxEs[contAños], 0.25)
+            q1min = funcion_percentil(temperaturaMinEs[contAños], 0.25)
+            q1pre = funcion_percentil(precipitacionEs[contAños], 0.25)
+            q3max = funcion_percentil(temperaturaMaxEs[contAños], 0.75)
+            q3min = funcion_percentil(temperaturaMinEs[contAños], 0.75)
+            q3pre = funcion_percentil(precipitacionEs[contAños], 0.75)
+            temMax = temMaxima(temperaturaMaxEs[contAños])
+            temMin = temMinima(temperaturaMaxEs[contAños])
+            preMax = temMaxima(precipitacionEs[contAños])
             contAños += 1
             cddCount = [0, 0]; csdiCount = [0, 0]; cwdCount= [0, 0]; fd0 = 0; id0 = 0; prcptot = 0; 
             r10mm= 0; r20mm = 0; r95p = 0; r99p = 0; r50mm = 0
@@ -237,14 +248,15 @@ def importarEstacion(request, codigoEstacion):
             gsl2 = glsCount1[1], id0 = id0, prcptot = prcptot, r10mm = r10mm, r20mm = r20mm, r95p = r95p,
             r99p = r99p, r50mm = r50mm, rx1day = rx1day, rx5day = rx5day, sdii = sdii, su25 = su25,
             tn10p = tn10p, tn90p = tn90p, tnn = tnn, txn = txn, tr20 = tr20Count[0], tx10p = tx10p,
-            tx90p = tx90p, tnx = tnx, txx = txx, wsdi = wsdi[1])
+            tx90p = tx90p, tnx = tnx, txx = txx, wsdi = wsdi[1], temmax = temMax, temmin = temMin, premax = preMax)
             indices.save()
             estadisticas = MemEstadisticas(codigoano = MemAno.objects.get(codigoano=año),
             codigoestacion = MemEstacionmeteorologica.objects.get(codigoestacion=codigoEstacion), mediamax = mediaMax,
             mediamin = mediaMin, mediapre = mediaPre, medianamax = medianaMax, medianamin = medianaMin, 
             medianapre = medianaPre, modamax = modaMax.mode[0], modamin = modaMin.mode[0], modapre = modaPre.mode[0], 
             desviacionesmax = desviacionEsMax, desviacionesmin = desviacionEsMin, desviacionespre = desviacionEsPre,
-            varianzamax = varianzaMax, varianzamin = varianzaMin, varianzapre = varianzaPre)
+            varianzamax = varianzaMax, varianzamin = varianzaMin, varianzapre = varianzaPre, cuartil1max = q1max, cuartil1min = q1min,
+            cuartil1pre = q1pre, cuartil3max = q3max, cuartil3min = q3min, cuartil3pre = q3pre)
             estadisticas.save()
         return redirect ('estacion:estacion')
    return render(request, 'memoria/estacion/importar.html', {'codigoEstacion':codigoEstacion})

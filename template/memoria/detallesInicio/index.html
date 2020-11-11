@@ -1,45 +1,9 @@
-{% load staticfiles i18n %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-  <script src="https://kit.fontawesome.com/ef746928d3.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" type="text/css" href="{% static 'build/css/inicio.css' %}" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
-  <title>Prototipo Memoria</title>
-</head>
-
-<body>
-  <nav class="navbar navbar-light bg-light header">
-    <a class="navbar-brand">Prototipo Memoria <i class="fas fa-wave-square icon-color"></i></a>
-    <form class="form-inline">
-      <a href="{% url 'login' %}" class="btn btn-outline-success my-2 my-sm-0 header-btn">Iniciar Sesión <i
-          class="far fa-user user"></i></a>
-    </form>
-  </nav>
+{% extends "memoria/baseInicio.html" %}
+{% load staticfiles %}
+{% block content %}
   <div class="pt-5">
-  <input type="hidden" id="codigo" name="codigo" value={{codigoEstacion}}>
+    <input type="hidden" id="codigo" name="codigo" value={{codigoEstacion}}>
     <div id="react"></div>
   </div>
-
-  <!-- Load React. -->
-  <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-
-  <!-- Don't use this in production: -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-  <!-- Cargamos nuestro componente de React. -->
   <script type="text/babel" src="{% static 'js/reactDetalle.js' %}"></script>
-
-</body>
-</html>
+  {% endblock %}

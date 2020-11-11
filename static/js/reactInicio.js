@@ -3,6 +3,7 @@ class Dashboard extends React.Component {
         super(props)
         this.myRef = React.createRef();
         this.state = {
+            mymap: Object,
             inicio: -1,
             fin: -1,
             codigoGrafico: -1,
@@ -11,8 +12,8 @@ class Dashboard extends React.Component {
             codigoEstacion2: 0,
             estaciones:[],
             estacion: [],
-            latitud: 0,
-            longitud: 0,
+            latitud: -20.291,
+            longitud: -69.346,
             fechas: [],
             temMaximas: [],
             temMinimas: [],
@@ -78,6 +79,14 @@ class Dashboard extends React.Component {
             <tr>
               <td>Medición</td>
               <td>{dato.medi}</td>
+            </tr>
+            <tr>
+              <td>Fecha de Inicio de Datos</td>
+              <td>{this.state.fechas[0]}</td>
+            </tr>
+            <tr>
+              <td>Fecha de Fin de Datos</td>
+              <td>{this.state.fechas[this.state.fechas.length -1]}</td>
             </tr>
             <tr>
               <td>Comentarios</td>
@@ -194,12 +203,16 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount() {
+      this.state.mymap = L.map('mimapa').setView([this.state.latitud, this.state.longitud], 9)
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+      maxZoom: 25,
+      attribution: 'Datos del mapa de &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, ' + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imágenes © <a href="https://www.mapbox.com/">Mapbox</a>', 
+      id: 'mapbox/streets-v11'
+      }).addTo(this.state.mymap);
         fetch('../memoria/estacionJson')
           .then(response => response.json())
           .then(data => this.setState({estaciones:data.estacionesJson, codigoEstacion:data.estacionesJson[0].codigo, 
             codigoEstacion2:data.estacionesJson[0].codigo}))
-
-          
       }
 
   ordenarIndicesFuncion(){
@@ -407,6 +420,10 @@ class Dashboard extends React.Component {
   }   
 
   cargarListaEstaciones(data){
+    console.log(data)
+    data.map(e =>{
+      L.marker([e.latitud, e.longitud]).addTo(this.state.mymap);
+    })
       return <div className="row">
           {data.map((dato) => (
               <div className="col-12 col-12 col-md-12 col-lg-12 col-xl-12">
@@ -481,8 +498,7 @@ class Dashboard extends React.Component {
           <div  className="card-body">
             <h5 className="card-title">Ubicación Estación</h5>
             <div className="row">
-            <iframe width="1000" height="450" src={'https://www.google.com/maps/embed/v1/place?key=AIzaSyDx_FE31SZ6Ow8iI57vMSTOHJ823in0k3c&q='+
-            this.state.latitud+','+this.state.longitud}></iframe>
+              <div id="mimapa"></div>
             </div>
           </div>
         </div>

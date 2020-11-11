@@ -72,11 +72,11 @@ class Dashboard extends React.Component {
             </tr>
             <tr>
               <td>Fecha de Inicio de Datos</td>
-              <td>{this.state.fechas[this.state.fechas.length -1]}</td>
+              <td>{this.state.fechas[0]}</td>
             </tr>
             <tr>
               <td>Fecha de Fin de Datos</td>
-              <td>{this.state.fechas[0]}</td>
+              <td>{this.state.fechas[this.state.fechas.length -1]}</td>
             </tr>
             <tr>
               <td>Comentarios</td>
@@ -123,6 +123,9 @@ class Dashboard extends React.Component {
         <thead>
           <tr>
             <th>año</th>
+            <th>Tem. Max.</th>
+            <th>Tem. Min.</th>
+            <th>Pre. Max.</th>
             <th>cdd</th>
             <th>csdi</th>
             <th>cwd</th>
@@ -157,6 +160,9 @@ class Dashboard extends React.Component {
           {data.map((dato) => (
             <tr>
               <td>{dato.ano}</td>
+              <td>{dato.temmax}</td>
+              <td>{dato.temmin}</td>
+              <td>{dato.premax}</td>
               <td>{dato.cdd}</td>
               <td>{dato.csdi}</td>
               <td>{dato.cwd}</td>

@@ -11,6 +11,16 @@ def takeTemMax(elem):
 def takePrecipitacion(elem):
     return elem[5]
 
+def temMaxima(datos):
+    temMax = datos
+    temMax.sort
+    return temMax[len(datos)-1]
+
+def temMinima(datos):
+    temMax = datos
+    temMax.sort
+    return temMax[0]
+
 def funcion_percentil(datos, percentil):
       mayores = datos
       mayores.sort()

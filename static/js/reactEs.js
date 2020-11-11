@@ -65,11 +65,11 @@ class Dashboard extends React.Component {
             </tr>
             <tr>
               <td>Fecha de Inicio de Datos</td>
-              <td>{this.state.fechas[this.state.fechas.length -1]}</td>
+              <td>{this.state.fechas[0]}</td>
             </tr>
             <tr>
               <td>Fecha de Fin de Datos</td>
-              <td>{this.state.fechas[0]}</td>
+              <td>{this.state.fechas[this.state.fechas.length -1]}</td>
             </tr>
             <tr>
               <td>Comentarios</td>
@@ -99,6 +99,12 @@ class Dashboard extends React.Component {
             <th>Varianza Tem. Max.</th>
             <th>Varianza Tem. Min.</th>
             <th>Varianza Precipitación</th>
+            <th>Q1 Tem. Max.</th>
+            <th>Q1 Tem. Min.</th>
+            <th>Q1 Precipitación</th>
+            <th>Q3 Tem. Max.</th>
+            <th>Q3 Tem. Min.</th>
+            <th>Q3 Precipitación</th>
           </tr>
         </thead>
         <tbody>
@@ -120,6 +126,12 @@ class Dashboard extends React.Component {
               <td>{dato.varianzamax}</td>
               <td>{dato.varianzamin}</td>
               <td>{dato.varianzapre}</td>
+              <td>{dato.q1max}</td>
+              <td>{dato.q1min}</td>
+              <td>{dato.q1pre}</td>
+              <td>{dato.q3max}</td>
+              <td>{dato.q3min}</td>
+              <td>{dato.q3pre}</td>
             </tr>
           ))}
         </tbody>
