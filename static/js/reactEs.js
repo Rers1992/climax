@@ -94,6 +94,7 @@ class Dashboard extends React.Component {
             <th>Q3</th>
             <th>IQR</th>
             <th>Q1-1.5*IQR</th>
+            <th>Q3+1.5*IQR</th>
           </tr>
         </thead>
         <tbody>
@@ -109,6 +110,7 @@ class Dashboard extends React.Component {
               <td>{dato.q3max}</td>
               <td>{dato.iqrmax}</td>
               <td>{(dato.q1max-1.5*dato.iqrmax).toFixed(1)}</td>
+              <td>{parseFloat(dato.q3max+1.5*dato.iqrmax).toFixed(1)}</td>
             </tr>
           ))}
         </tbody>
@@ -130,6 +132,7 @@ class Dashboard extends React.Component {
           <th>Q3</th>
           <th>IQR</th>
           <th>Q1-1.5*IQR</th>
+          <th>Q3+1.5*IQR</th>
         </tr>
       </thead>
       <tbody>
@@ -145,6 +148,7 @@ class Dashboard extends React.Component {
             <td>{dato.q3min}</td>
             <td>{dato.iqrmin}</td>
             <td>{(dato.q1min-1.5*dato.iqrmin).toFixed(1)}</td>
+            <td>{parseFloat(dato.q3min+1.5*dato.iqrmin).toFixed(1)}</td>
           </tr>
         ))}
       </tbody>
@@ -166,6 +170,7 @@ class Dashboard extends React.Component {
         <th>Q3</th>
         <th>IQR</th>
         <th>Q1-1.5*IQR</th>
+        <th>Q3+1.5*IQR</th>
       </tr>
     </thead>
     <tbody>
@@ -181,6 +186,7 @@ class Dashboard extends React.Component {
           <td>{dato.q3pre}</td>
           <td>{dato.iqrpre}</td>
           <td>{(dato.q1pre-1.5*dato.iqrpre).toFixed(1)}</td>
+          <td>{parseFloat(dato.q3pre+1.5*dato.iqrpre).toFixed(1)}</td>
         </tr>
       ))}
     </tbody>
