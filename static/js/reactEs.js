@@ -79,32 +79,21 @@ class Dashboard extends React.Component {
       </table>;
     }
 
-    renderTabla(){
+    renderTablaTemMax(){
         return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <caption><div className="form-control text-center">Temperatura Maxima</div></caption>
         <thead>
           <tr>
             <th>año</th>
-            <th>Media Tem. Max.</th>
-            <th>Media Tem. Min.</th>
-            <th>Media Precipitación</th>
-            <th>Mediana Tem. Max.</th>
-            <th>Mediana Tem. Min.</th>
-            <th>Mediana Precipitación</th>
-            <th>Moda Tem. Max.</th>
-            <th>Moda Tem. Min.</th>
-            <th>Moda Precipitación</th>
-            <th>Desviación Es. Tem. Max.</th>
-            <th>Desviación Es. Tem. Min.</th>
-            <th>Desviación Es. Precipitación</th>
-            <th>Varianza Tem. Max.</th>
-            <th>Varianza Tem. Min.</th>
-            <th>Varianza Precipitación</th>
-            <th>Q1 Tem. Max.</th>
-            <th>Q1 Tem. Min.</th>
-            <th>Q1 Precipitación</th>
-            <th>Q3 Tem. Max.</th>
-            <th>Q3 Tem. Min.</th>
-            <th>Q3 Precipitación</th>
+            <th>Media</th>
+            <th>Mediana</th>
+            <th>Moda</th>
+            <th>Desviación Estandar</th>
+            <th>Varianza</th>
+            <th>Q1</th>
+            <th>Q3</th>
+            <th>IQR</th>
+            <th>Q1-1.5*IQR</th>
           </tr>
         </thead>
         <tbody>
@@ -112,31 +101,91 @@ class Dashboard extends React.Component {
             <tr>
               <td>{dato.ano}</td>
               <td>{dato.mediamax}</td>
-              <td>{dato.mediamin}</td>
-              <td>{dato.mediapre}</td>
               <td>{dato.medianamax}</td>
-              <td>{dato.medianamin}</td>
-              <td>{dato.medianapre}</td>
               <td>{dato.modamax}</td>
-              <td>{dato.modamin}</td>
-              <td>{dato.modapre}</td>
               <td>{dato.desviacionesmax}</td>
-              <td>{dato.desviacionesmin}</td>
-              <td>{dato.desviacionespre}</td>
               <td>{dato.varianzamax}</td>
-              <td>{dato.varianzamin}</td>
-              <td>{dato.varianzapre}</td>
               <td>{dato.q1max}</td>
-              <td>{dato.q1min}</td>
-              <td>{dato.q1pre}</td>
               <td>{dato.q3max}</td>
-              <td>{dato.q3min}</td>
-              <td>{dato.q3pre}</td>
+              <td>{dato.iqrmax}</td>
+              <td>{(dato.q1max-1.5*dato.iqrmax).toFixed(1)}</td>
             </tr>
           ))}
         </tbody>
       </table>;
     }
+
+    renderTablaTemMin(){
+      return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <caption><div className="form-control text-center">Temperatura Minima</div></caption>
+      <thead>
+        <tr>
+          <th>año</th>
+          <th>Media</th>
+          <th>Mediana</th>
+          <th>Moda</th>
+          <th>Desviación Estandar</th>
+          <th>Varianza</th>
+          <th>Q1</th>
+          <th>Q3</th>
+          <th>IQR</th>
+          <th>Q1-1.5*IQR</th>
+        </tr>
+      </thead>
+      <tbody>
+        {this.state.data.map((dato) => (
+          <tr>
+            <td>{dato.ano}</td>
+            <td>{dato.mediamin}</td>
+            <td>{dato.medianamin}</td>
+            <td>{dato.modamin}</td>
+            <td>{dato.desviacionesmin}</td>
+            <td>{dato.varianzamin}</td>
+            <td>{dato.q1min}</td>
+            <td>{dato.q3min}</td>
+            <td>{dato.iqrmin}</td>
+            <td>{(dato.q1min-1.5*dato.iqrmin).toFixed(1)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>;
+  }
+
+  renderTablaPre(){
+    return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <caption><div className="form-control text-center">Precipitación</div></caption>
+    <thead>
+      <tr>
+        <th>año</th>
+        <th>Media</th>
+        <th>Mediana</th>
+        <th>Moda</th>
+        <th>Desviación Estandar</th>
+        <th>Varianza</th>
+        <th>Q1</th>
+        <th>Q3</th>
+        <th>IQR</th>
+        <th>Q1-1.5*IQR</th>
+      </tr>
+    </thead>
+    <tbody>
+      {this.state.data.map((dato) => (
+        <tr>
+          <td>{dato.ano}</td>
+          <td>{dato.mediapre}</td>
+          <td>{dato.medianapre}</td>
+          <td>{dato.modapre}</td>
+          <td>{dato.desviacionespre}</td>
+          <td>{dato.varianzapre}</td>
+          <td>{dato.q1pre}</td>
+          <td>{dato.q3pre}</td>
+          <td>{dato.iqrpre}</td>
+          <td>{(dato.q1pre-1.5*dato.iqrpre).toFixed(1)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>;
+}
 
     ordenarFuncion(){
         var mediamax = [], mediamin = [], mediapre = [], medianamax = [],
@@ -230,7 +279,17 @@ class Dashboard extends React.Component {
               </div>
             </div>
             <div></div>
-          {this.renderTabla()}
+        <div className="row">
+          <div className="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6">    
+            {this.renderTablaTemMax()}
+          </div>
+          <div className="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6">    
+            {this.renderTablaTemMin()}
+          </div>
+          <div className="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6">    
+            {this.renderTablaPre()}
+          </div>
+        </div>
         <div className="row">
           <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
               <br></br>

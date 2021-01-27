@@ -420,14 +420,13 @@ class Dashboard extends React.Component {
   }   
 
   cargarListaEstaciones(data){
-    console.log(data)
     data.map(e =>{
       L.marker([e.latitud, e.longitud]).addTo(this.state.mymap);
     })
       return <div className="row">
           {data.map((dato) => (
               <div className="col-12 col-12 col-md-12 col-lg-12 col-xl-12">
-              <div className="card card-photo contenedor" onClick={() => this.setState({ codigoEstacion: dato.codigo, codigoEstacion2: dato.codigo })}>
+              <div className="card card-photo contenedor" onClick={() => this.cambioUbicacionMapa(dato.latitud, dato.longitud, dato.codigo )}>
                 <div  className="card-body">
                     <h5 className="card-title">Nombre Estación: { dato.nombre}</h5>
                     <h5 className="card-title">Propietario: { dato.propietario}</h5>
@@ -436,6 +435,18 @@ class Dashboard extends React.Component {
             </div>
           ))}
       </div>
+  }
+
+  cambioUbicacionMapa(latitud, longitud, codigo){
+    this.setState({ codigoEstacion: codigo, codigoEstacion2: codigo })
+    document.getElementById('mimapa').innerHTML = "<div id='mimapa2'></div>";
+    this.state.mymap = L.map('mimapa2').setView([latitud, longitud], 16)
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+      maxZoom: 25,
+      attribution: 'Datos del mapa de &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, ' + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imágenes © <a href="https://www.mapbox.com/">Mapbox</a>', 
+      id: 'mapbox/streets-v11'
+      }).addTo(this.state.mymap);
+      L.marker([latitud, longitud]).addTo(this.state.mymap);
   }
 
   handleChange(event) {
@@ -512,13 +523,13 @@ class Dashboard extends React.Component {
             </div>
             <br></br>
             <div className="row col-12 col-12 col-md-12 col-lg-12 col-xl-12 pb-4">
-                <div className="col-3 col-md-3 col-lg-3 col-xl-3">
+                <div className="col-3 col-md-3 col-lg-3 col-xl-4">
                     <a href={"bitacoraInicio/"+this.state.codigoEstacion2} className="btn btn-info">Bitacora</a>
                 </div>
-                <div className="col-3 col-md-3 col-lg-3 col-xl-3">
+                <div className="col-3 col-md-3 col-lg-3 col-xl-4">
                     <a href={"indices/"+this.state.codigoEstacion2} className="btn btn-danger">Indices</a>
                 </div>
-                <div className="col-3 col-md-3 col-lg-3 col-xl-3">
+                <div className="col-3 col-md-3 col-lg-3 col-xl-4">
                     <a href={"estadisticos/"+this.state.codigoEstacion2} className="btn btn-success">Estadisticas</a>
                 </div>
             </div>

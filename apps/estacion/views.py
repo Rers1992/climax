@@ -58,7 +58,8 @@ def estadisticasJson(request, codigoEstacion):
         'desviacionesmax' : x.desviacionesmax, 'desviacionesmin' : x.desviacionesmin, 
         'desviacionespre' : x.desviacionespre, 'varianzamax' : x.varianzamax, 
         'varianzamin' : x.varianzamin, 'varianzapre' : x.varianzapre, 'q1max': x.cuartil1max, 'q1min': x.cuartil1min,
-        'q1pre': x.cuartil1pre, 'q3max': x.cuartil3max, 'q3min': x.cuartil3min, 'q3pre': x.cuartil3pre})
+        'q1pre': x.cuartil1pre, 'q3max': x.cuartil3max, 'q3min': x.cuartil3min, 'q3pre': x.cuartil3pre, 'iqrmax': x.intecuartilmax, 
+        'iqrmin': x.intecuartilmin, 'iqrpre': x.intecuartilpre})
     estadisticasJson.sort(key=get_my_key)
     return JsonResponse({'estadisticas': estadisticasJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci})
@@ -185,6 +186,12 @@ def importarEstacion(request, codigoEstacion):
             q3max = funcion_percentil(temperaturaMaxEs[contAños], 0.75)
             q3min = funcion_percentil(temperaturaMinEs[contAños], 0.75)
             q3pre = funcion_percentil(precipitacionEs[contAños], 0.75)
+            iqrmax = q3max - q1max 
+            iqrmin = q3min - q1min
+            iqrpre = q3pre - q1pre
+            atipicoInfMax = atipicoInferior(q1max-1.5*iqrmax, temperaturaMaxEs[contAños])
+            atipicoInfMin = atipicoInferior(q1min-1.5*iqrmin, temperaturaMinEs[contAños])
+            atipicoInfPre = atipicoInferior(q1pre-1.5*iqrpre, precipitacionEs[contAños])
             temMax = temMaxima(temperaturaMaxEs[contAños])
             temMin = temMinima(temperaturaMaxEs[contAños])
             preMax = temMaxima(precipitacionEs[contAños])
@@ -256,7 +263,8 @@ def importarEstacion(request, codigoEstacion):
             medianapre = medianaPre, modamax = modaMax.mode[0], modamin = modaMin.mode[0], modapre = modaPre.mode[0], 
             desviacionesmax = desviacionEsMax, desviacionesmin = desviacionEsMin, desviacionespre = desviacionEsPre,
             varianzamax = varianzaMax, varianzamin = varianzaMin, varianzapre = varianzaPre, cuartil1max = q1max, cuartil1min = q1min,
-            cuartil1pre = q1pre, cuartil3max = q3max, cuartil3min = q3min, cuartil3pre = q3pre)
+            cuartil1pre = q1pre, cuartil3max = q3max, cuartil3min = q3min, cuartil3pre = q3pre, intecuartilmax = iqrmax, intecuartilmin = iqrmin, 
+            intecuartilpre = iqrpre, atipicoinfmax = atipicoInfMax, atipicoinfmin = atipicoInfMin, atipicoinfpre = atipicoInfPre)
             estadisticas.save()
         return redirect ('estacion:estacion')
    return render(request, 'memoria/estacion/importar.html', {'codigoEstacion':codigoEstacion})

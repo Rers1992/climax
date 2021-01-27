@@ -194,6 +194,12 @@ class MemEstadisticas(models.Model):
     cuartil3max = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
     cuartil3min = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
     cuartil3pre = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    intecuartilmax = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    intecuartilmin = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    intecuartilpre = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    atipicoinfmax = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    atipicoinfmin = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    atipicoinfpre = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
 
     class Meta:
         managed = True
