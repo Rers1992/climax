@@ -53,6 +53,13 @@ def atipicoInferior(aI, datos):
             cont += 1
     return cont
 
+def atipicoSuperior(aI, datos):
+    cont = 0
+    for x in datos:
+        if(x > aI):
+            cont += 1
+    return cont
+
 def anos_meses(data2):
     existeAno = MemAno.objects.filter(ano = data2[0])
     existeMes = []

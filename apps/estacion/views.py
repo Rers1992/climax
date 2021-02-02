@@ -59,7 +59,11 @@ def estadisticasJson(request, codigoEstacion):
         'desviacionespre' : x.desviacionespre, 'varianzamax' : x.varianzamax, 
         'varianzamin' : x.varianzamin, 'varianzapre' : x.varianzapre, 'q1max': x.cuartil1max, 'q1min': x.cuartil1min,
         'q1pre': x.cuartil1pre, 'q3max': x.cuartil3max, 'q3min': x.cuartil3min, 'q3pre': x.cuartil3pre, 'iqrmax': x.intecuartilmax, 
-        'iqrmin': x.intecuartilmin, 'iqrpre': x.intecuartilpre})
+        'iqrmin': x.intecuartilmin, 'iqrpre': x.intecuartilpre, 'atipicoinfmax': x.atipicoinfmax, 'atipicosupmax': x.atipicosupmax,
+        'atipicoinfmin': x.atipicoinfmin, 'atipicosupmin': x.atipicosupmin, 'atipicoinfpre': x.atipicoinfpre, 
+        'atipicosuppre': x.atipicosuppre, 'extremoinfmax': x.extremoinfmax, 'extremosupmax': x.extremosupmax,
+        'extremoinfmin': x.extremoinfmin, 'extremosupmin': x.extremosupmin, 'extremoinfpre': x.extremoinfpre, 
+        'extremosuppre': x.extremosuppre})
     estadisticasJson.sort(key=get_my_key)
     return JsonResponse({'estadisticas': estadisticasJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci})
@@ -192,6 +196,15 @@ def importarEstacion(request, codigoEstacion):
             atipicoInfMax = atipicoInferior(q1max-1.5*iqrmax, temperaturaMaxEs[contAños])
             atipicoInfMin = atipicoInferior(q1min-1.5*iqrmin, temperaturaMinEs[contAños])
             atipicoInfPre = atipicoInferior(q1pre-1.5*iqrpre, precipitacionEs[contAños])
+            atipicoSupMax = atipicoSuperior(q3max+1.5*iqrmax, temperaturaMaxEs[contAños])
+            atipicoSupMin = atipicoSuperior(q3min+1.5*iqrmin, temperaturaMinEs[contAños])
+            atipicoSupPre = atipicoSuperior(q3pre+1.5*iqrpre, precipitacionEs[contAños])
+            extremoInfMax = atipicoInferior(q1max-3*iqrmax, temperaturaMaxEs[contAños])
+            extremoInfMin = atipicoInferior(q1min-3*iqrmin, temperaturaMinEs[contAños])
+            extremoInfPre = atipicoInferior(q1pre-3*iqrpre, precipitacionEs[contAños])
+            extremoSupMax = atipicoSuperior(q3max+3*iqrmax, temperaturaMaxEs[contAños])
+            extremoSupMin = atipicoSuperior(q3min+3*iqrmin, temperaturaMinEs[contAños])
+            extremoSupPre = atipicoSuperior(q3pre+3*iqrpre, precipitacionEs[contAños])
             temMax = temMaxima(temperaturaMaxEs[contAños])
             temMin = temMinima(temperaturaMaxEs[contAños])
             preMax = temMaxima(precipitacionEs[contAños])
@@ -264,7 +277,10 @@ def importarEstacion(request, codigoEstacion):
             desviacionesmax = desviacionEsMax, desviacionesmin = desviacionEsMin, desviacionespre = desviacionEsPre,
             varianzamax = varianzaMax, varianzamin = varianzaMin, varianzapre = varianzaPre, cuartil1max = q1max, cuartil1min = q1min,
             cuartil1pre = q1pre, cuartil3max = q3max, cuartil3min = q3min, cuartil3pre = q3pre, intecuartilmax = iqrmax, intecuartilmin = iqrmin, 
-            intecuartilpre = iqrpre, atipicoinfmax = atipicoInfMax, atipicoinfmin = atipicoInfMin, atipicoinfpre = atipicoInfPre)
+            intecuartilpre = iqrpre, atipicoinfmax = atipicoInfMax, atipicoinfmin = atipicoInfMin, atipicoinfpre = atipicoInfPre,
+            atipicosupmax = atipicoSupMax, atipicosupmin= atipicoSupMin, atipicosuppre= atipicoSupPre, extremoinfmax = extremoInfMax, 
+            extremoinfmin = extremoInfMin, extremoinfpre = extremoInfPre, extremosupmax = extremoSupMax, extremosupmin= extremoSupMin, 
+            extremosuppre= extremoSupPre)
             estadisticas.save()
         return redirect ('estacion:estacion')
    return render(request, 'memoria/estacion/importar.html', {'codigoEstacion':codigoEstacion})

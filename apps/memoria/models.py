@@ -200,6 +200,15 @@ class MemEstadisticas(models.Model):
     atipicoinfmax = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
     atipicoinfmin = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
     atipicoinfpre = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    atipicosupmax = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    atipicosupmin = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    atipicosuppre = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    extremoinfmax = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    extremoinfmin = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    extremoinfpre = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    extremosupmax = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    extremosupmin = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    extremosuppre = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
 
     class Meta:
         managed = True
