@@ -169,6 +169,7 @@ def importarEstacion(request, codigoEstacion):
         percentil_95 = funcion_percentil_95(preciPercentiles, 0.95)
         percentil_99 = funcion_percentil_95(preciPercentiles, 0.99)
         for z in separar_anos:
+            largo = len(z)
             mediaMax = np.mean(temperaturaMaxEs[contAños])
             mediaMin = np.mean(temperaturaMinEs[contAños])
             mediaPre = np.mean(precipitacionEs[contAños])
@@ -181,6 +182,14 @@ def importarEstacion(request, codigoEstacion):
             desviacionEsMax = np.std(temperaturaMaxEs[contAños])
             desviacionEsMin = np.std(temperaturaMinEs[contAños])
             desviacionEsPre = np.std(precipitacionEs[contAños])
+            kstestMax, kstestPMax = stats.kstest(temperaturaMaxEs[contAños], cdf='norm',
+            args=(mediaMax, desviacionEsMax), N=largo)
+            print(kstestMax)
+            print(kstestPMax)
+            kstestMin, kstestPMin = stats.kstest(temperaturaMinEs[contAños], cdf='norm',
+            args=(medianaMin, desviacionEsMin), N=largo)
+            kstestPre, kstestPPre = stats.kstest(precipitacionEs[contAños], cdf='norm',
+            args=(mediaPre, medianaPre), N=largo)
             varianzaMax = np.var(temperaturaMaxEs[contAños])
             varianzaMin = np.var(temperaturaMinEs[contAños])
             varianzaPre = np.var(precipitacionEs[contAños])
@@ -214,7 +223,7 @@ def importarEstacion(request, codigoEstacion):
             sdiiCount = [0,0]; su25 = 0; tn10p = 0; tn90p = 0; tx10p = 0; tx90p = 0; wsdi = [0,0]
             glsCount = [0,0]; glsCount1 = [0,0]; tr20Count = [0,0]; rx5day = 0
             temperaturasMaxMin = [0,0]
-            ciclo = 0; largo = len(z)
+            ciclo = 0
             rx1day = funcion_rx1day(z, largo)
             rx5day = funcion_rx5day(z, rx5day)
             tnn = funcion_tnn(z)
@@ -280,7 +289,8 @@ def importarEstacion(request, codigoEstacion):
             intecuartilpre = iqrpre, atipicoinfmax = atipicoInfMax, atipicoinfmin = atipicoInfMin, atipicoinfpre = atipicoInfPre,
             atipicosupmax = atipicoSupMax, atipicosupmin= atipicoSupMin, atipicosuppre= atipicoSupPre, extremoinfmax = extremoInfMax, 
             extremoinfmin = extremoInfMin, extremoinfpre = extremoInfPre, extremosupmax = extremoSupMax, extremosupmin= extremoSupMin, 
-            extremosuppre= extremoSupPre)
+            extremosuppre= extremoSupPre, kstestmax= kstestMax, kstestpmax= kstestPMax, kstestmin=kstestMin, 
+            kstestpmin = kstestPMin, kstestpre= kstestPre, kstestppre= kstestPPre)
             estadisticas.save()
         return redirect ('estacion:estacion')
    return render(request, 'memoria/estacion/importar.html', {'codigoEstacion':codigoEstacion})

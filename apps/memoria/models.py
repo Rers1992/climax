@@ -209,6 +209,18 @@ class MemEstadisticas(models.Model):
     extremosupmax = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
     extremosupmin = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
     extremosuppre = models.DecimalField(max_digits=1000, decimal_places=0, blank=True, null=True)
+    kstestmax = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    kstestmin = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    kstestpre = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    kstestpmax = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    kstestpmin = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    kstestppre = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    shapiromax = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    shapiromin = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    shapiropre = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    shapiropmax = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    shapiropmin = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    shapiroppre = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
 
     class Meta:
         managed = True
