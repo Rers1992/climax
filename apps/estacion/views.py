@@ -63,7 +63,11 @@ def estadisticasJson(request, codigoEstacion):
         'atipicoinfmin': x.atipicoinfmin, 'atipicosupmin': x.atipicosupmin, 'atipicoinfpre': x.atipicoinfpre, 
         'atipicosuppre': x.atipicosuppre, 'extremoinfmax': x.extremoinfmax, 'extremosupmax': x.extremosupmax,
         'extremoinfmin': x.extremoinfmin, 'extremosupmin': x.extremosupmin, 'extremoinfpre': x.extremoinfpre, 
-        'extremosuppre': x.extremosuppre})
+        'extremosuppre': x.extremosuppre, 'kstestmax': x.kstestmax, 'kstestmin': x.kstestmin, 
+        'kstestpre': x.kstestpre, 'kstestpmax': x.kstestpmax, 'kstestpmin': x.kstestpmin, 
+        'kstestppre': x.kstestppre, 'shapiromax': x.shapiromax, 'shapiromin': x.shapiromin, 
+        'shapiropre': x.shapiropre, 'shapiropmax': x.shapiropmax, 'shapiropmin': x.shapiropmin, 
+        'shapiroppre': x.shapiroppre})
     estadisticasJson.sort(key=get_my_key)
     return JsonResponse({'estadisticas': estadisticasJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci})
@@ -184,12 +188,13 @@ def importarEstacion(request, codigoEstacion):
             desviacionEsPre = np.std(precipitacionEs[contAños])
             kstestMax, kstestPMax = stats.kstest(temperaturaMaxEs[contAños], cdf='norm',
             args=(mediaMax, desviacionEsMax), N=largo)
-            print(kstestMax)
-            print(kstestPMax)
             kstestMin, kstestPMin = stats.kstest(temperaturaMinEs[contAños], cdf='norm',
             args=(medianaMin, desviacionEsMin), N=largo)
             kstestPre, kstestPPre = stats.kstest(precipitacionEs[contAños], cdf='norm',
             args=(mediaPre, medianaPre), N=largo)
+            shapiroMax, shapiroPMax = stats.shapiro(temperaturaMaxEs[contAños])
+            shapiroMin, shapiroPMin = stats.shapiro(temperaturaMinEs[contAños])
+            shapiroPre, shapiroPPre = stats.shapiro(precipitacionEs[contAños])
             varianzaMax = np.var(temperaturaMaxEs[contAños])
             varianzaMin = np.var(temperaturaMinEs[contAños])
             varianzaPre = np.var(precipitacionEs[contAños])
@@ -290,7 +295,9 @@ def importarEstacion(request, codigoEstacion):
             atipicosupmax = atipicoSupMax, atipicosupmin= atipicoSupMin, atipicosuppre= atipicoSupPre, extremoinfmax = extremoInfMax, 
             extremoinfmin = extremoInfMin, extremoinfpre = extremoInfPre, extremosupmax = extremoSupMax, extremosupmin= extremoSupMin, 
             extremosuppre= extremoSupPre, kstestmax= kstestMax, kstestpmax= kstestPMax, kstestmin=kstestMin, 
-            kstestpmin = kstestPMin, kstestpre= kstestPre, kstestppre= kstestPPre)
+            kstestpmin = kstestPMin, kstestpre= kstestPre, kstestppre= kstestPPre, shapiromax= shapiroMax,
+            shapiropmax= shapiroPMax, shapiromin= shapiroMin, shapiropmin= shapiroPMin, shapiropre= shapiroPre, 
+            shapiroppre= shapiroPPre)
             estadisticas.save()
         return redirect ('estacion:estacion')
    return render(request, 'memoria/estacion/importar.html', {'codigoEstacion':codigoEstacion})

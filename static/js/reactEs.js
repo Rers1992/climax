@@ -101,6 +101,10 @@ class Dashboard extends React.Component {
             <th>Inferiores</th>
             <th>Q3+3*IQR</th>
             <th>Superiores</th>
+            <th>Kstest</th>
+            <th>P</th>
+            <th>Shapiro</th>
+            <th>P</th>
           </tr>
         </thead>
         <tbody>
@@ -123,6 +127,10 @@ class Dashboard extends React.Component {
               <td>{dato.extremoinfmax}</td>
               <td>{parseFloat(dato.q3max+3*dato.iqrmax).toFixed(1)}</td>
               <td>{dato.extremosupmax}</td>
+              <td>{dato.kstestmax}</td>
+              <td>{dato.kstestpmax}</td>
+              <td>{dato.shapiromax}</td>
+              <td>{dato.shapiropmax}</td>
             </tr>
           ))}
         </tbody>
@@ -151,6 +159,10 @@ class Dashboard extends React.Component {
           <th>Inferiores</th>
           <th>Q3+3*IQR</th>
           <th>Superiores</th>
+          <th>Kstest</th>
+          <th>P</th>
+          <th>Shapiro</th>
+          <th>P</th>
         </tr>
       </thead>
       <tbody>
@@ -173,6 +185,10 @@ class Dashboard extends React.Component {
             <td>{dato.extremoinfmin}</td>
             <td>{parseFloat(dato.q3min+3*dato.iqrmin).toFixed(1)}</td>
             <td>{dato.extremosupmin}</td>
+            <td>{dato.kstestmin}</td>
+            <td>{dato.kstestpmin}</td>
+            <td>{dato.shapiromin}</td>
+            <td>{dato.shapiropmin}</td>
           </tr>
         ))}
       </tbody>
@@ -201,6 +217,10 @@ class Dashboard extends React.Component {
         <th>Inferiores</th>
         <th>Q3+3*IQR</th>
         <th>Superiores</th>
+        <th>Kstest</th>
+        <th>P</th>
+        <th>Shapiro</th>
+        <th>P</th>
       </tr>
     </thead>
     <tbody>
@@ -223,6 +243,10 @@ class Dashboard extends React.Component {
           <td>{dato.extremoinfpre}</td>
           <td>{parseFloat(dato.q3pre+3*dato.iqrpre).toFixed(1)}</td>
           <td>{dato.extremosuppre}</td>
+          <td>{dato.kstestpre}</td>
+          <td>{dato.kstestppre}</td>
+          <td>{dato.shapiropre}</td>
+          <td>{dato.shapiroppre}</td>
         </tr>
       ))}
     </tbody>
