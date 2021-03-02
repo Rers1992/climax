@@ -105,6 +105,8 @@ class Dashboard extends React.Component {
             <th>P</th>
             <th>Shapiro</th>
             <th>P</th>
+            <th>Coeficiente de Asimetria</th>
+            <th>Kurtosis</th>
           </tr>
         </thead>
         <tbody>
@@ -131,6 +133,8 @@ class Dashboard extends React.Component {
               <td>{dato.kstestpmax}</td>
               <td>{dato.shapiromax}</td>
               <td>{dato.shapiropmax}</td>
+              <td>{((dato.mediamax-dato.modamax)/dato.desviacionesmax).toFixed(1)}</td>
+              <td>{dato.kurtosismax}</td>
             </tr>
           ))}
         </tbody>
@@ -163,6 +167,8 @@ class Dashboard extends React.Component {
           <th>P</th>
           <th>Shapiro</th>
           <th>P</th>
+          <th>Coeficiente de Asimetria</th>
+          <th>Kurtosis</th>
         </tr>
       </thead>
       <tbody>
@@ -189,6 +195,8 @@ class Dashboard extends React.Component {
             <td>{dato.kstestpmin}</td>
             <td>{dato.shapiromin}</td>
             <td>{dato.shapiropmin}</td>
+            <td>{((dato.mediamin-dato.modamin)/dato.desviacionesmin).toFixed(1)}</td>
+            <td>{dato.kurtosismin}</td>
           </tr>
         ))}
       </tbody>
@@ -221,6 +229,8 @@ class Dashboard extends React.Component {
         <th>P</th>
         <th>Shapiro</th>
         <th>P</th>
+        <th>Coeficiente de Asimetria</th>
+        <th>Kurtosis</th>
       </tr>
     </thead>
     <tbody>
@@ -247,6 +257,8 @@ class Dashboard extends React.Component {
           <td>{dato.kstestppre}</td>
           <td>{dato.shapiropre}</td>
           <td>{dato.shapiroppre}</td>
+          <td>{((dato.mediapre-dato.modapre)/dato.desviacionespre).toFixed(1)}</td>
+          <td>{dato.kurtosispre}</td>
         </tr>
       ))}
     </tbody>

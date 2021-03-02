@@ -221,6 +221,9 @@ class MemEstadisticas(models.Model):
     shapiropmax = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
     shapiropmin = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
     shapiroppre = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    kurtosismax = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    kurtosismin = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
+    kurtosispre = models.DecimalField(max_digits=1000, decimal_places=1, blank=True, null=True)
 
     class Meta:
         managed = True

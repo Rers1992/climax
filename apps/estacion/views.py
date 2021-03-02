@@ -67,7 +67,8 @@ def estadisticasJson(request, codigoEstacion):
         'kstestpre': x.kstestpre, 'kstestpmax': x.kstestpmax, 'kstestpmin': x.kstestpmin, 
         'kstestppre': x.kstestppre, 'shapiromax': x.shapiromax, 'shapiromin': x.shapiromin, 
         'shapiropre': x.shapiropre, 'shapiropmax': x.shapiropmax, 'shapiropmin': x.shapiropmin, 
-        'shapiroppre': x.shapiroppre})
+        'shapiroppre': x.shapiroppre, 'kurtosismax': x.kurtosismax, 'kurtosismin': x.kurtosismin, 
+        'kurtosispre': x.kurtosispre})
     estadisticasJson.sort(key=get_my_key)
     return JsonResponse({'estadisticas': estadisticasJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci})
@@ -183,6 +184,9 @@ def importarEstacion(request, codigoEstacion):
             modaMax = stats.mode(temperaturaMaxEs[contAños])
             modaMin = stats.mode(temperaturaMinEs[contAños])
             modaPre = stats.mode(precipitacionEs[contAños])
+            kurtosisMax = stats.kurtosis(temperaturaMaxEs[contAños])
+            kurtosisMin = stats.kurtosis(temperaturaMinEs[contAños])
+            kurtosisPre = stats.kurtosis(precipitacionEs[contAños])
             desviacionEsMax = np.std(temperaturaMaxEs[contAños])
             desviacionEsMin = np.std(temperaturaMinEs[contAños])
             desviacionEsPre = np.std(precipitacionEs[contAños])
@@ -297,7 +301,7 @@ def importarEstacion(request, codigoEstacion):
             extremosuppre= extremoSupPre, kstestmax= kstestMax, kstestpmax= kstestPMax, kstestmin=kstestMin, 
             kstestpmin = kstestPMin, kstestpre= kstestPre, kstestppre= kstestPPre, shapiromax= shapiroMax,
             shapiropmax= shapiroPMax, shapiromin= shapiroMin, shapiropmin= shapiroPMin, shapiropre= shapiroPre, 
-            shapiroppre= shapiroPPre)
+            shapiroppre= shapiroPPre, kurtosismax= kurtosisMax, kurtosismin= kurtosisMin, kurtosispre= kurtosisPre)
             estadisticas.save()
         return redirect ('estacion:estacion')
    return render(request, 'memoria/estacion/importar.html', {'codigoEstacion':codigoEstacion})
