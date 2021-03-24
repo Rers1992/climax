@@ -1,5 +1,6 @@
 {% load crispy_forms_tags %}
-<form method="POST" action="{% url 'estacion:importarEstacion' codigoEstacion=codigoEstacion%}" enctype="multipart/form-data">
+<form method="POST" action="{% url 'estacion:importarEstacion' codigoEstacion=codigoEstacion%}"
+    enctype="multipart/form-data">
     <div class="modal-header" id="div-results">
         <h4 class="modal-title">Importar Serie de Tiempo</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -8,23 +9,32 @@
     <div class="modal-body">
         {% csrf_token %}
         {% if error %}
-            <h2>{{ error }}</h2>
+        <h2>{{ error }}</h2>
         {% else %}
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <input class="form-control" type="file" name="xlsfile">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <br>
+                <br>
                 <label class="form-control text-center">Periodo</label>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6">
-            <label class="form-control text-center">Año de Inicio</label>
+                <label class="form-control text-center">Año de Inicio</label>
                 <input class="form-control" type="number" name="fecha1" required>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6">
-            <label class="form-control text-center">Año de Fin</label>
+                <label class="form-control text-center">Año de Fin</label>
                 <input class="form-control" type="number" name="fecha2" required>
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <label class="form-control text-center">La data esta en hora ?</label>
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <input type="radio" id="male" name="horario" value="horas" required>
+                <label for="male">Si</label><br>
+                <input type="radio" id="female" name="horario" value="diario" required>
+                <label for="female">No</label><br>
             </div>
         </div>
         {% endif %}
