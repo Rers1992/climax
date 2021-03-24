@@ -96,6 +96,40 @@ class Dashboard extends React.Component {
     </table>;
   }
 
+  crearGraficoNuevo(valor, temMax, temMin, Pre, años, grafico) {
+    var y0 = temMax;
+    var y1 = temMin;
+    var y2 = Pre;
+
+    var trace1 = {
+      x:años,
+      y: y0,
+      type: grafico,
+      marker: {color: 'rgba(255, 99, 132, 0.2)'},
+      name:'Tem. Maxima'
+    };
+
+    var trace2 = {
+      x:años,
+      y: y1,
+      type: grafico,
+      marker: {color: 'rgba(63, 121, 191, 0.2)'},
+      name:'Tem. Minima'
+    };
+
+    var trace3 = {
+      x:años,
+      y: y2,
+      type: grafico,
+      marker: {color: 'rgba(21, 255, 5, 0.2)'},
+      name:'Precipitacion'
+    };
+
+    var data = [trace1, trace2, trace3];
+
+    Plotly.newPlot('myDiv1', data);
+  }
+
   crearGrafico2(valor, temMax, temMin, Pre, años) {
     new Chart(valor, {
       type: 'line',
@@ -127,6 +161,7 @@ class Dashboard extends React.Component {
       }
     })
   }
+  
 
   renderTabla(data) {
     return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -381,7 +416,8 @@ class Dashboard extends React.Component {
     this.setState({ indicesOrdenados: indices })
     this.setState({ vectorAños: años })
     this.setState({ rcuadrado: r2 })
-    this.crearGrafico2(this.tiempo, this.state.temMaximas, this.state.temMinimas, this.state.precipitaciones, this.state.fechas)
+    this.crearGraficoNuevo(this.tiempo, this.state.temMaximas, 
+      this.state.temMinimas, this.state.precipitaciones, this.state.fechas, 'line')
     for (let i = 0; i < 28; i++) {
       vectorB = []
       for (let j = 0; j < años.length; j++) {
@@ -476,7 +512,7 @@ class Dashboard extends React.Component {
         pre.push(this.state.precipitaciones[i])
         fechas.push(this.state.fechas[i])
       }
-      this.crearGrafico2(this.tiempo, temMax, temMin, pre, fechas)
+      this.crearGraficoNuevo(this.tiempo, temMax, temMin, pre, fechas, 'line')
     } else {
       alert("La fecha de fin no puede ser menor a la de inicio")
     }
@@ -566,7 +602,7 @@ class Dashboard extends React.Component {
               </div>
             </div>
             <div className="row" id="seriecon">
-              <canvas width="400" height="200" id="serie" ref={ctx2 => this.tiempo = ctx2} />
+            <div id='myDiv1'></div>
             </div>
           </div>
         </div>
