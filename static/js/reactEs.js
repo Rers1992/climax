@@ -294,7 +294,7 @@ class Dashboard extends React.Component {
     }
     this.crearGrafico2('myDiv2', this.state.temMaximas, this.state.temMinimas,
       this.state.precipitaciones, this.state.fechas, 'line')
-    this.crearGrafico2('myDiv1', this.state.temMaximas, this.state.temMinimas,
+    this.crearGraficoHistograma('myDiv1', this.state.temMaximas, this.state.temMinimas,
       this.state.precipitaciones, this.state.fechas, 'histogram')
     this.crearGrafico3(this.tiempoC, this.state.temMaximas, this.state.temMinimas,
       this.state.precipitaciones, this.state.fechas, 'boxplot')
@@ -335,6 +335,38 @@ class Dashboard extends React.Component {
     };
 
     var data = [trace1, trace2, trace3];
+
+    Plotly.newPlot(valor, data);
+  }
+
+  crearGraficoHistograma(valor, temMax, temMin, Pre, años, grafico) {
+    var y0 = temMax;
+    var y1 = temMin;
+    var y2 = Pre;
+
+    var trace1 = {
+      x:temMax,
+      type: grafico,
+      marker: {color: 'rgba(255, 99, 132, 0.2)'},
+      name:'Tem. Maxima'
+    };
+
+    var trace2 = {
+      x:temMin,
+      type: grafico,
+      marker: {color: 'rgba(63, 121, 191, 0.2)'},
+      name:'Tem. Minima'
+    };
+
+    var trace3 = {
+      x:Pre,
+      type: grafico,
+      marker: {color: 'rgba(21, 255, 5, 0.2)'},
+      name:'Precipitacion'
+    };
+    var layout = {barmode: "overlay"};
+
+    var data = [trace1, trace2, trace3, layout];
 
     Plotly.newPlot(valor, data);
   }
@@ -500,7 +532,7 @@ class Dashboard extends React.Component {
       }
       this.crearGrafico3(this.tiempoC, temMax, temMin, pre, fechas, 'boxplot')
       this.crearGrafico2('myDiv2', temMax, temMin, pre, fechas, 'line')
-      this.crearGrafico2('myDiv1', temMax, temMin, pre, fechas, 'histogram')
+      this.crearGraficoHistograma('myDiv1', temMax, temMin, pre, fechas, 'histogram')
     } else {
       alert("La fecha de fin no puede ser menor a la de inicio")
     }
