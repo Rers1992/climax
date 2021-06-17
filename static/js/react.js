@@ -1,213 +1,215 @@
 class Dashboard extends React.Component {
-    constructor(props){
-        super(props)
-        this.myRef = React.createRef();
-        this.state = {
-            estacion: [],
-            latitud: 0,
-            longitud: 0,
-            fechas: [],
-            temMaximas: [],
-            temMinimas: [],
-            precipitaciones: [],
-            data: [],
-            indicesOrdenados: [],
-            vectorAños: [],
-            nombreIndicesOrdenados: [],
-            nombreIndices: ['cdd', 'csdi', 'cwd', 'dtr', 'fd0', 'gsl', 'gsl2', 'id0', 
-              'prcptot', 'r10mm', 'r20mm', 'r95p', 'r99p', 'r50mm',
-              'rx1day', 'rx5day', 'sdii', 'su25', 'tn10p', 'tn90p', 
-              'tnn', 'txn', 'tr20', 'tx10p', 'tx90p', 'tnx', 'txx', 'wsdi']
-        }
+  constructor(props) {
+    super(props)
+    this.myRef = React.createRef();
+    this.state = {
+      estacion: [],
+      latitud: 0,
+      longitud: 0,
+      fechas: [],
+      temMaximas: [],
+      temMinimas: [],
+      precipitaciones: [],
+      data: [],
+      indicesOrdenados: [],
+      vectorAños: [],
+      nombreIndicesOrdenados: [],
+      nombreIndices: ['cdd', 'csdi', 'cwd', 'dtr', 'fd0', 'gsl', 'gsl2', 'id0',
+        'prcptot', 'r10mm', 'r20mm', 'r95p', 'r99p', 'r50mm',
+        'rx1day', 'rx5day', 'sdii', 'su25', 'tn10p', 'tn90p',
+        'tnn', 'txn', 'tr20', 'tx10p', 'tx90p', 'tnx', 'txx', 'wsdi']
     }
+  }
 
-    renderDatosEstacion(dato){
-      return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <thead>
-          <tr>
-            <th>Dato</th>
-            <th>Información</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr>
-              <td>Codigo</td>
-              <td>{dato.codigo}</td>
-            </tr>
-            <tr>
-              <td>Ubicacion</td>
-              <td>{dato.ubicacion}</td>
-            </tr>
-            <tr>
-              <td>Nombre</td>
-              <td>{dato.nombre}</td>
-            </tr>
-            <tr>
-              <td>Fecha de Instalación</td>
-              <td>{dato.fechaI}</td>
-            </tr>
-            <tr>
-              <td>Longitud</td>
-              <td>{dato.long}</td>
-            </tr>
-            <tr>
-              <td>Latitud</td>
-              <td>{dato.lat}</td>
-            </tr>
-            <tr>
-              <td>Altura</td>
-              <td>{dato.altura}</td>
-            </tr>
-            <tr>
-              <td>Cuenca</td>
-              <td>{dato.cuenca}</td>
-            </tr>
-            <tr>
-              <td>Rio</td>
-              <td>{dato.rio}</td>
-            </tr>
-            <tr>
-              <td>Medición</td>
-              <td>{dato.medi}</td>
-            </tr>
-            <tr>
-              <td>Fecha de Inicio de Datos</td>
-              <td>{this.state.fechas[0]}</td>
-            </tr>
-            <tr>
-              <td>Fecha de Fin de Datos</td>
-              <td>{this.state.fechas[this.state.fechas.length -1]}</td>
-            </tr>
-            <tr>
-              <td>Comentarios</td>
-              <td>{dato.comentario}</td>
-            </tr>
-        </tbody>
-      </table>;
-    }
+  renderDatosEstacion(dato) {
+    return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <thead>
+        <tr>
+          <th>Dato</th>
+          <th>Información</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Codigo</td>
+          <td>{dato.codigo}</td>
+        </tr>
+        <tr>
+          <td>Ubicacion</td>
+          <td>{dato.ubicacion}</td>
+        </tr>
+        <tr>
+          <td>Nombre</td>
+          <td>{dato.nombre}</td>
+        </tr>
+        <tr>
+          <td>Fecha de Instalación</td>
+          <td>{dato.fechaI}</td>
+        </tr>
+        <tr>
+          <td>Longitud</td>
+          <td>{dato.long}</td>
+        </tr>
+        <tr>
+          <td>Latitud</td>
+          <td>{dato.lat}</td>
+        </tr>
+        <tr>
+          <td>Altura</td>
+          <td>{dato.altura}</td>
+        </tr>
+        <tr>
+          <td>Cuenca</td>
+          <td>{dato.cuenca}</td>
+        </tr>
+        <tr>
+          <td>Rio</td>
+          <td>{dato.rio}</td>
+        </tr>
+        <tr>
+          <td>Medición</td>
+          <td>{dato.medi}</td>
+        </tr>
+        <tr>
+          <td>Fecha de Inicio de Datos</td>
+          <td>{this.state.fechas[0]}</td>
+        </tr>
+        <tr>
+          <td>Fecha de Fin de Datos</td>
+          <td>{this.state.fechas[this.state.fechas.length - 1]}</td>
+        </tr>
+        <tr>
+          <td>Comentarios</td>
+          <td>{dato.comentario}</td>
+        </tr>
+      </tbody>
+    </table>;
+  }
 
-    crearGrafico2(valor, temMax, temMin, Pre, años){
-      new Chart(valor, {
-        type: 'line',
-        data: {
-            labels: años,
-            datasets: [{
-                label: "Tem. Maxima",
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1,
-                data: temMax,
-                fill: false,
-              }, {
-                  label: "Tem. Minima",
-                  backgroundColor: 'rgba(63, 121, 191, 0.2)',
-                  borderColor: 'rgba(63, 121, 191, 1)',
-                  borderWidth: 1,
-                  data: temMin,
-                  fill: false,
-              }, {
-                  label: "Precipitación",
-                  data: Pre,
-                  backgroundColor: 'rgba(21, 255, 5, 0.2)',
-                  borderColor: 'rgba(21, 255, 5, 1)',
-                  borderWidth: 1,
-                  fill: false,
-              },
-          ]
-        }
-    })
-    }
-
-    renderTabla(data){
-        return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <thead>
-          <tr>
-            <th>año</th>
-            <th>Tem. Max.</th>
-            <th>Tem. Min.</th>
-            <th>Pre. Max.</th>
-            <th>cdd</th>
-            <th>csdi</th>
-            <th>cwd</th>
-            <th>dtr</th>
-            <th>fd0</th>
-            <th>gsl</th>
-            <th>gsl2</th>
-            <th>id0</th>
-            <th>prcptot</th>
-            <th>r10mm</th>
-            <th>r20mm</th>
-            <th>r95p</th>
-            <th>r99p</th>
-            <th>r50mm</th>
-            <th>rx1day</th>
-            <th>rx5day</th>
-            <th>sdii</th>
-            <th>su25</th>
-            <th>tn10p</th>
-            <th>tn90p</th>
-            <th>tnn</th>
-            <th>txn</th>
-            <th>tr20</th>
-            <th>tx10p</th>
-            <th>tx90p</th>
-            <th>tnx</th>
-            <th>txx</th>
-            <th>wsdi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((dato) => (
-            <tr>
-              <td>{dato.ano}</td>
-              <td>{dato.temmax}</td>
-              <td>{dato.temmin}</td>
-              <td>{dato.premax}</td>
-              <td>{dato.cdd}</td>
-              <td>{dato.csdi}</td>
-              <td>{dato.cwd}</td>
-              <td>{dato.dtr}</td>
-              <td>{dato.fd0}</td>
-              <td>{dato.gsl}</td>
-              <td>{dato.gsl2}</td>
-              <td>{dato.id0}</td>
-              <td>{dato.prcptot}</td>
-              <td>{dato.r10mm}</td>
-              <td>{dato.r20mm}</td>
-              <td>{dato.r95p}</td>
-              <td>{dato.r99p}</td>
-              <td>{dato.r50mm}</td>
-              <td>{dato.rx1day}</td>
-              <td>{dato.rx5day}</td>
-              <td>{dato.sdii}</td>
-              <td>{dato.su25}</td>
-              <td>{dato.tn10p}</td>
-              <td>{dato.tn90p}</td>
-              <td>{dato.tnn}</td>
-              <td>{dato.txn}</td>
-              <td>{dato.tr20}</td>
-              <td>{dato.tx10p}</td>
-              <td>{dato.tx90p}</td>
-              <td>{dato.tnx}</td>
-              <td>{dato.txx}</td>
-              <td>{dato.wsdi}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>;
-        
-    }
-
-    componentDidMount() {
-        fetch('../indices2/'+$("#codigo").val())
-          .then(response => response.json())
-          .then(data => this.setState({data:data.indices, estacion:data.estacion, longitud:data.estacion.long, latitud:data.estacion.lat, 
-            fechas: data.fechas, temMaximas: data.temMax, temMinimas: data.temMin, precipitaciones: data.preci}))
-          .then(data => this.ordenarIndicesFuncion())
-          
+  crearGrafico2(valor, temMax, temMin, Pre, años) {
+    new Chart(valor, {
+      type: 'line',
+      data: {
+        labels: años,
+        datasets: [{
+          label: "Tem. Maxima",
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1,
+          data: temMax,
+          fill: false,
+        }, {
+          label: "Tem. Minima",
+          backgroundColor: 'rgba(63, 121, 191, 0.2)',
+          borderColor: 'rgba(63, 121, 191, 1)',
+          borderWidth: 1,
+          data: temMin,
+          fill: false,
+        }, {
+          label: "Precipitación",
+          data: Pre,
+          backgroundColor: 'rgba(21, 255, 5, 0.2)',
+          borderColor: 'rgba(21, 255, 5, 1)',
+          borderWidth: 1,
+          fill: false,
+        },
+        ]
       }
+    })
+  }
 
-  ordenarIndicesFuncion(){
+  renderTabla(data) {
+    return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <thead>
+        <tr>
+          <th>año</th>
+          <th>Tem. Max.</th>
+          <th>Tem. Min.</th>
+          <th>Pre. Max.</th>
+          <th>cdd</th>
+          <th>csdi</th>
+          <th>cwd</th>
+          <th>dtr</th>
+          <th>fd0</th>
+          <th>gsl</th>
+          <th>gsl2</th>
+          <th>id0</th>
+          <th>prcptot</th>
+          <th>r10mm</th>
+          <th>r20mm</th>
+          <th>r95p</th>
+          <th>r99p</th>
+          <th>r50mm</th>
+          <th>rx1day</th>
+          <th>rx5day</th>
+          <th>sdii</th>
+          <th>su25</th>
+          <th>tn10p</th>
+          <th>tn90p</th>
+          <th>tnn</th>
+          <th>txn</th>
+          <th>tr20</th>
+          <th>tx10p</th>
+          <th>tx90p</th>
+          <th>tnx</th>
+          <th>txx</th>
+          <th>wsdi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((dato) => (
+          <tr>
+            <td>{dato.ano}</td>
+            <td>{dato.temmax}</td>
+            <td>{dato.temmin}</td>
+            <td>{dato.premax}</td>
+            <td>{dato.cdd}</td>
+            <td>{dato.csdi}</td>
+            <td>{dato.cwd}</td>
+            <td>{dato.dtr}</td>
+            <td>{dato.fd0}</td>
+            <td>{dato.gsl}</td>
+            <td>{dato.gsl2}</td>
+            <td>{dato.id0}</td>
+            <td>{dato.prcptot}</td>
+            <td>{dato.r10mm}</td>
+            <td>{dato.r20mm}</td>
+            <td>{dato.r95p}</td>
+            <td>{dato.r99p}</td>
+            <td>{dato.r50mm}</td>
+            <td>{dato.rx1day}</td>
+            <td>{dato.rx5day}</td>
+            <td>{dato.sdii}</td>
+            <td>{dato.su25}</td>
+            <td>{dato.tn10p}</td>
+            <td>{dato.tn90p}</td>
+            <td>{dato.tnn}</td>
+            <td>{dato.txn}</td>
+            <td>{dato.tr20}</td>
+            <td>{dato.tx10p}</td>
+            <td>{dato.tx90p}</td>
+            <td>{dato.tnx}</td>
+            <td>{dato.txx}</td>
+            <td>{dato.wsdi}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>;
+
+  }
+
+  componentDidMount() {
+    fetch('../indices2/' + $("#codigo").val())
+      .then(response => response.json())
+      .then(data => this.setState({
+        data: data.indices, estacion: data.estacion, longitud: data.estacion.long, latitud: data.estacion.lat,
+        fechas: data.fechas, temMaximas: data.temMax, temMinimas: data.temMin, precipitaciones: data.preci
+      }))
+      .then(data => this.ordenarIndicesFuncion())
+
+  }
+
+  ordenarIndicesFuncion() {
     var indices = []
     var sumx = 0
     var sumx2 = 0
@@ -224,12 +226,12 @@ class Dashboard extends React.Component {
     var b = []
     var n = 0
     var r2 = []
-    var nombreIndices = [this.cdd, this.csdi, this.cwd, this.dtr, this.fd0, this.gsl, this.gsl2, this.id0, 
-      this.prcptot, this.r10mm, this.r20mm, this.r95p, this.r99p, this.r50mm,
-      this.rx1day, this.rx5day, this.sdii, this.su25, this.tn10p, this.tn90p, 
-      this.tnn, this.txn, this.tr20, this.tx10p, this.tx90p, this.tnx, this.txx, this.wsdi]
-    this.setState({nombreIndicesOrdenados:nombreIndices})
-    for(let i = 0; i < 28; i++){
+    var nombreIndices = [this.cdd, this.csdi, this.cwd, this.dtr, this.fd0, this.gsl, this.gsl2, this.id0,
+    this.prcptot, this.r10mm, this.r20mm, this.r95p, this.r99p, this.r50mm,
+    this.rx1day, this.rx5day, this.sdii, this.su25, this.tn10p, this.tn90p,
+    this.tnn, this.txn, this.tr20, this.tx10p, this.tx90p, this.tnx, this.txx, this.wsdi]
+    this.setState({ nombreIndicesOrdenados: nombreIndices })
+    for (let i = 0; i < 28; i++) {
       indices[i] = []
       sumy[i] = 0
       sumy2[i] = 0
@@ -242,9 +244,9 @@ class Dashboard extends React.Component {
       r2[i] = 0
     }
     n = this.state.data.length
-    for(let i = 0; i < n; i++){
+    for (let i = 0; i < n; i++) {
       años.push(this.state.data[i]['ano'])
-      sumx +=  Number(this.state.data[i]['ano'])
+      sumx += Number(this.state.data[i]['ano'])
       sumx2 += Number(Number(this.state.data[i]['ano']) * Number(this.state.data[i]['ano']))
       indices[0].push(this.state.data[i]['cdd'])
       indices[1].push(this.state.data[i]['csdi'])
@@ -359,181 +361,336 @@ class Dashboard extends React.Component {
       sumxy[26] += Number(this.state.data[i]['txx']) * Number(this.state.data[i]['ano'])
       sumxy[27] += Number(this.state.data[i]['wsdi']) * Number(this.state.data[i]['ano'])
     }
-    
-    promx = sumx/n
-    sigmax = Math.sqrt((sumx2/n - promx**2))
-    for(let i = 0; i < 28; i++){
-      promy[i] = sumy[i]/n
-      m[i] = (sumx*sumy[i] - n*sumxy[i])/(sumx**2 - n*sumx2)
+
+    promx = sumx / n
+    sigmax = Math.sqrt((sumx2 / n - promx ** 2))
+    for (let i = 0; i < 28; i++) {
+      promy[i] = sumy[i] / n
+      m[i] = (sumx * sumy[i] - n * sumxy[i]) / (sumx ** 2 - n * sumx2)
       b[i] = promy[i] - m[i] * promx
-      sigmay[i] = Math.sqrt((sumy2[i]/n - promy[i]**2))
-      sigmaxy[i] = sumxy[i]/n - promx* promy[i]
-      r2[i] = (sigmaxy[i]/(sigmax*sigmay[i]))**2
+      sigmay[i] = Math.sqrt((sumy2[i] / n - promy[i] ** 2))
+      sigmaxy[i] = sumxy[i] / n - promx * promy[i]
+      r2[i] = (sigmaxy[i] / (sigmax * sigmay[i])) ** 2
     }
     var vectorB = []
 
-    años.push(String(Number(años[n-1]) + 1))
-    this.setState({indicesOrdenados:indices})
-    this.setState({vectorAños:años})
+    años.push(String(Number(años[n - 1]) + 1))
+    this.setState({ indicesOrdenados: indices })
+    this.setState({ vectorAños: años })
     this.crearGrafico2(this.tiempo, this.state.temMaximas, this.state.temMinimas, this.state.precipitaciones, this.state.fechas)
-    for(let i = 0; i < 28; i++){
+    for (let i = 0; i < 28; i++) {
       vectorB = []
-      for(let j = 0; j< años.length; j++){
-          vectorB.push(m[i] * años[j] + b[i])
+      for (let j = 0; j < años.length; j++) {
+        vectorB.push(m[i] * años[j] + b[i])
       }
       this.crearGrafico(this.state.nombreIndicesOrdenados[i], i, vectorB, r2)
     }
   }
 
-  crearGrafico(valor, i, vectorB, r2){
+  crearGrafico(valor, i, vectorB, r2) {
     new Chart(valor, {
       type: 'line',
       options: {
         title: {
           display: true,
-          text: 'R2 = '+ r2[i]
+          text: 'R2 = ' + r2[i]
         }
       },
       data: {
-          labels: this.state.vectorAños,
-          datasets: [{
-              label: this.state.nombreIndices[i],
-              data: this.state.indicesOrdenados[i],
-              backgroundColor: 'rgba(255, 99, 132, 0.2)',
-              borderColor: 'rgba(255, 99, 132, 1)',
-              borderWidth: 1
-          }, {
-            label: "Ajuste",
-            backgroundColor: 'rgba(63, 121, 191, 0.2)',
-            borderColor: 'rgba(63, 121, 191, 1)',
-            borderWidth: 1,
-            data: vectorB,
-            fill: false,
+        labels: this.state.vectorAños,
+        datasets: [{
+          label: this.state.nombreIndices[i],
+          data: this.state.indicesOrdenados[i],
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }, {
+          label: "Ajuste",
+          backgroundColor: 'rgba(63, 121, 191, 0.2)',
+          borderColor: 'rgba(63, 121, 191, 1)',
+          borderWidth: 1,
+          data: vectorB,
+          fill: false,
         }]
       }
-  })
-  }    
+    })
+  }
 
   render() {
-    return  <div>
+    return <div>
       <div className="row">
-            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-5">
-            <h2 className="text-center"><b>Información de la Estación Meteorológica</b></h2>
-              {this.renderDatosEstacion(this.state.estacion)}
-            </div>
-            <div className="col-12 col-xs-12 col-sm-6 col-md-7 col-lg-7">
-            <h2 className="text-center"><b>Ubicación estación</b></h2>
-            <iframe width="800" height="250" src={'https://www.google.com/maps/embed/v1/place?key=AIzaSyDx_FE31SZ6Ow8iI57vMSTOHJ823in0k3c&q='+
-            this.state.latitud+','+this.state.longitud}></iframe>
-            </div>
-          </div>
-            <div className="row">
-              <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <br></br>
-                <div className="form-control text-center"><b>Serie de Tiempo</b></div>
-                <canvas width="400" height="100" ref={ctx => this.tiempo = ctx}/>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-5">
+          <h2 className="text-center"><b>Información de la Estación Meteorológica</b></h2>
+          {this.renderDatosEstacion(this.state.estacion)}
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-7 col-lg-7">
+          <h2 className="text-center"><b>Ubicación estación</b></h2>
+          <iframe width="800" height="250" src={'https://www.google.com/maps/embed/v1/place?key=AIzaSyDx_FE31SZ6Ow8iI57vMSTOHJ823in0k3c&q=' +
+            this.state.latitud + ',' + this.state.longitud}></iframe>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <br></br>
+          <div className="form-control text-center"><b>Serie de Tiempo</b></div>
+          <canvas width="400" height="100" ref={ctx => this.tiempo = ctx} />
+        </div>
+      </div>
+      <div>
+        <button type="button" className="btn btn-info btn-lg"
+          data-toggle="modal" data-target="#myModal">Abrir Diccionario</button>
+
+        <div className="modal fade" id="myModal" role="dialog">
+          <div className="modal-dialog modal-lg">
+
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                <h4 className="modal-title">Diccionario</h4>
+              </div>
+              <div className="modal-body">
+                <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <thead>
+                    <tr>
+                      <th>Abreviación</th>
+                      <th>Definición</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Tem. Max.</td>
+                      <td>Temperatura máxima</td>
+                    </tr>
+                    <tr>
+                      <td>Tem. Min.</td>
+                      <td>Temperatura minima</td>
+                    </tr>
+                    <tr>
+                      <td>Pre. Max.</td>
+                      <td>Precipitación máxima</td>
+                    </tr>
+                    <tr>
+                      <td>cdd</td>
+                      <td>Días secos consecutivos</td>
+                    </tr>
+                    <tr>
+                      <td>csdi</td>
+                      <td>Duración de periodos frios</td>
+                    </tr>
+                    <tr>
+                      <td>cwd</td>
+                      <td>Días húmedos consecutivos</td>
+                    </tr>
+                    <tr>
+                      <td>dtr</td>
+                      <td>Rango diurno de temperatura</td>
+                    </tr>
+                    <tr>
+                      <td>fd0</td>
+                      <td>Días de helada</td>
+                    </tr>
+                    <tr>
+                      <td>gsl</td>
+                      <td>Duración de la estación de cultivo</td>
+                    </tr>
+                    <tr>
+                      <td>id0</td>
+                      <td>Días de hielo</td>
+                    </tr>
+                    <tr>
+                      <td>prcptot</td>
+                      <td>Precipitación total anual de los días humedos</td>
+                    </tr>
+                    <tr>
+                      <td>r10mm</td>
+                      <td>Días con precipitación mayor a 10mm</td>
+                    </tr>
+                    <tr>
+                      <td>r20mm</td>
+                      <td>Días con precipitación mayor a 20mm</td>
+                    </tr>
+                    <tr>
+                      <td>r95p</td>
+                      <td>Días muy húmedos</td>
+                    </tr>
+                    <tr>
+                      <td>r99p</td>
+                      <td>Días extremadamente humedos</td>
+                    </tr>
+                    <tr>
+                      <td>r50mm</td>
+                      <td>Días con precipitación mayor a 50mm</td>
+                    </tr>
+                    <tr>
+                      <td>rx1day</td>
+                      <td>Precipitación máxima en un día</td>
+                    </tr>
+                    <tr>
+                      <td>rx5day</td>
+                      <td>Precipitación máxima en cinco días</td>
+                    </tr>
+                    <tr>
+                      <td>sdii</td>
+                      <td>Índice simple de intensidad diaria</td>
+                    </tr>
+                    <tr>
+                      <td>su25</td>
+                      <td>Días de verano</td>
+                    </tr>
+                    <tr>
+                      <td>tn10p</td>
+                      <td>Noches frías</td>
+                    </tr>
+                    <tr>
+                      <td>tn90p</td>
+                      <td>Noches calientes</td>
+                    </tr>
+                    <tr>
+                      <td>tnn</td>
+                      <td>Temperatura minima extrema</td>
+                    </tr>
+                    <tr>
+                      <td>txn</td>
+                      <td>Temperatura mínima más alta</td>
+                    </tr>
+                    <tr>
+                      <td>tr20</td>
+                      <td>Noches tropicales</td>
+                    </tr>
+                    <tr>
+                      <td>tx10p</td>
+                      <td>Días frescos</td>
+                    </tr>
+                    <tr>
+                      <td>tx90p</td>
+                      <td>Días calurosos</td>
+                    </tr>
+                    <tr>
+                      <td>tnx</td>
+                      <td>Temperatura máxima mas baja</td>
+                    </tr>
+                    <tr>
+                      <td>txx</td>
+                      <td>Temperatura máxima extrema</td>
+                    </tr>
+                    <tr>
+                      <td>wsdi</td>
+                      <td>Duración de los periodos calidos</td>
+                    </tr>
+                    <tr>
+                      <td>R2</td>
+                      <td>Coeficiente de determinación</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-danger" data-dismiss="modal">Cerrar</button>
               </div>
             </div>
-            <div></div>
+
+          </div>
+        </div>
+      </div>
       {this.renderTabla(this.state.data)}
       <div className="row">
-            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-              <canvas width="400" height="400" ref={ctx => this.cdd = ctx}/>
-            </div>
-            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-              <canvas width="400" height="400" ref={ctx => this.csdi = ctx}/>
-            </div>
-            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-              <canvas width="400" height="400" ref={ctx => this.cwd = ctx}/>
-            </div>
-            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-              <canvas width="400" height="400" ref={ctx => this.dtr = ctx}/>
-            </div>
-            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-              <canvas width="400" height="400" ref={ctx => this.fd0 = ctx}/>
-            </div>
-            <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-              <canvas width="400" height="400" ref={ctx => this.gsl = ctx}/>
-            </div>
-            </div>
-            <div className="row">
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.gsl2 = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.id0 = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.prcptot = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.r10mm = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.r20mm = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.r95p = ctx}/>
-          </div>
-          </div>
-          <div className="row">
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.r99p = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.r50mm = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.rx1day = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.rx5day = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.sdii = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.su25 = ctx}/>
-          </div>
-          </div>
-          <div className="row">
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.tn10p = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.tn90p = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.tnn = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.txn = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.tr20 = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.tx10p = ctx}/>
-          </div>
-          </div>
-          <div className="row">
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.tx90p = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.tnx = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.txx = ctx}/>
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
-            <canvas width="400" height="400" ref={ctx => this.wsdi = ctx}/>
-          </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.cdd = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.csdi = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.cwd = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.dtr = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.fd0 = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.gsl = ctx} />
+        </div>
       </div>
-     </div>;
+      <div className="row">
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.gsl2 = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.id0 = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.prcptot = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.r10mm = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.r20mm = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.r95p = ctx} />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.r99p = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.r50mm = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.rx1day = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.rx5day = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.sdii = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.su25 = ctx} />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.tn10p = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.tn90p = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.tnn = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.txn = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.tr20 = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.tx10p = ctx} />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.tx90p = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.tnx = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.txx = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-2">
+          <canvas width="400" height="400" ref={ctx => this.wsdi = ctx} />
+        </div>
+      </div>
+    </div>;
   }
 }
 
 // Find all DOM containers, and render Like buttons into them.
 const domContainer = document.querySelector('#react');
-ReactDOM.render(<Dashboard/>, domContainer);
+ReactDOM.render(<Dashboard />, domContainer);

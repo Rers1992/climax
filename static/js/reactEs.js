@@ -311,27 +311,27 @@ class Dashboard extends React.Component {
     var y2 = Pre;
 
     var trace1 = {
-      x:años,
+      x: años,
       y: y0,
       type: grafico,
-      marker: {color: 'rgba(255, 99, 132, 0.2)'},
-      name:'Tem. Maxima'
+      marker: { color: 'rgba(255, 99, 132, 0.2)' },
+      name: 'Tem. Maxima'
     };
 
     var trace2 = {
-      x:años,
+      x: años,
       y: y1,
       type: grafico,
-      marker: {color: 'rgba(63, 121, 191, 0.2)'},
-      name:'Tem. Minima'
+      marker: { color: 'rgba(63, 121, 191, 0.2)' },
+      name: 'Tem. Minima'
     };
 
     var trace3 = {
-      x:años,
+      x: años,
       y: y2,
       type: grafico,
-      marker: {color: 'rgba(21, 255, 5, 0.2)'},
-      name:'Precipitacion'
+      marker: { color: 'rgba(21, 255, 5, 0.2)' },
+      name: 'Precipitacion'
     };
 
     var data = [trace1, trace2, trace3];
@@ -345,26 +345,26 @@ class Dashboard extends React.Component {
     var y2 = Pre;
 
     var trace1 = {
-      x:temMax,
+      x: temMax,
       type: grafico,
-      marker: {color: 'rgba(255, 99, 132, 0.2)'},
-      name:'Tem. Maxima'
+      marker: { color: 'rgba(255, 99, 132, 0.2)' },
+      name: 'Tem. Maxima'
     };
 
     var trace2 = {
-      x:temMin,
+      x: temMin,
       type: grafico,
-      marker: {color: 'rgba(63, 121, 191, 0.2)'},
-      name:'Tem. Minima'
+      marker: { color: 'rgba(63, 121, 191, 0.2)' },
+      name: 'Tem. Minima'
     };
 
     var trace3 = {
-      x:Pre,
+      x: Pre,
       type: grafico,
-      marker: {color: 'rgba(21, 255, 5, 0.2)'},
-      name:'Precipitacion'
+      marker: { color: 'rgba(21, 255, 5, 0.2)' },
+      name: 'Precipitacion'
     };
-    var layout = {barmode: "overlay"};
+    var layout = { barmode: "overlay" };
 
     var data = [trace1, trace2, trace3, layout];
 
@@ -379,22 +379,22 @@ class Dashboard extends React.Component {
     var trace1 = {
       y: y0,
       type: 'box',
-      marker: {color: 'rgba(255, 99, 132, 0.2)'},
-      name:'Tem. Maxima'
+      marker: { color: 'rgba(255, 99, 132, 0.2)' },
+      name: 'Tem. Maxima'
     };
 
     var trace2 = {
       y: y1,
       type: 'box',
-      marker: {color: 'rgba(63, 121, 191, 0.2)'},
-      name:'Tem. Minima'
+      marker: { color: 'rgba(63, 121, 191, 0.2)' },
+      name: 'Tem. Minima'
     };
 
     var trace3 = {
       y: y2,
       type: 'box',
-      marker: {color: 'rgba(21, 255, 5, 0.2)'},
-      name:'Precipitacion'
+      marker: { color: 'rgba(21, 255, 5, 0.2)' },
+      name: 'Precipitacion'
     };
 
     var data = [trace1, trace2, trace3];
@@ -594,7 +594,66 @@ class Dashboard extends React.Component {
           <div id='myDiv'></div>
         </div>
       </div>
-      <div></div>
+      <br></br>
+      <div>
+        <button type="button" className="btn btn-info btn-lg"
+          data-toggle="modal" data-target="#myModal">Abrir Diccionario</button>
+
+        <div className="modal fade" id="myModal" role="dialog">
+          <div className="modal-dialog modal-lg">
+
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                <h4 className="modal-title">Diccionario</h4>
+              </div>
+              <div className="modal-body">
+                <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <thead>
+                    <tr>
+                      <th>Abreviación</th>
+                      <th>Definición</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Q1</td>
+                      <td>Primer cuartil</td>
+                    </tr>
+                    <tr>
+                      <td>Q3</td>
+                      <td>Tercer cuartil</td>
+                    </tr>
+                    <tr>
+                      <td>IQR</td>
+                      <td>Inter cuartil</td>
+                    </tr>
+                    <tr>
+                      <td>Kstest</td>
+                      <td>Prueba de normalidad de Kolmogorov-Smirnov</td>
+                    </tr>
+                    <tr>
+                      <td>shapiro</td>
+                      <td>Prueba de normalidad de Shapiro Wilk</td>
+                    </tr>
+                    <tr>
+                      <td>p</td>
+                      <td>El valor p es una probabilidad que mide la evidencia 
+                        en contra de la hipótesis nula. Un valor p más pequeño 
+                        proporciona una evidencia más fuerte en contra de la 
+                        hipótesis nula.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-danger" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
       <div className="row">
         <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
           {this.renderTablaTemMax()}
