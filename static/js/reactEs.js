@@ -91,24 +91,24 @@ class Dashboard extends React.Component {
           <th>Media</th>
           <th>Mediana</th>
           <th>Moda</th>
-          <th>Desviación Estandar</th>
-          <th>Varianza</th>
+          <th>D.E.</th>
+          <th>Var</th>
           <th>Q1</th>
           <th>Q3</th>
           <th>IQR</th>
           <th>Q1-1.5*IQR</th>
-          <th>Inferiores</th>
+          <th>InfA</th>
           <th>Q3+1.5*IQR</th>
-          <th>Superiores</th>
+          <th>SupA</th>
           <th>Q1-3*IQR</th>
-          <th>Inferiores</th>
+          <th>InfE</th>
           <th>Q3+3*IQR</th>
-          <th>Superiores</th>
+          <th>SupE</th>
           <th>Kstest</th>
           <th>P</th>
           <th>Shapiro</th>
           <th>P</th>
-          <th>Coeficiente de Asimetria</th>
+          <th>C.A.</th>
           <th>Kurtosis</th>
         </tr>
       </thead>
@@ -153,24 +153,24 @@ class Dashboard extends React.Component {
           <th>Media</th>
           <th>Mediana</th>
           <th>Moda</th>
-          <th>Desviación Estandar</th>
-          <th>Varianza</th>
+          <th>D.E.</th>
+          <th>Var</th>
           <th>Q1</th>
           <th>Q3</th>
           <th>IQR</th>
           <th>Q1-1.5*IQR</th>
-          <th>Inferiores</th>
+          <th>InfA</th>
           <th>Q3+1.5*IQR</th>
-          <th>Superiores</th>
+          <th>SupA</th>
           <th>Q1-3*IQR</th>
-          <th>Inferiores</th>
+          <th>InfE</th>
           <th>Q3+3*IQR</th>
-          <th>Superiores</th>
+          <th>SupE</th>
           <th>Kstest</th>
           <th>P</th>
           <th>Shapiro</th>
           <th>P</th>
-          <th>Coeficiente de Asimetria</th>
+          <th>C.A.</th>
           <th>Kurtosis</th>
         </tr>
       </thead>
@@ -215,24 +215,24 @@ class Dashboard extends React.Component {
           <th>Media</th>
           <th>Mediana</th>
           <th>Moda</th>
-          <th>Desviación Estandar</th>
-          <th>Varianza</th>
+          <th>D.E.</th>
+          <th>Var</th>
           <th>Q1</th>
           <th>Q3</th>
           <th>IQR</th>
           <th>Q1-1.5*IQR</th>
-          <th>Inferiores</th>
+          <th>InfA</th>
           <th>Q3+1.5*IQR</th>
-          <th>Superiores</th>
+          <th>SupA</th>
           <th>Q1-3*IQR</th>
-          <th>Inferiores</th>
+          <th>InfE</th>
           <th>Q3+3*IQR</th>
-          <th>Superiores</th>
+          <th>SupE</th>
           <th>Kstest</th>
           <th>P</th>
           <th>Shapiro</th>
           <th>P</th>
-          <th>Coeficiente de Asimetria</th>
+          <th>C.A.</th>
           <th>Kurtosis</th>
         </tr>
       </thead>
@@ -300,7 +300,7 @@ class Dashboard extends React.Component {
       this.state.precipitaciones, this.state.fechas, 'boxplot')
     this.crearGrafico(this.mediaG, mediamax, mediamin, mediapre, años, 'line')
     this.crearGrafico(this.medianaG, medianamax, medianamin, medianapre, años, 'line')
-    this.crearGrafico(this.modaG, modamax, modamin, modapre, años, 'line')
+    //this.crearGrafico(this.modaG, modamax, modamin, modapre, años, 'line')
     this.crearGrafico(this.desEG, desviacionesmax, desviacionesmin, desviacionespre, años, 'line')
     this.crearGrafico(this.varianzaG, varianzamax, varianzamin, varianzapre, años, 'line')
   }
@@ -597,7 +597,7 @@ class Dashboard extends React.Component {
       <br></br>
       <div>
         <button type="button" className="btn btn-info btn-lg"
-          data-toggle="modal" data-target="#myModal">Abrir Diccionario</button>
+          data-toggle="modal" data-target="#myModal">Leyendas de la Tabla</button>
 
         <div className="modal fade" id="myModal" role="dialog">
           <div className="modal-dialog modal-lg">
@@ -616,6 +616,14 @@ class Dashboard extends React.Component {
                     </tr>
                   </thead>
                   <tbody>
+                  <tr>
+                      <td>D.E.</td>
+                      <td>Desviación estandar</td>
+                    </tr>
+                    <tr>
+                      <td>Var</td>
+                      <td>Varianza</td>
+                    </tr>
                     <tr>
                       <td>Q1</td>
                       <td>Primer cuartil</td>
@@ -626,7 +634,43 @@ class Dashboard extends React.Component {
                     </tr>
                     <tr>
                       <td>IQR</td>
-                      <td>Inter cuartil</td>
+                      <td>Rango inter cuartil</td>
+                    </tr>
+                    <tr>
+                      <td>Q1-1.5*IQR</td>
+                      <td>Valores atipicos inferiores</td>
+                    </tr>
+                    <tr>
+                      <td>InfA</td>
+                      <td>conteo de valores por debajo del valor de Q1-1.5*IQR</td>
+                    </tr>
+                    <tr>
+                      <td>Q3+1.5*IQR</td>
+                      <td>Valores atipicos superiores</td>
+                    </tr>
+                    <tr>
+                      <td>SupA</td>
+                      <td>conteo de valores por encima del valor de Q3+1.5*IQR</td>
+                    </tr>
+                    <tr>
+                      <td>Q1-3*IQR</td>
+                      <td>Valores extremos inferiores</td>
+                    </tr>
+                    <tr>
+                      <td>InfE</td>
+                      <td>conteo de valores por debajo del valor de Q1-3*IQR</td>
+                    </tr>
+                    <tr>
+                      <td>Q3+3*IQR</td>
+                      <td>Valores extremos superiores</td>
+                    </tr>
+                    <tr>
+                      <td>SupE</td>
+                      <td>conteo de valores por encima del valor de Q3+3*IQR</td>
+                    </tr>
+                    <tr>
+                      <td>C.A.</td>
+                      <td>Coeficiente de asimetría</td>
                     </tr>
                     <tr>
                       <td>Kstest</td>
@@ -676,18 +720,16 @@ class Dashboard extends React.Component {
           <div className="form-control text-center">Mediana</div>
           <canvas width="400" height="400" ref={ctx => this.medianaG = ctx} />
         </div>
-        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        {/*<div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
           <br></br>
           <div className="form-control text-center">Moda</div>
           <canvas width="400" height="400" ref={ctx => this.modaG = ctx} />
-        </div>
+        </div>*/}
         <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
           <br></br>
           <div className="form-control text-center">Desviación Estandar</div>
           <canvas width="400" height="400" ref={ctx => this.desEG = ctx} />
         </div>
-      </div>
-      <div className="row">
         <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
           <br></br>
           <div className="form-control text-center">Varianza</div>

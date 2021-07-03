@@ -1,0 +1,9 @@
+rango inter cuartil* listo
+leyendas de la tabla* listo
+DE = desviasion estandar* listo
+var = varianza * listo
+Coeficiente de Asimetria = c.a. * listo
+quitar moda* listo
+inferiores = inf * listo
+valores atipicos = Q1-1.5*IQR * listo
+	Q1-3*IQR = valores extremos * listo

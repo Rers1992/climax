@@ -123,9 +123,9 @@ class Dashboard extends React.Component {
       <thead>
         <tr>
           <th>año</th>
-          <th>Tem. Max.</th>
-          <th>Tem. Min.</th>
-          <th>Pre. Max.</th>
+          <th>TMax.</th>
+          <th>TMin.</th>
+          <th>PMax.</th>
           <th>cdd</th>
           <th>csdi</th>
           <th>cwd</th>
@@ -438,7 +438,7 @@ class Dashboard extends React.Component {
       </div>
       <div>
         <button type="button" className="btn btn-info btn-lg"
-          data-toggle="modal" data-target="#myModal">Abrir Diccionario</button>
+          data-toggle="modal" data-target="#myModal">Leyendas de la Tabla</button>
 
         <div className="modal fade" id="myModal" role="dialog">
           <div className="modal-dialog modal-lg">
@@ -458,15 +458,15 @@ class Dashboard extends React.Component {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Tem. Max.</td>
+                      <td>TMax.</td>
                       <td>Temperatura máxima</td>
                     </tr>
                     <tr>
-                      <td>Tem. Min.</td>
+                      <td>TMin.</td>
                       <td>Temperatura minima</td>
                     </tr>
                     <tr>
-                      <td>Pre. Max.</td>
+                      <td>PMax.</td>
                       <td>Precipitación máxima</td>
                     </tr>
                     <tr>
@@ -579,7 +579,8 @@ class Dashboard extends React.Component {
                     </tr>
                     <tr>
                       <td>R2</td>
-                      <td>Coeficiente de determinación</td>
+                      <td>Coeficiente de determinación (Cuanto más cerca de 1 se sitúe su valor, 
+                        mayor será el ajuste del modelo a la variable que estamos intentando explicar)</td>
                     </tr>
                   </tbody>
                 </table>
