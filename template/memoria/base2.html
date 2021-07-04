@@ -54,12 +54,14 @@
                             <div class="menu_section">
                                 <h3>General</h3>
                                 <ul class="nav side-menu">
+                                    {% if user.is_admin %}
                                     <li><a href="{% url 'memoria:entidad' %}"><i
-                                                class="fa fa-building"></i>Entidades</a></li>
-                                    <li><a href="{% url 'memoria:usuario' %}"><i class="fa fa-user"></i>Usuarios</a>
-                                    </li>
+                                                class="fa fa-user"></i>Usuarios</a></li>
+                                    <!--<li><a href="{% url 'memoria:usuario' %}"><i class="fa fa-user"></i>Usuarios</a>
+                                    </li>-->
                                     <li><a href="{% url 'ubicacion:ubicacion' %}"><i
                                                 class="fa fa-map"></i>Ubicaciones</a></li>
+                                    {% endif %}
                                     <li><a href="{% url 'estacion:estacion' %}"><i class="fa fa-file"></i>Estaciones</a>
                                     </li>
                                     </li>

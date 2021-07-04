@@ -15,7 +15,7 @@ class MemAno(models.Model):
 
 class MemBitacora(models.Model):
     codigobitacora = models.AutoField(primary_key=True)
-    rutusuario = models.ForeignKey('MemUsuario', models.DO_NOTHING, db_column='rutusuario')
+    rutusuario = models.ForeignKey('MemEmpresa', models.DO_NOTHING, db_column='rutusuario')
     codigoestacion = models.ForeignKey('MemEstacionmeteorologica', models.DO_NOTHING, db_column='codigoestacion')
     descripcionbitacora = models.CharField(max_length=1000, blank=True, null=True)
     fechainiciobitacora = models.DateField(blank=True, null=True, auto_now_add=True)
@@ -26,15 +26,15 @@ class MemBitacora(models.Model):
         db_table = 'mem_bitacora'
 
 
-class MemDesextremosclimaticos(models.Model):
-    codigoindicador = models.CharField(primary_key=True, max_length=20)
-    nombreindicador = models.CharField(max_length=20, blank=True, null=True)
-    descripcionindicador = models.CharField(max_length=20, blank=True, null=True)
-    medidaindicador = models.CharField(max_length=20, blank=True, null=True)
+#class MemDesextremosclimaticos(models.Model):
+#    codigoindicador = models.CharField(primary_key=True, max_length=20)
+#    nombreindicador = models.CharField(max_length=20, blank=True, null=True)
+#    descripcionindicador = models.CharField(max_length=20, blank=True, null=True)
+#    medidaindicador = models.CharField(max_length=20, blank=True, null=True)
 
-    class Meta:
-        managed = True
-        db_table = 'mem_desextremosclimaticos'
+#    class Meta:
+#        managed = True
+#        db_table = 'mem_desextremosclimaticos'
 
 
 
@@ -102,7 +102,7 @@ class MemEmpresa(AbstractBaseUser):
 class MemEstacionmeteorologica(models.Model):
     codigoestacion = models.AutoField(primary_key=True)
     codigoubicacion = models.ForeignKey('MemUbicacion', models.DO_NOTHING, db_column='codigoubicacion', blank=True, null=True)
-    rutusuario = models.ForeignKey('MemUsuario', models.DO_NOTHING, db_column='rutusuario')
+    rutusuario = models.ForeignKey('MemEmpresa', models.DO_NOTHING, db_column='rutusuario', blank=True, null=True)
     nombreestacion = models.CharField(max_length=20, blank=True, null=True)
     fechainstalacion = models.DateField(blank=True, null=True)
     fechatermino = models.DateField(blank=True, null=True)
@@ -250,10 +250,40 @@ class MemSeriedetiempo(models.Model):
         managed = True
         db_table = 'mem_seriedetiempo'
 
+class MemPaisUbicacion(models.Model):
+    codigopais = models.AutoField(primary_key=True)
+    nombrepais = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.nombrepais) + ": " + str(self.codigopais)
+
+    class Meta:
+        managed = True
+        db_table = 'mem_pais_ubicacion'
+
+class MemRegionUbicacion(models.Model):
+    codigoregion = models.AutoField(primary_key=True)
+    nombreregion = models.CharField(max_length=255, blank=True, null=True)
+    pais = models.ForeignKey(MemPaisUbicacion, 
+    models.DO_NOTHING, db_column='pais', blank=True, null=True)
+
+    def __str__(self):
+        return str(self.pais) + ": " + str(self.nombreregion) + ": " + str(self.codigoregion)
+
+    class Meta:
+        managed = True
+        db_table = 'mem_region_ubicacion'
+        
+
 
 class MemUbicacion(models.Model):
     codigoubicacion = models.AutoField(primary_key=True)
-    nombreubicacion = models.CharField(max_length=20, blank=True, null=True)
+    nombreubicacion = models.CharField(max_length=255, blank=True, null=True)
+    region = models.ForeignKey(MemRegionUbicacion, 
+    models.DO_NOTHING, db_column='region', blank=True, null=True)
+
+    def __str__(self):
+        return str(self.nombreubicacion)
 
     class Meta:
         managed = True

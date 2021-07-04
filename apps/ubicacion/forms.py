@@ -4,7 +4,8 @@ from apps.memoria.models import MemUbicacion
 class MemUbicacionForm(forms.ModelForm):
     class Meta:
         model = MemUbicacion
-        fields = ['nombreubicacion']
+        fields = ['nombreubicacion', 'region']
         labels={
-            'nombreubicacion':'Ubicación'
+            'nombreubicacion':'Ubicación',
+            'region':'region'
         }

@@ -4,6 +4,8 @@ function fn_abreFormEstacion() {
         url: 'crearEstacion',
         success: function (data) {
             $('#employee_detail').html(data);
+            $('#div_id_rutusuario').hide();
+            document.getElementById('id_rutusuario').value = document.getElementById('idrutusuario').value
             $('#dataModal').modal("show");
         }
     });
