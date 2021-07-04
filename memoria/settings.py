@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'apps.memoria',
     'crispy_forms',
-    'apps.usuario',
+    #'apps.usuario',
     'apps.estacion',
     'apps.ubicacion',
     'apps.bitacora',

@@ -15,14 +15,15 @@ from scipy import stats
 # Create your views here.
 
 def estacion(request):
-    estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True).select_related('codigoubicacion')
+    estaciones = MemEstacionmeteorologica.objects.filter(
+        estadoestacion = True, rutusuario=request.user).select_related('codigoubicacion')
     return render(request, 'memoria/estacion/index.html', {'estaciones':estaciones})
 
 def estacionJson(request):
     json = []
     estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True).select_related('rutusuario')
     for x in estaciones:
-        json.append({'codigo': x.codigoestacion, 'nombre' : x.nombreestacion, 'propietario': x.rutusuario.nombreusuario, 'latitud': x.latitudestacion,
+        json.append({'codigo': x.codigoestacion, 'nombre' : x.nombreestacion, 'propietario': x.rutusuario.nombreempresa, 'latitud': x.latitudestacion,
         'longitud': x.longitudestacion})
 
     return JsonResponse({'estacionesJson': json})

@@ -3,8 +3,8 @@ from django.views.generic.edit import CreateView, View, FormView
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import MemEmpresaForm, MemUsurioForm, LoginForm
-from .models import MemEmpresa, MemUsuario
+from .forms import MemEmpresaForm, LoginForm #, MemUsurioForm
+from .models import MemEmpresa#, MemUsuario
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, logout
@@ -16,9 +16,9 @@ def entidad(request):
     empresas = MemEmpresa.objects.filter(is_active = True)
     return render(request, 'memoria/entidad/index.html', {'empresas':empresas})
 
-def usuario(request):
-    empresas = MemUsuario.objects.filter(estadousuario = True)
-    return render(request, 'memoria/usuario/index.html', {'empresas':empresas})
+# def usuario(request):
+#     empresas = MemUsuario.objects.filter(estadousuario = True)
+#     return render(request, 'memoria/usuario/index.html', {'empresas':empresas})
 
 def crearEntidad(request):
     if request.method == 'POST':
@@ -30,15 +30,15 @@ def crearEntidad(request):
         empresaForm = MemEmpresaForm()
         return render (request, 'memoria/entidad/modal.html', {'empresaForm':empresaForm})
 
-def crearUsuario(request):
-    if request.method == 'POST':
-        empresaForm = MemUsurioForm(request.POST)
-        if empresaForm.is_valid():
-            empresaForm.save()
-            return redirect('memoria:usuario')
-    else:
-        empresaForm = MemUsurioForm()
-        return render (request, 'memoria/usuario/modal.html', {'empresaForm':empresaForm})
+# def crearUsuario(request):
+#     if request.method == 'POST':
+#         empresaForm = MemUsurioForm(request.POST)
+#         if empresaForm.is_valid():
+#             empresaForm.save()
+#             return redirect('memoria:usuario')
+#     else:
+#         empresaForm = MemUsurioForm()
+#         return render (request, 'memoria/usuario/modal.html', {'empresaForm':empresaForm})
 
 def editarEntidad(request, v_rut):
     empresaForm = None
@@ -57,22 +57,22 @@ def editarEntidad(request, v_rut):
         error = e
     return render(request, 'memoria/entidad/modal.html', {'empresaForm':empresaForm, 'empresa':empresa, 'error':error })
 
-def editarUsuario(request, v_rut):
-    empresaForm = None
-    empresa = None
-    error = None
-    try:
-        empresa = MemUsuario.objects.get(rutusuario = v_rut)
-        if request.method == 'GET':
-            empresaForm = MemUsurioForm(instance = empresa)
-        else:
-            empresaForm = MemUsurioForm(request.POST, instance = empresa)
-        if empresaForm.is_valid():
-            empresaForm.save()
-            return redirect('memoria:usuario')
-    except ObjectDoesNotExist as e:
-        error = e
-    return render(request, 'memoria/usuario/modal.html', {'empresaForm':empresaForm, 'empresa':empresa, 'error':error })
+# def editarUsuario(request, v_rut):
+#     empresaForm = None
+#     empresa = None
+#     error = None
+#     try:
+#         empresa = MemUsuario.objects.get(rutusuario = v_rut)
+#         if request.method == 'GET':
+#             empresaForm = MemUsurioForm(instance = empresa)
+#         else:
+#             empresaForm = MemUsurioForm(request.POST, instance = empresa)
+#         if empresaForm.is_valid():
+#             empresaForm.save()
+#             return redirect('memoria:usuario')
+#     except ObjectDoesNotExist as e:
+#         error = e
+#     return render(request, 'memoria/usuario/modal.html', {'empresaForm':empresaForm, 'empresa':empresa, 'error':error })
 
 def eliminarEntidad(request, v_rut):
     empresa = MemEmpresa.objects.get(rutempresa = v_rut)

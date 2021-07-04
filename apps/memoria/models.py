@@ -290,14 +290,14 @@ class MemUbicacion(models.Model):
         db_table = 'mem_ubicacion'
 
 
-class MemUsuario(models.Model):
-    rutusuario = models.CharField(primary_key=True, max_length=13)
-    rutempresa = models.ForeignKey(MemEmpresa, models.DO_NOTHING, db_column='rutempresa')
-    nombreusuario = models.CharField(max_length=20, blank=True, null=True)
-    cargousuario = models.BooleanField('CargoUsuario', default = True )
-    contrasenausuario = models.CharField(max_length=20, blank=True, null=True)
-    estadousuario = models.BooleanField('EstadoUsuario', default = True )
+# class MemUsuario(models.Model):
+#     rutusuario = models.CharField(primary_key=True, max_length=13)
+#     rutempresa = models.ForeignKey(MemEmpresa, models.DO_NOTHING, db_column='rutempresa')
+#     nombreusuario = models.CharField(max_length=20, blank=True, null=True)
+#     cargousuario = models.BooleanField('CargoUsuario', default = True )
+#     contrasenausuario = models.CharField(max_length=20, blank=True, null=True)
+#     estadousuario = models.BooleanField('EstadoUsuario', default = True )
 
-    class Meta:
-        managed = True
-        db_table = 'mem_usuario'
+#     class Meta:
+#         managed = True
+#         db_table = 'mem_usuario'
