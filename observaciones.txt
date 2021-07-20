@@ -7,3 +7,13 @@ quitar moda* listo
 inferiores = inf * listo
 valores atipicos = Q1-1.5*IQR * listo
 	Q1-3*IQR = valores extremos * listo
+diagrama de cajas ** listo
+valores atipicos en diagrama de caja ** listo
+agregar nombre de ejes x e y de histograma (revisar otros graficos) ->distribucion de variables ** listo
+separar presipitaciones de temperaturas ** listo
+temperatura media en estadisticas ** listo
+
+
+datos de la serie temporal completa (todos los años juntos)
+pantalla nueva de inicio pero con valores regionales
+separar empresas con usuarios/ ver posibilidad de consumir api con nombres de empresas

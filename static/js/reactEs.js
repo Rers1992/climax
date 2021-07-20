@@ -12,7 +12,9 @@ class Dashboard extends React.Component {
       fechas: [],
       temMaximas: [],
       temMinimas: [],
-      precipitaciones: []
+      precipitaciones: [],
+      temPre: true,
+      temPreMensaje:"Ver Precipitación"
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -268,42 +270,6 @@ class Dashboard extends React.Component {
     </table>;
   }
 
-  ordenarFuncion() {
-    var mediamax = [], mediamin = [], mediapre = [], medianamax = [],
-      medianamin = [], medianapre = [], modamax = [], modamin = [], modapre = [],
-      desviacionesmax = [], desviacionesmin = [], desviacionespre = [], varianzamax = [],
-      varianzamin = [], varianzapre = []
-    var años = []
-    for (let i = 0; i < this.state.data.length; i++) {
-      años.push(this.state.data[i]['ano'])
-      mediamax.push(this.state.data[i]['mediamax'])
-      mediamin.push(this.state.data[i]['mediamin'])
-      mediapre.push(this.state.data[i]['mediapre'])
-      medianamax.push(this.state.data[i]['medianamax'])
-      medianamin.push(this.state.data[i]['medianamin'])
-      medianapre.push(this.state.data[i]['medianapre'])
-      modamax.push(this.state.data[i]['modamax'])
-      modamin.push(this.state.data[i]['modamin'])
-      modapre.push(this.state.data[i]['modapre'])
-      desviacionesmax.push(this.state.data[i]['desviacionesmax'])
-      desviacionesmin.push(this.state.data[i]['desviacionesmin'])
-      desviacionespre.push(this.state.data[i]['desviacionespre'])
-      varianzamax.push(this.state.data[i]['varianzamax'])
-      varianzamin.push(this.state.data[i]['varianzamin'])
-      varianzapre.push(this.state.data[i]['varianzapre'])
-    }
-    this.crearGrafico2('myDiv2', this.state.temMaximas, this.state.temMinimas,
-      this.state.precipitaciones, this.state.fechas, 'line')
-    this.crearGraficoHistograma('myDiv1', this.state.temMaximas, this.state.temMinimas,
-      this.state.precipitaciones, this.state.fechas, 'histogram')
-    this.crearGrafico3(this.tiempoC, this.state.temMaximas, this.state.temMinimas,
-      this.state.precipitaciones, this.state.fechas, 'boxplot')
-    this.crearGrafico(this.mediaG, mediamax, mediamin, mediapre, años, 'line')
-    this.crearGrafico(this.medianaG, medianamax, medianamin, medianapre, años, 'line')
-    //this.crearGrafico(this.modaG, modamax, modamin, modapre, años, 'line')
-    this.crearGrafico(this.desEG, desviacionesmax, desviacionesmin, desviacionespre, años, 'line')
-    this.crearGrafico(this.varianzaG, varianzamax, varianzamin, varianzapre, años, 'line')
-  }
 
   crearGrafico2(valor, temMax, temMin, Pre, años, grafico) {
     var y0 = temMax;
@@ -331,19 +297,121 @@ class Dashboard extends React.Component {
       y: y2,
       type: grafico,
       marker: { color: 'rgba(21, 255, 5, 0.2)' },
-      name: 'Precipitacion'
+      name: 'Tem. Media'
+    };
+    var layout = {
+      bargap: 0.05,
+      bargroupgap: 0.2,
+      barmode: "overlay",
+      //title: "Sampled Results", 
+      xaxis: { title: "Fecha" },
+      yaxis: { title: "Valor Medición" }
     };
 
     var data = [trace1, trace2, trace3];
 
-    Plotly.newPlot(valor, data);
+    Plotly.newPlot(valor, data, layout);
   }
 
-  crearGraficoHistograma(valor, temMax, temMin, Pre, años, grafico) {
-    var y0 = temMax;
-    var y1 = temMin;
-    var y2 = Pre;
+  crearGrafico2Pre(valor, Pre, años, grafico) {
+    var y0 = Pre;
 
+    var trace1 = {
+      x: años,
+      y: y0,
+      type: grafico,
+      marker: { color: 'rgba(21, 255, 5, 0.2)' },
+      name: 'Precipitacion'
+    };
+    var layout = {
+      bargap: 0.05,
+      bargroupgap: 0.2,
+      barmode: "overlay",
+      //title: "Sampled Results", 
+      xaxis: { title: "Fecha" },
+      yaxis: { title: "Valor Medición" }
+    };
+
+    var data = [trace1];
+
+    Plotly.newPlot(valor, data, layout);
+  }
+
+
+  ordenarFuncion() {
+    var mediamax = [], mediamin = [], mediapre = [], medianamax = [],
+      medianamin = [], medianapre = [], modamax = [], modamin = [], modapre = [],
+      desviacionesmax = [], desviacionesmin = [], desviacionespre = [], varianzamax = [],
+      varianzamin = [], varianzapre = []
+    var años = []
+    for (let i = 0; i < this.state.data.length; i++) {
+      años.push(this.state.data[i]['ano'])
+      mediamax.push(this.state.data[i]['mediamax'])
+      mediamin.push(this.state.data[i]['mediamin'])
+      mediapre.push((parseInt(
+        this.state.data[i]['mediamin'])+parseInt(this.state.data[i]['mediamax']))/2)
+      medianamax.push(this.state.data[i]['medianamax'])
+      medianamin.push(this.state.data[i]['medianamin'])
+      medianapre.push(
+        parseInt(this.state.data[i]['medianamax'])+parseInt(this.state.data[i]['medianamin'])/2)
+      //modamax.push(this.state.data[i]['modamax'])
+      //modamin.push(this.state.data[i]['modamin'])
+      //modapre.push(this.state.data[i]['modapre'])
+      desviacionesmax.push(this.state.data[i]['desviacionesmax'])
+      desviacionesmin.push(this.state.data[i]['desviacionesmin'])
+      desviacionespre.push(
+        (parseInt(this.state.data[i]['desviacionesmax'])+parseInt(this.state.data[i]['desviacionesmin']))/2)
+      varianzamax.push(this.state.data[i]['varianzamax'])
+      varianzamin.push(this.state.data[i]['varianzamin'])
+      varianzapre.push((parseInt(
+        this.state.data[i]['varianzamax'])+parseInt(this.state.data[i]['varianzamin']))/2)
+    }
+    //this.crearGrafico2('myDiv2', this.state.temMaximas, this.state.temMinimas,
+    //  this.state.precipitaciones, this.state.fechas, 'line')
+    var arrayTemMedia = []
+    for (let j = 0; j < (this.state.temMaximas).length; j++) {
+      arrayTemMedia.push((parseInt(this.state.temMinimas[j]) + parseInt(this.state.temMaximas[j])) / 2)
+    }
+    this.crearGrafico2('myDiv2', this.state.temMaximas, this.state.temMinimas,
+      arrayTemMedia, this.state.fechas, 'line')
+    this.crearGraficoHistograma('myDiv1', this.state.temMaximas, this.state.temMinimas,
+      arrayTemMedia, this.state.fechas, 'histogram')
+    this.crearGrafico3(this.tiempoC, this.state.temMaximas, this.state.temMinimas,
+      arrayTemMedia, this.state.fechas, 'boxplot')
+    this.crearGrafico(this.mediaG, mediamax, mediamin, mediapre, años, 'line')
+    this.crearGrafico(this.medianaG, medianamax, medianamin, medianapre, años, 'line')
+    //this.crearGrafico(this.modaG, modamax, modamin, modapre, años, 'line')
+    this.crearGrafico(this.desEG, desviacionesmax, desviacionesmin, desviacionespre, años, 'line')
+    this.crearGrafico(this.varianzaG, varianzamax, varianzamin, varianzapre, años, 'line')
+  }
+
+  ordenarFuncionPre() {
+    var mediamax = [], mediamin = [], mediapre = [], medianamax = [],
+      medianamin = [], medianapre = [], modamax = [], modamin = [], modapre = [],
+      desviacionesmax = [], desviacionesmin = [], desviacionespre = [], varianzamax = [],
+      varianzamin = [], varianzapre = []
+    var años = []
+    for (let i = 0; i < this.state.data.length; i++) {
+      años.push(this.state.data[i]['ano'])
+      mediapre.push(this.state.data[i]['mediapre'])
+      medianapre.push(this.state.data[i]['medianapre'])
+      //modapre.push(this.state.data[i]['modapre'])
+      desviacionespre.push(this.state.data[i]['desviacionespre'])
+      varianzapre.push(this.state.data[i]['varianzapre'])
+    }
+
+    this.crearGrafico2Pre('myDiv2', this.state.precipitaciones, this.state.fechas, 'line')
+    this.crearGraficoHistogramaPre('myDiv1', this.state.precipitaciones, this.state.fechas, 'histogram')
+    this.crearGrafico3Pre(this.tiempoC, this.state.precipitaciones, this.state.fechas, 'boxplot')
+    this.crearGraficoPre(this.mediaG, mediapre, años, 'line')
+    this.crearGraficoPre(this.medianaG, medianapre, años, 'line')
+    //this.crearGrafico(this.modaG, modamax, modamin, modapre, años, 'line')
+    this.crearGraficoPre(this.desEG, desviacionespre, años, 'line')
+    this.crearGraficoPre(this.varianzaG, varianzapre, años, 'line')
+  }
+
+
+  crearGraficoHistograma(valor, temMax, temMin, Pre, años, grafico) {
     var trace1 = {
       x: temMax,
       type: grafico,
@@ -362,14 +430,48 @@ class Dashboard extends React.Component {
       x: Pre,
       type: grafico,
       marker: { color: 'rgba(21, 255, 5, 0.2)' },
-      name: 'Precipitacion'
+      name: 'Tem. Media'
     };
     var layout = { barmode: "overlay" };
 
     var data = [trace1, trace2, trace3, layout];
 
-    Plotly.newPlot(valor, data);
+    var layout = {
+      bargap: 0.05,
+      bargroupgap: 0.2,
+      barmode: "overlay",
+      //title: "Sampled Results", 
+      xaxis: { title: "Valores de Medición" },
+      yaxis: { title: "Count" }
+    };
+
+    Plotly.newPlot(valor, data, layout);
   }
+
+
+  crearGraficoHistogramaPre(valor, Pre, años, grafico) {
+    var trace3 = {
+      x: Pre,
+      type: grafico,
+      marker: { color: 'rgba(21, 255, 5, 0.2)' },
+      name: 'Precipitacion'
+    };
+    var layout = { barmode: "overlay" };
+
+    var data = [trace3, layout];
+
+    var layout = {
+      bargap: 0.05,
+      bargroupgap: 0.2,
+      barmode: "overlay",
+      //title: "Sampled Results", 
+      xaxis: { title: "Valores de Medición" },
+      yaxis: { title: "Count" }
+    };
+
+    Plotly.newPlot(valor, data, layout);
+  }
+
 
   crearGrafico3(valor, temMax, temMin, Pre, años, grafico) {
     var y0 = temMax;
@@ -379,22 +481,46 @@ class Dashboard extends React.Component {
     var trace1 = {
       y: y0,
       type: 'box',
-      marker: { color: 'rgba(255, 99, 132, 0.2)' },
-      name: 'Tem. Maxima'
+      marker: {
+        color: 'rgba(255, 99, 132, 0.2)',
+        outliercolor: 'rgba(219, 64, 82, 0.6)',
+        line: {
+          outliercolor: 'rgba(219, 64, 82, 1.0)',
+          outlierwidth: 2
+        }
+      },
+      name: 'Tem. Maxima',
+      boxpoints: 'suspectedoutliers'
     };
 
     var trace2 = {
       y: y1,
       type: 'box',
-      marker: { color: 'rgba(63, 121, 191, 0.2)' },
-      name: 'Tem. Minima'
+      marker: {
+        color: 'rgba(63, 121, 191, 0.2)',
+        outliercolor: 'rgba(219, 64, 82, 0.6)',
+        line: {
+          outliercolor: 'rgba(219, 64, 82, 1.0)',
+          outlierwidth: 2
+        }
+      },
+      name: 'Tem. Minima',
+      boxpoints: 'suspectedoutliers'
     };
 
     var trace3 = {
       y: y2,
       type: 'box',
-      marker: { color: 'rgba(21, 255, 5, 0.2)' },
-      name: 'Precipitacion'
+      marker: {
+        color: 'rgba(21, 255, 5, 0.2)',
+        outliercolor: 'rgba(219, 64, 82, 0.6)',
+        line: {
+          outliercolor: 'rgba(219, 64, 82, 1.0)',
+          outlierwidth: 2
+        }
+      },
+      name: 'Tem. Media',
+      boxpoints: 'suspectedoutliers'
     };
 
     var data = [trace1, trace2, trace3];
@@ -402,60 +528,32 @@ class Dashboard extends React.Component {
     Plotly.newPlot('myDiv', data);
   }
 
-  crearGrafico(valor, temMax, temMin, Pre, años, grafico) {
-    if (grafico == 'bar') {
-      new Chart(valor, {
-        type: grafico,
-        data: {
-          labels: años,
-          datasets: [{
-            label: "Tem. Maxima",
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1,
-            data: temMax,
-            fill: false,
-          }, {
-            label: "Tem. Minima",
-            backgroundColor: 'rgba(63, 121, 191, 0.2)',
-            borderColor: 'rgba(63, 121, 191, 1)',
-            borderWidth: 1,
-            data: temMin,
-            fill: false,
-          }, {
-            label: "Precipitación",
-            data: Pre,
-            backgroundColor: 'rgba(21, 255, 5, 0.2)',
-            borderColor: 'rgba(21, 255, 5, 1)',
-            borderWidth: 1,
-            fill: false,
-          },
-          ]
-        },
-        options: {
-          scales: {
-            xAxes: [{
-              display: false,
-              barPercentage: 1.3,
-              ticks: {
-                max: 3,
-              }
-            }, {
-              display: true,
-              ticks: {
-                autoSkip: false,
-                max: 4,
-              }
-            }],
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }]
-          }
+
+  crearGrafico3Pre(valor, Pre, años, grafico) {
+    var y2 = Pre;
+
+    var trace3 = {
+      y: y2,
+      type: 'box',
+      marker: {
+        color: 'rgba(21, 255, 5, 0.2)',
+        outliercolor: 'rgba(219, 64, 82, 0.6)',
+        line: {
+          outliercolor: 'rgba(219, 64, 82, 1.0)',
+          outlierwidth: 2
         }
-      })
-    } else {
+      },
+      name: 'Precipitacion',
+      boxpoints: 'suspectedoutliers'
+    };
+
+    var data = [trace3];
+
+    Plotly.newPlot('myDiv', data);
+  }
+
+
+  crearGrafico(valor, temMax, temMin, Pre, años, grafico) {
       new Chart(valor, {
         type: grafico,
         data: {
@@ -475,7 +573,7 @@ class Dashboard extends React.Component {
             data: temMin,
             fill: false,
           }, {
-            label: "Precipitación",
+            label: "Tem. Media",
             data: Pre,
             backgroundColor: 'rgba(21, 255, 5, 0.2)',
             borderColor: 'rgba(21, 255, 5, 1)',
@@ -491,9 +589,33 @@ class Dashboard extends React.Component {
           }
         }
       })
-    }
-
   }
+
+
+  crearGraficoPre(valor, Pre, años, grafico) {
+    new Chart(valor, {
+      type: grafico,
+      data: {
+        labels: años,
+        datasets: [{
+          label: "Precipitación",
+          data: Pre,
+          backgroundColor: 'rgba(21, 255, 5, 0.2)',
+          borderColor: 'rgba(21, 255, 5, 1)',
+          borderWidth: 1,
+          fill: false,
+        },
+        ]
+      },
+      options: {
+        responsive: true,
+        legend: {
+          position: 'top',
+        }
+      }
+    })
+}
+
 
   componentDidMount() {
     fetch('../estadisticasJson/' + $("#codigo").val())
@@ -520,6 +642,7 @@ class Dashboard extends React.Component {
     $('#serie').removeData();
     var temMax = []
     var temMin = []
+    var temMed = []
     var pre = []
     var fechas = []
     var val = this.state.inicio - this.state.fin
@@ -527,18 +650,58 @@ class Dashboard extends React.Component {
       for (let i = this.state.fin; i < val; i++) {
         temMax.push(this.state.temMaximas[i])
         temMin.push(this.state.temMinimas[i])
+        temMed.push((parseInt(this.state.temMaximas[i])+parseInt(this.state.temMinimas[i]))/2)
         pre.push(this.state.precipitaciones[i])
         fechas.push(this.state.fechas[i])
       }
-      this.crearGrafico3(this.tiempoC, temMax, temMin, pre, fechas, 'boxplot')
-      this.crearGrafico2('myDiv2', temMax, temMin, pre, fechas, 'line')
-      this.crearGraficoHistograma('myDiv1', temMax, temMin, pre, fechas, 'histogram')
+      if(this.state.temPre){
+        this.crearGrafico3(this.tiempoC, temMax, temMin, temMed, fechas, 'boxplot')
+        this.crearGrafico2('myDiv2', temMax, temMin, temMed, fechas, 'line')
+        this.crearGraficoHistograma('myDiv1', temMax, temMin, temMed, fechas, 'histogram')
+      }else{
+        this.crearGrafico3Pre(this.tiempoC, pre, fechas, 'boxplot')
+        this.crearGrafico2Pre('myDiv2', pre, fechas, 'line')
+        this.crearGraficoHistogramaPre('myDiv1', pre, fechas, 'histogram')
+      }
+      
     } else {
       alert("La fecha de fin no puede ser menor a la de inicio")
     }
   }
 
-  render() {
+
+  temPreFun(){
+    if(this.state.temPre){
+      this.setState({temPre:false, temPreMensaje:"Ver Temperatura"})
+      this.ordenarFuncionPre()
+    }else{
+      this.setState({temPre:true, temPreMensaje:"Ver Precipitación"})
+      this.ordenarFuncion()
+    }
+    
+  }
+
+  tablasTemPreFun(){
+    if(this.state.temPre){
+      return <div className="row">
+      <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        {this.renderTablaTemMax()}
+      </div>
+      <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        {this.renderTablaTemMin()}
+      </div>
+    </div>
+    }else{
+      return <div className="row">
+      <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        {this.renderTablaPre()}
+      </div>
+    </div>
+    }
+  }
+
+
+  mapasFiltros() {
     return <div>
       <div className="row">
         <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-5">
@@ -569,174 +732,179 @@ class Dashboard extends React.Component {
             ))}
           </select>
         </div>
-        <div className="col-3 col-12 col-md-4 col-lg-4 col-xl-4 pb-4">
+        <div className="col-3 col-12 col-md-2 col-lg-2 col-xl-2">
           <button className="btn btn-primary" onClick={() => this.filtroGrafico3()}>Filtrar</button>
         </div>
-      </div>
-      <div className="row">
-        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <br></br>
-          <div className="form-control text-center"><b>Serie de Tiempo</b></div>
-          <div id='myDiv2'></div>
+        <div className="col-3 col-12 col-md-2 col-lg-2 col-xl-2">
+          <button className="btn btn-success" onClick={() => this.temPreFun()}>{this.state.temPreMensaje}</button>
         </div>
       </div>
-      <div className="row">
-        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <br></br>
-          <div className="form-control text-center"><b>Serie de Tiempo Histograma</b></div>
-          <div id='myDiv1'></div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <br></br>
-          <div className="form-control text-center"><b>Serie de Tiempo Caja</b></div>
-          <div id='myDiv'></div>
-        </div>
-      </div>
-      <br></br>
-      <div>
-        <button type="button" className="btn btn-info btn-lg"
-          data-toggle="modal" data-target="#myModal">Leyendas de la Tabla</button>
+    </div>
+  }
 
-        <div className="modal fade" id="myModal" role="dialog">
-          <div className="modal-dialog modal-lg">
+  leyendasTabla() {
+    return <div>
+      <button type="button" className="btn btn-info btn-lg"
+        data-toggle="modal" data-target="#myModal">Leyendas de la Tabla</button>
 
-            <div className="modal-content">
-              <div className="modal-header">
-                <button type="button" className="close" data-dismiss="modal">&times;</button>
-                <h4 className="modal-title">Diccionario</h4>
-              </div>
-              <div className="modal-body">
-                <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                  <thead>
-                    <tr>
-                      <th>Abreviación</th>
-                      <th>Definición</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                      <td>D.E.</td>
-                      <td>Desviación estandar</td>
-                    </tr>
-                    <tr>
-                      <td>Var</td>
-                      <td>Varianza</td>
-                    </tr>
-                    <tr>
-                      <td>Q1</td>
-                      <td>Primer cuartil</td>
-                    </tr>
-                    <tr>
-                      <td>Q3</td>
-                      <td>Tercer cuartil</td>
-                    </tr>
-                    <tr>
-                      <td>IQR</td>
-                      <td>Rango inter cuartil</td>
-                    </tr>
-                    <tr>
-                      <td>Q1-1.5*IQR</td>
-                      <td>Valores atipicos inferiores</td>
-                    </tr>
-                    <tr>
-                      <td>InfA</td>
-                      <td>conteo de valores por debajo del valor de Q1-1.5*IQR</td>
-                    </tr>
-                    <tr>
-                      <td>Q3+1.5*IQR</td>
-                      <td>Valores atipicos superiores</td>
-                    </tr>
-                    <tr>
-                      <td>SupA</td>
-                      <td>conteo de valores por encima del valor de Q3+1.5*IQR</td>
-                    </tr>
-                    <tr>
-                      <td>Q1-3*IQR</td>
-                      <td>Valores extremos inferiores</td>
-                    </tr>
-                    <tr>
-                      <td>InfE</td>
-                      <td>conteo de valores por debajo del valor de Q1-3*IQR</td>
-                    </tr>
-                    <tr>
-                      <td>Q3+3*IQR</td>
-                      <td>Valores extremos superiores</td>
-                    </tr>
-                    <tr>
-                      <td>SupE</td>
-                      <td>conteo de valores por encima del valor de Q3+3*IQR</td>
-                    </tr>
-                    <tr>
-                      <td>C.A.</td>
-                      <td>Coeficiente de asimetría</td>
-                    </tr>
-                    <tr>
-                      <td>Kstest</td>
-                      <td>Prueba de normalidad de Kolmogorov-Smirnov</td>
-                    </tr>
-                    <tr>
-                      <td>shapiro</td>
-                      <td>Prueba de normalidad de Shapiro Wilk</td>
-                    </tr>
-                    <tr>
-                      <td>p</td>
-                      <td>El valor p es una probabilidad que mide la evidencia 
-                        en contra de la hipótesis nula. Un valor p más pequeño 
-                        proporciona una evidencia más fuerte en contra de la 
-                        hipótesis nula.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-danger" data-dismiss="modal">Cerrar</button>
-              </div>
+      <div className="modal fade" id="myModal" role="dialog">
+        <div className="modal-dialog modal-lg">
+
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal">&times;</button>
+              <h4 className="modal-title">Diccionario</h4>
             </div>
+            <div className="modal-body">
+              <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <thead>
+                  <tr>
+                    <th>Abreviación</th>
+                    <th>Definición</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>D.E.</td>
+                    <td>Desviación estandar</td>
+                  </tr>
+                  <tr>
+                    <td>Var</td>
+                    <td>Varianza</td>
+                  </tr>
+                  <tr>
+                    <td>Q1</td>
+                    <td>Primer cuartil</td>
+                  </tr>
+                  <tr>
+                    <td>Q3</td>
+                    <td>Tercer cuartil</td>
+                  </tr>
+                  <tr>
+                    <td>IQR</td>
+                    <td>Rango inter cuartil</td>
+                  </tr>
+                  <tr>
+                    <td>Q1-1.5*IQR</td>
+                    <td>Valores atipicos inferiores</td>
+                  </tr>
+                  <tr>
+                    <td>InfA</td>
+                    <td>conteo de valores por debajo del valor de Q1-1.5*IQR</td>
+                  </tr>
+                  <tr>
+                    <td>Q3+1.5*IQR</td>
+                    <td>Valores atipicos superiores</td>
+                  </tr>
+                  <tr>
+                    <td>SupA</td>
+                    <td>conteo de valores por encima del valor de Q3+1.5*IQR</td>
+                  </tr>
+                  <tr>
+                    <td>Q1-3*IQR</td>
+                    <td>Valores extremos inferiores</td>
+                  </tr>
+                  <tr>
+                    <td>InfE</td>
+                    <td>conteo de valores por debajo del valor de Q1-3*IQR</td>
+                  </tr>
+                  <tr>
+                    <td>Q3+3*IQR</td>
+                    <td>Valores extremos superiores</td>
+                  </tr>
+                  <tr>
+                    <td>SupE</td>
+                    <td>conteo de valores por encima del valor de Q3+3*IQR</td>
+                  </tr>
+                  <tr>
+                    <td>C.A.</td>
+                    <td>Coeficiente de asimetría</td>
+                  </tr>
+                  <tr>
+                    <td>Kstest</td>
+                    <td>Prueba de normalidad de Kolmogorov-Smirnov</td>
+                  </tr>
+                  <tr>
+                    <td>shapiro</td>
+                    <td>Prueba de normalidad de Shapiro Wilk</td>
+                  </tr>
+                  <tr>
+                    <td>p</td>
+                    <td>El valor p es una probabilidad que mide la evidencia
+                      en contra de la hipótesis nula. Un valor p más pequeño
+                      proporciona una evidencia más fuerte en contra de la
+                      hipótesis nula.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
 
+        </div>
+      </div>
+    </div>
+  }
+
+
+  render() {
+      return <div>
+        {this.mapasFiltros()}
+        <div className="row">
+          <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <br></br>
+            <div className="form-control text-center"><b>Serie de Tiempo</b></div>
+            <div id='myDiv2'></div>
           </div>
         </div>
-      </div>
-      <div className="row">
-        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          {this.renderTablaTemMax()}
+        <div className="row">
+          <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <br></br>
+            <div className="form-control text-center"><b>Distribucion de Variables</b></div>
+            <div id='myDiv1'></div>
+          </div>
         </div>
-        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          {this.renderTablaTemMin()}
+        <div className="row">
+          <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <br></br>
+            <div className="form-control text-center"><b>Diagrama de Cajas</b></div>
+            <div id='myDiv'></div>
+          </div>
         </div>
-        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          {this.renderTablaPre()}
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
-          <br></br>
-          <div className="form-control text-center">Media</div>
-          <canvas width="400" height="400" ref={ctx => this.mediaG = ctx} />
-        </div>
-        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
-          <br></br>
-          <div className="form-control text-center">Mediana</div>
-          <canvas width="400" height="400" ref={ctx => this.medianaG = ctx} />
-        </div>
-        {/*<div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <br></br>
+        {this.leyendasTabla()}
+        {this.tablasTemPreFun()}
+        <div className="row">
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <br></br>
+            <div className="form-control text-center">Media</div>
+            <canvas width="400" height="400" ref={ctx => this.mediaG = ctx} />
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <br></br>
+            <div className="form-control text-center">Mediana</div>
+            <canvas width="400" height="400" ref={ctx => this.medianaG = ctx} />
+          </div>
+          {/*<div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
           <br></br>
           <div className="form-control text-center">Moda</div>
           <canvas width="400" height="400" ref={ctx => this.modaG = ctx} />
         </div>*/}
-        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
-          <br></br>
-          <div className="form-control text-center">Desviación Estandar</div>
-          <canvas width="400" height="400" ref={ctx => this.desEG = ctx} />
-        </div>
-        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
-          <br></br>
-          <div className="form-control text-center">Varianza</div>
-          <canvas width="400" height="400" ref={ctx => this.varianzaG = ctx} />
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <br></br>
+            <div className="form-control text-center">Desviación Estandar</div>
+            <canvas width="400" height="400" ref={ctx => this.desEG = ctx} />
+          </div>
+          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <br></br>
+            <div className="form-control text-center">Varianza</div>
+            <canvas width="400" height="400" ref={ctx => this.varianzaG = ctx} />
+          </div>
         </div>
       </div>
-    </div>
+
   }
 }
 // Find all DOM containers, and render Like buttons into them.
