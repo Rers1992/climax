@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.estacion',
     'apps.ubicacion',
     'apps.bitacora',
+    'django_select2',
     'apps.inicio',
     'import_export',
 ]
@@ -79,6 +80,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'memoria.wsgi.application'
 
 AUTH_USER_MODEL = 'memoria.MemEmpresa'
+
+
+#CACHES = {
+#    # … default cache config and others
+#    "select2": {
+#        "BACKEND": "django_redis.cache.RedisCache",
+#        "LOCATION": "redis://127.0.0.1:6379/2",
+#        "OPTIONS": {
+#            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#        }
+#    }
+#}
+
+# Tell select2 which cache configuration to use:
+#SELECT2_CACHE_BACKEND = "select2"
  
 
 

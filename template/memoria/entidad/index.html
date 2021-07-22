@@ -35,9 +35,12 @@
 <div id="dataModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
+            <input id="adminUsuario" name="adminUs" type="hidden" value="{{ user.is_admin }}">
+            <input id="idrutusuario" name="prodId" type="hidden" value="{{ user.rutempresa }}">
             <div class="modal-body" id="employee_detail">
             </div>
         </div>
     </div>
 </div>
+{{ form.media.js }}
 {% endblock %}

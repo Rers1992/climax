@@ -13,7 +13,7 @@ from .forms import MemEmpresa
 # Create your views here.
 
 def entidad(request):
-    empresas = MemEmpresa.objects.filter(is_active = True)
+    empresas = MemEmpresa.objects.filter(is_active = True, empresa_padre= request.user)
     return render(request, 'memoria/entidad/index.html', {'empresas':empresas})
 
 # def usuario(request):

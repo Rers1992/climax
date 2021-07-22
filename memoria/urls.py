@@ -25,6 +25,7 @@ urlpatterns = [
     path('', auth_views.LoginView.as_view()),
     path('admin/', admin.site.urls),
     path('memoria/', include('apps.memoria.urls')),
+    path("select2/", include("django_select2.urls")),
     path('memoria/', include(('apps.ubicacion.urls', 'ubicacion'))),
     path('memoria/', include(('apps.estacion.urls', 'estacion'))),
     path('memoria/', include(('apps.bitacora.urls', 'bitacora'))),

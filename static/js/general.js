@@ -30,6 +30,12 @@ function fn_abreForm() {
         url: 'crearEntidad',
         success: function (data) {
             $('#employee_detail').html(data);
+            console.log(document.getElementById('adminUsuario').value)
+            if(document.getElementById('adminUsuario').value == 'False'){
+                document.getElementById('id_empresa_padre').value = document.getElementById('idrutusuario').value
+                $('#div_id_empresa_padre').hide();
+                $('#div_id_is_admin').hide();
+            }
             $('#dataModal').modal("show");
         }
     });
@@ -41,6 +47,11 @@ function fn_abreFormModificar(v_rut) {
         url: 'editarEntidad/'+v_rut,
         success: function (data) {
             $('#employee_detail').html(data);
+            if(document.getElementById('adminUsuario').value == 'False'){
+                $('#div_id_empresa_padre').hide();
+                $('#div_id_is_admin').hide();
+                document.getElementById('id_empresa_padre').value = document.getElementById('idrutusuario').value
+            }
             $('#div_id_contrasenaempresa').hide();
             $('#dataModal').modal("show");
         }

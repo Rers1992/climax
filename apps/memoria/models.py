@@ -68,7 +68,11 @@ class MemEmpresa(AbstractBaseUser):
     rutempresa= models.CharField(primary_key=True, max_length=20)
     nombreempresa = models.CharField(max_length=50, blank=True, null=True)
     razonsocialempresa = models.CharField(max_length=20, blank=True, null=True)
+    empresa_padre = models.ForeignKey(
+        to='self', related_name='memEmpresa', 
+        default=None, on_delete=models.SET_NULL, blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    is_empresa = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 
     objects = MyUserManager()

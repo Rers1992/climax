@@ -3,7 +3,8 @@ from django.http import JsonResponse
 from tablib import Dataset
 from .resources import SerieTiempoResource
 from .indicadores import *
-from apps.memoria.models import MemEstacionmeteorologica, MemSeriedetiempo, MemAno, MemMes, MemIndicesextremosclimaticos, MemEstadisticas
+from apps.memoria.models import( MemEstacionmeteorologica, MemSeriedetiempo, 
+MemAno, MemMes, MemIndicesextremosclimaticos, MemEstadisticas, MemEmpresa)
 from .forms import MemEstacionForm
 import tablib
 from import_export import resources  
@@ -15,8 +16,17 @@ from scipy import stats
 # Create your views here.
 
 def estacion(request):
+    empresas = MemEmpresa.objects.get(rutempresa = request.user)
+    if empresas.empresa_padre:
+        empresasHijas = MemEmpresa.objects.filter(
+            Q(rutempresa = empresas.empresa_padre.rutempresa)|Q(empresa_padre=empresas.empresa_padre.rutempresa))
+    else:
+        empresasHijas = MemEmpresa.objects.filter(
+            Q(rutempresa = request.user)|Q(empresa_padre=request.user))
     estaciones = MemEstacionmeteorologica.objects.filter(
-        estadoestacion = True, rutusuario=request.user).select_related('codigoubicacion')
+        estadoestacion = True, rutusuario__in=list(
+            empresasHijas.values_list('rutempresa', flat=True)
+        )).select_related('codigoubicacion')
     return render(request, 'memoria/estacion/index.html', {'estaciones':estaciones})
 
 def estacionJson(request):

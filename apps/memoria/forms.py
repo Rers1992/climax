@@ -1,16 +1,28 @@
 from django import forms
+from django_select2 import forms as s2forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import MemEmpresa #, MemUsuario
+
+
+class AuthorWidget(s2forms.ModelSelect2Widget):
+    search_fields = [
+        "rutempresa",
+        "nombreempresa",
+    ]
+
 
 class MemEmpresaForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = MemEmpresa
-        fields = ['rutempresa', 'nombreempresa', 'razonsocialempresa', 'is_active', 'is_admin']
+        fields = ['rutempresa', 'nombreempresa', 'razonsocialempresa', 'is_admin', 'empresa_padre']
+        #widgets = {
+        #    "empresa_padre": AuthorWidget,
+        #}
         labels={
             'rutempresa':'Rut',
             'nombreempresa':'Nombre',
             'razonsocialempresa':'Razón social',
-            'is_active': 'Activado',
+            'empresa_padre': 'Empresa',
             'is_admin': 'Admin',
         }
 
