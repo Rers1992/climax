@@ -638,6 +638,18 @@ class Dashboard extends React.Component {
     }
   }
 
+  handleChangeDatos(event) {
+    console.log(event.target.value)
+    console.log(this.state.temPre)
+    if(event.target.value == "Temperatura"){
+      this.setState({temPre:true})
+      this.ordenarFuncion()
+    }else if(event.target.value == "Precipitacion"){
+      this.setState({temPre:false})
+      this.ordenarFuncionPre()
+    }
+  }
+
   filtroGrafico3() {
     $('#serie').removeData();
     var temMax = []
@@ -716,6 +728,13 @@ class Dashboard extends React.Component {
       </div>
       <br></br>
       <div className="row">
+      <div className="col-3 col-12 col-md-2 col-lg-2 col-xl-2">
+          <select className="form-control" onChange={(event) => this.handleChangeDatos(event)}>
+            <option value="-1" >Ver Datos...</option>
+            <option value="Temperatura">Temperatura</option>
+            <option value="Precipitacion">Precipitación</option>
+          </select>
+        </div>
         <div className="col-3 col-12 col-md-4 col-lg-4 col-xl-4 pb-4">
           <select className="form-control" value={this.state.fin + "-2"} onChange={this.handleChange}>
             <option value="-1" >Fecha Inicio...</option>
@@ -734,9 +753,6 @@ class Dashboard extends React.Component {
         </div>
         <div className="col-3 col-12 col-md-2 col-lg-2 col-xl-2">
           <button className="btn btn-primary" onClick={() => this.filtroGrafico3()}>Filtrar</button>
-        </div>
-        <div className="col-3 col-12 col-md-2 col-lg-2 col-xl-2">
-          <button className="btn btn-success" onClick={() => this.temPreFun()}>{this.state.temPreMensaje}</button>
         </div>
       </div>
     </div>

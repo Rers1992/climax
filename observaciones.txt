@@ -13,12 +13,12 @@ agregar nombre de ejes x e y de histograma (revisar otros graficos) ->distribuci
 separar presipitaciones de temperaturas ** listo
 temperatura media en estadisticas ** listo
 separar empresas con usuarios ** listo
+escribir en select de empresa ** listo
+cambiar boton a la derecha y hacerlo lista desplegable ** listo
 
 
 datos de la serie temporal completa (todos los años juntos)
 pantalla nueva de inicio pero con valores regionales
-cambiar boton a la derecha y hacerlo lista desplegable
-escribir en select de empresa
 armar modelo en pd
 generar un espacio vacio
 valores extremos en diagrama de caja filtrar anormales y atipicos
