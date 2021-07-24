@@ -1,3 +1,8 @@
+$(document).ready(function() {
+  //$('#fInicio').select2();
+  //$('#fFin').select2();
+});
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
@@ -344,7 +349,7 @@ class Dashboard extends React.Component {
       desviacionesmax = [], desviacionesmin = [], desviacionespre = [], varianzamax = [],
       varianzamin = [], varianzapre = []
     var años = []
-    for (let i = 0; i < this.state.data.length; i++) {
+    for (let i = 1; i < this.state.data.length; i++) {
       años.push(this.state.data[i]['ano'])
       mediamax.push(this.state.data[i]['mediamax'])
       mediamin.push(this.state.data[i]['mediamin'])
@@ -391,7 +396,7 @@ class Dashboard extends React.Component {
       desviacionesmax = [], desviacionesmin = [], desviacionespre = [], varianzamax = [],
       varianzamin = [], varianzapre = []
     var años = []
-    for (let i = 0; i < this.state.data.length; i++) {
+    for (let i = 1; i < this.state.data.length; i++) {
       años.push(this.state.data[i]['ano'])
       mediapre.push(this.state.data[i]['mediapre'])
       medianapre.push(this.state.data[i]['medianapre'])
@@ -639,8 +644,6 @@ class Dashboard extends React.Component {
   }
 
   handleChangeDatos(event) {
-    console.log(event.target.value)
-    console.log(this.state.temPre)
     if(event.target.value == "Temperatura"){
       this.setState({temPre:true})
       this.ordenarFuncion()
@@ -657,9 +660,9 @@ class Dashboard extends React.Component {
     var temMed = []
     var pre = []
     var fechas = []
-    var val = this.state.inicio - this.state.fin
+    var val = this.state.inicio
     if (val > 0) {
-      for (let i = this.state.fin; i < val; i++) {
+      for (let i = this.state.fin; i <= val; i++) {
         temMax.push(this.state.temMaximas[i])
         temMin.push(this.state.temMinimas[i])
         temMed.push((parseInt(this.state.temMaximas[i])+parseInt(this.state.temMinimas[i]))/2)
@@ -736,7 +739,7 @@ class Dashboard extends React.Component {
           </select>
         </div>
         <div className="col-3 col-12 col-md-4 col-lg-4 col-xl-4 pb-4">
-          <select className="form-control" value={this.state.fin + "-2"} onChange={this.handleChange}>
+          <select className="form-control" value={this.state.fin + "-2"} id="fInicio" onChange={this.handleChange}>
             <option value="-1" >Fecha Inicio...</option>
             {this.state.fechas.map((dato, index) => (
               <option value={index + "-2"}>{dato}</option>
@@ -744,7 +747,7 @@ class Dashboard extends React.Component {
           </select>
         </div>
         <div className="col-3 col-12 col-md-4 col-lg-4 col-xl-4 pb-4">
-          <select className="form-control" value={this.state.inicio + "-1"} onChange={this.handleChange}>
+          <select className="form-control" value={this.state.inicio + "-1"} id="fFin" onChange={this.handleChange}>
             <option value="-1" >Fecha Fin...</option>
             {this.state.fechas.map((dato, index) => (
               <option value={index + "-1"}>{dato}</option>

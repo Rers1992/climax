@@ -50,6 +50,57 @@ def estadisticasJson(request, codigoEstacion):
     temMax = []
     temMin = []
     preci = []
+    mediamax = 0
+    mediamin = 0
+    mediapre = 0
+    medianamax = 0 
+    medianamin = 0
+    medianapre = 0
+    modamax = 0 
+    modamin = 0 
+    modapre = 0 
+    desviacionesmax = 0 
+    desviacionesmin = 0 
+    desviacionespre = 0 
+    varianzamax = 0 
+    varianzamin = 0 
+    varianzapre = 0
+    cuartil1max = 0
+    cuartil1min = 0
+    cuartil1pre = 0
+    cuartil3max = 0
+    cuartil3min = 0
+    cuartil3pre = 0
+    intecuartilmax = 0
+    intecuartilmin = 0
+    intecuartilpre = 0
+    atipicoinfmax = 0
+    atipicoinfmin = 0
+    atipicoinfpre = 0
+    atipicosupmax = 0
+    atipicosupmin = 0
+    atipicosuppre = 0
+    extremoinfmax = 0
+    extremoinfmin = 0
+    extremoinfpre = 0
+    extremosupmax = 0
+    extremosupmin = 0
+    extremosuppre = 0
+    kstestmax = 0
+    kstestmin = 0
+    kstestpre = 0
+    kstestpmax = 0
+    kstestpmin = 0
+    kstestppre = 0
+    shapiromax = 0
+    shapiromin = 0
+    shapiropre = 0
+    shapiropmax = 0
+    shapiropmin = 0
+    shapiroppre = 0
+    kurtosismax = 0
+    kurtosismin = 0
+    kurtosispre = 0
     serie = MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion).order_by('fechaserie')
     for i in serie:
         años.append(i.fechaserie)
@@ -63,6 +114,57 @@ def estadisticasJson(request, codigoEstacion):
     'lat': estaciones[0].latitudestacion, 'altura': estaciones[0].alturaestacion, 'cuenca': estaciones[0].cuenca, 'rio': estaciones[0].rio, 
     'medi': estaciones[0].medicionestacion, 'comentario': estaciones[0].comentario}
     for x in estadisticas:
+        mediamax += x.mediamax
+        mediamin += x.mediamin
+        mediapre += x.mediapre
+        medianamax += x.medianamax 
+        medianamin += x.medianamin
+        medianapre += x.medianapre
+        modamax += x.modamax 
+        modamin += x.modamin
+        modapre += x.modapre
+        desviacionesmax += x.desviacionesmax 
+        desviacionesmin += x.desviacionesmin
+        desviacionespre += x.desviacionespre
+        varianzamax += x.varianzamax
+        varianzamin += x.varianzamin
+        varianzapre += x.varianzapre
+        cuartil1max += x.cuartil1max
+        cuartil1min += x.cuartil1min
+        cuartil1pre += x.cuartil1pre
+        cuartil3max += x.cuartil3max
+        cuartil3min += x.cuartil3min
+        cuartil3pre += x.cuartil3pre
+        intecuartilmax += x.intecuartilmax
+        intecuartilmin += x.intecuartilmin
+        intecuartilpre += x.intecuartilpre
+        atipicoinfmax += x.atipicoinfmax
+        atipicoinfmin += x.atipicoinfmin
+        atipicoinfpre += x.atipicoinfpre
+        atipicosupmax += x.atipicosupmax
+        atipicosupmin += x.atipicosupmin
+        atipicosuppre += x.atipicosuppre
+        extremoinfmax += x.extremoinfmax
+        extremoinfmin += x.extremoinfmin
+        extremoinfpre += x.extremoinfpre
+        extremosupmax += x.extremosupmax
+        extremosupmin += x.extremosupmin
+        extremosuppre += x.extremosuppre
+        kstestmax += x.kstestmax
+        kstestmin += x.kstestmin
+        kstestpre += x.kstestpre
+        kstestpmax += x.kstestpmax
+        kstestpmin += x.kstestpmin
+        kstestppre += x.kstestppre
+        shapiromax += x.shapiromax
+        shapiromin += x.shapiromin
+        shapiropre += x.shapiropre
+        shapiropmax += x.shapiropmax
+        shapiropmin += x.shapiropmin
+        shapiroppre += x.shapiroppre
+        kurtosismax += x.kurtosismax
+        kurtosismin += x.kurtosismin
+        kurtosispre += x.kurtosispre
         estadisticasJson.append({'ano': x.codigoano.ano,'mediamax' : x.mediamax, 'mediamin' : x.mediamin, 
         'mediapre' : x.mediapre, 'medianamax' : x.medianamax, 'medianamin' : x.medianamin, 
         'medianapre' : x.medianapre, 'modamax' : x.modamax, 'modamin' : x.modamin, 'modapre' : x.modapre, 
@@ -81,6 +183,47 @@ def estadisticasJson(request, codigoEstacion):
         'shapiroppre': x.shapiroppre, 'kurtosismax': x.kurtosismax, 'kurtosismin': x.kurtosismin, 
         'kurtosispre': x.kurtosispre})
     estadisticasJson.sort(key=get_my_key)
+    estadisticasJson.insert(0,{'ano': 'todos','mediamax' : "{:.1f}".format(mediamax/len(estadisticas)), 
+        'mediamin' : "{:.1f}".format(mediamin/len(estadisticas)), 
+        'mediapre' : "{:.1f}".format(mediapre/len(estadisticas)), 'medianamax' : "{:.1f}".format(medianamax/len(estadisticas)), 
+        'medianamin' : "{:.1f}".format(medianamin/len(estadisticas)), 
+        'medianapre' : "{:.1f}".format(medianapre/len(estadisticas)), 'modamax' : "{:.1f}".format(modamax/len(estadisticas)), 
+        'modamin' : "{:.1f}".format(modamin/len(estadisticas)), 'modapre' : "{:.1f}".format(modapre/len(estadisticas)), 
+        'desviacionesmax' : "{:.1f}".format(desviacionesmax/len(estadisticas)), 
+        'desviacionesmin' : "{:.1f}".format(desviacionesmin/len(estadisticas)), 
+        'desviacionespre' : "{:.1f}".format(desviacionespre/len(estadisticas)), 
+        'varianzamax' : "{:.1f}".format(varianzamax/len(estadisticas)), 
+        'varianzamin' : "{:.1f}".format(varianzamin/len(estadisticas)), 
+        'varianzapre' : "{:.1f}".format(varianzapre/len(estadisticas)), 
+        'q1max': "{:.1f}".format(cuartil1max/len(estadisticas)), 
+        'q1min': "{:.1f}".format(cuartil1min/len(estadisticas)),
+        'q1pre': "{:.1f}".format(cuartil1pre/len(estadisticas)), 
+        'q3max': "{:.1f}".format(cuartil3max/len(estadisticas)), 
+        'q3min': "{:.1f}".format(cuartil3min/len(estadisticas)), 'q3pre': "{:.1f}".format(cuartil3pre/len(estadisticas)), 
+        'iqrmax': "{:.1f}".format(intecuartilmax/len(estadisticas)), 
+        'iqrmin': "{:.1f}".format(intecuartilmin/len(estadisticas)), 'iqrpre': "{:.1f}".format(intecuartilpre/len(estadisticas)), 
+        'atipicoinfmax': "{:.0f}".format(atipicoinfmax/len(estadisticas)), 
+        'atipicosupmax': "{:.0f}".format(atipicosupmax/len(estadisticas)),
+        'atipicoinfmin': "{:.0f}".format(atipicoinfmin/len(estadisticas)), 
+        'atipicosupmin': "{:.0f}".format(atipicosupmin/len(estadisticas)), 
+        'atipicoinfpre': "{:.0f}".format(atipicoinfpre/len(estadisticas)), 
+        'atipicosuppre': "{:.0f}".format(atipicosuppre/len(estadisticas)), 
+        'extremoinfmax': "{:.0f}".format(extremoinfmax/len(estadisticas)), 
+        'extremosupmax': "{:.0f}".format(extremosupmax/len(estadisticas)),
+        'extremoinfmin': "{:.0f}".format(extremoinfmin/len(estadisticas)), 
+        'extremosupmin': "{:.0f}".format(extremosupmin/len(estadisticas)), 
+        'extremoinfpre': "{:.0f}".format(extremoinfpre/len(estadisticas)), 
+        'extremosuppre': "{:.0f}".format(extremosuppre/len(estadisticas)), 'kstestmax': "{:.1f}".format(kstestmax/len(estadisticas)), 
+        'kstestmin': "{:.1f}".format(kstestmin/len(estadisticas)), 
+        'kstestpre': "{:.1f}".format(kstestpre/len(estadisticas)), 'kstestpmax': "{:.1f}".format(kstestpmax/len(estadisticas)), 
+        'kstestpmin': "{:.1f}".format(kstestpmin/len(estadisticas)), 
+        'kstestppre': "{:.1f}".format(kstestppre/len(estadisticas)), 'shapiromax': "{:.1f}".format(shapiromax/len(estadisticas)), 
+        'shapiromin': "{:.1f}".format(shapiromin/len(estadisticas)), 
+        'shapiropre': "{:.1f}".format(shapiropre/len(estadisticas)), 'shapiropmax': "{:.1f}".format(shapiropmax/len(estadisticas)), 
+        'shapiropmin': "{:.1f}".format(shapiropmin/len(estadisticas)), 
+        'shapiroppre': "{:.1f}".format(shapiroppre/len(estadisticas)), 'kurtosismax': "{:.1f}".format(kurtosismax/len(estadisticas)), 
+        'kurtosismin': "{:.1f}".format(kurtosismin/len(estadisticas)), 
+        'kurtosispre': "{:.1f}".format(kurtosispre/len(estadisticas))})
     return JsonResponse({'estadisticas': estadisticasJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci})
 
@@ -93,6 +236,37 @@ def tablaHecho(request, codigoEstacion):
     temMax = []
     temMin = []
     preci = []
+    cdd = 0
+    csdi = 0
+    cwd = 0
+    dtr = 0
+    fd0 = 0
+    gsl = 0
+    gsl2 = 0
+    id0 = 0
+    prcptot = 0
+    r10mm = 0
+    r20mm = 0
+    r95p = 0
+    r99p = 0
+    r50mm = 0
+    rx1day = 0
+    rx5day = 0
+    sdii = 0
+    su25 = 0
+    tn10p = 0
+    tn90p = 0
+    tnn = 0
+    txn = 0
+    tr20 = 0
+    tx10p = 0
+    tx90p = 0
+    tnx = 0
+    txx = 0
+    wsdi = 0
+    temmax = 0
+    temmin = 0
+    premax = 0
     serie = MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion).order_by('fechaserie')
     for i in serie:
         años.append(i.fechaserie)
@@ -106,6 +280,37 @@ def tablaHecho(request, codigoEstacion):
     'lat': estaciones[0].latitudestacion, 'altura': estaciones[0].alturaestacion, 'cuenca': estaciones[0].cuenca, 'rio': estaciones[0].rio, 
     'medi': estaciones[0].medicionestacion, 'comentario': estaciones[0].comentario}
     for x in indices:
+        cdd += x.cdd
+        csdi += x.csdi
+        cwd += x.cwd
+        dtr += x.dtr
+        fd0 += x.fd0
+        gsl += x.gsl
+        gsl2 += x.gsl2
+        id0 += x.id0
+        prcptot += x.prcptot
+        r10mm += x.r10mm
+        r20mm += x.r20mm
+        r95p += x.r95p
+        r99p += x.r99p
+        r50mm += x.r50mm
+        rx1day += x.rx1day
+        rx5day += x.rx5day
+        sdii += x.sdii
+        su25 += x.su25
+        tn10p += x.tn10p
+        tn90p += x.tn90p
+        tnn += x.tnn
+        txn += x.txn
+        tr20 += x.tr20
+        tx10p += x.tx10p
+        tx90p += x.tx90p
+        tnx += x.tnx
+        txx += x.txx
+        wsdi += x.wsdi
+        temmax += x.temmax
+        temmin += x.temmin
+        premax += x.premax
         indicesJson.append({'ano': x.codigoano.ano,'cdd' : x.cdd, 'csdi' : x.csdi, 'cwd' : x.cwd, 
         'dtr' : x.dtr, 'fd0' : x.fd0, 'gsl' : x.gsl,
         'gsl2' : x.gsl2, 'id0' : x.id0, 'prcptot' : x.prcptot, 
@@ -116,6 +321,24 @@ def tablaHecho(request, codigoEstacion):
         'tr20' : x.tr20, 'tx10p' : x.tx10p,
         'tx90p' : x.tx90p, 'tnx' : x.tnx, 'txx' : x.txx, 'wsdi' : x.wsdi, 'temmax': x.temmax, 'temmin': x.temmin, 'premax': x.premax})
     indicesJson.sort(key=get_my_key)
+    indicesJson.insert(0,{'ano': "todos",'cdd' : "{:.1f}".format(cdd/len(indices)), 'csdi' : "{:.1f}".format(csdi/len(indices)), 
+    'cwd' : "{:.1f}".format(cwd/len(indices)), 
+        'dtr' : "{:.1f}".format(dtr/len(indices)), 'fd0' : "{:.1f}".format(fd0/len(indices)), 
+        'gsl' : "{:.1f}".format(gsl/len(indices)),
+        'gsl2' : "{:.1f}".format(gsl2/len(indices)), 'id0' : "{:.1f}".format(id0/len(indices)), 
+        'prcptot' : "{:.1f}".format(prcptot/len(indices)), 
+        'r10mm' : "{:.1f}".format(r10mm/len(indices)), 'r20mm' : "{:.1f}".format(r20mm/len(indices)), 
+        'r95p' : "{:.1f}".format(r95p/len(indices)),
+        'r99p' : "{:.1f}".format(r99p/len(indices)), 'r50mm' : "{:.1f}".format(r50mm/len(indices)), 
+        'rx1day' : "{:.1f}".format(rx1day/len(indices)), 'rx5day' : "{:.1f}".format(rx5day/len(indices)),
+        'sdii' : "{:.1f}".format(sdii/len(indices)), 'su25' : "{:.1f}".format(su25/len(indices)),
+        'tn10p' : "{:.1f}".format(tn10p/len(indices)), 'tn90p' : "{:.1f}".format(tn90p/len(indices)), 
+        'tnn' : "{:.1f}".format(tnn/len(indices)), 'txn' : "{:.1f}".format(txn/len(indices)), 
+        'tr20' : "{:.1f}".format(tr20/len(indices)), 'tx10p' : "{:.1f}".format(tx10p/len(indices)),
+        'tx90p' : "{:.1f}".format(tx90p/len(indices)), 'tnx' : "{:.1f}".format(tnx/len(indices)), 
+        'txx' : "{:.1f}".format(txx/len(indices)), 'wsdi' : "{:.1f}".format(wsdi/len(indices)), 
+        'temmax': "{:.1f}".format(temmax/len(indices)), 'temmin': "{:.1f}".format(temmin/len(indices)), 
+        'premax': "{:.1f}".format(premax/len(indices))})
     return JsonResponse({'indices':indicesJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci})
 

@@ -244,7 +244,7 @@ class Dashboard extends React.Component {
       r2[i] = 0
     }
     n = this.state.data.length
-    for (let i = 0; i < n; i++) {
+    for (let i = 1; i < n; i++) {
       años.push(this.state.data[i]['ano'])
       sumx += Number(this.state.data[i]['ano'])
       sumx2 += Number(Number(this.state.data[i]['ano']) * Number(this.state.data[i]['ano']))
