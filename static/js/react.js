@@ -5,6 +5,8 @@ class Dashboard extends React.Component {
     this.state = {
       estacion: [],
       latitud: 0,
+      inicio: -1,
+      fin: -1,
       longitud: 0,
       fechas: [],
       temMaximas: [],
@@ -17,8 +19,11 @@ class Dashboard extends React.Component {
       nombreIndices: ['cdd', 'csdi', 'cwd', 'dtr', 'fd0', 'gsl', 'gsl2', 'id0',
         'prcptot', 'r10mm', 'r20mm', 'r95p', 'r99p', 'r50mm',
         'rx1day', 'rx5day', 'sdii', 'su25', 'tn10p', 'tn90p',
-        'tnn', 'txn', 'tr20', 'tx10p', 'tx90p', 'tnx', 'txx', 'wsdi']
+        'tnn', 'txn', 'tr20', 'tx10p', 'tx90p', 'tnx', 'txx', 'wsdi'],
+      temPre: true,
+      temPreMensaje:"Ver Precipitación"
     }
+    this.handleChange = this.handleChange.bind(this);
   }
 
   renderDatosEstacion(dato) {
@@ -374,10 +379,16 @@ class Dashboard extends React.Component {
     }
     var vectorB = []
 
+    var arrayTemMedia = []
+    for (let j = 0; j < (this.state.temMaximas).length; j++) {
+      arrayTemMedia.push((parseInt(this.state.temMinimas[j]) + parseInt(this.state.temMaximas[j])) / 2)
+    }
+
     años.push(String(Number(años[n - 1]) + 1))
     this.setState({ indicesOrdenados: indices })
     this.setState({ vectorAños: años })
-    this.crearGrafico2(this.tiempo, this.state.temMaximas, this.state.temMinimas, this.state.precipitaciones, this.state.fechas)
+    this.crearGrafico22('myDiv2', this.state.temMaximas, 
+    this.state.temMinimas, arrayTemMedia, this.state.fechas)
     for (let i = 0; i < 28; i++) {
       vectorB = []
       for (let j = 0; j < años.length; j++) {
@@ -386,6 +397,90 @@ class Dashboard extends React.Component {
       this.crearGrafico(this.state.nombreIndicesOrdenados[i], i, vectorB, r2)
     }
   }
+
+
+  ordenarFuncion(){
+    var arrayTemMedia = []
+    for (let j = 0; j < (this.state.temMaximas).length; j++) {
+      arrayTemMedia.push((parseInt(this.state.temMinimas[j]) + parseInt(this.state.temMaximas[j])) / 2)
+    }
+    this.crearGrafico22('myDiv2', this.state.temMaximas, 
+    this.state.temMinimas, arrayTemMedia, this.state.fechas)
+  }
+
+
+  ordenarFuncionPre() {
+    this.crearGrafico2Pre('myDiv2', this.state.precipitaciones, this.state.fechas, 'line')
+  }
+
+
+  crearGrafico22(valor, temMax, temMin, Pre, años, grafico) {
+    var y0 = temMax;
+    var y1 = temMin;
+    var y2 = Pre;
+
+    var trace1 = {
+      x: años,
+      y: y0,
+      type: grafico,
+      marker: { color: 'rgba(255, 99, 132, 0.2)' },
+      name: 'Tem. Maxima'
+    };
+
+    var trace2 = {
+      x: años,
+      y: y1,
+      type: grafico,
+      marker: { color: 'rgba(63, 121, 191, 0.2)' },
+      name: 'Tem. Minima'
+    };
+
+    var trace3 = {
+      x: años,
+      y: y2,
+      type: grafico,
+      marker: { color: 'rgba(21, 255, 5, 0.2)' },
+      name: 'Tem. Media'
+    };
+    var layout = {
+      bargap: 0.05,
+      bargroupgap: 0.2,
+      barmode: "overlay",
+      //title: "Sampled Results", 
+      xaxis: { title: "Fecha" },
+      yaxis: { title: "Valor Medición" }
+    };
+
+    var data = [trace1, trace2, trace3];
+
+    Plotly.newPlot(valor, data, layout);
+  }
+
+
+  crearGrafico2Pre(valor, Pre, años, grafico) {
+    var y0 = Pre;
+
+    var trace1 = {
+      x: años,
+      y: y0,
+      type: grafico,
+      marker: { color: 'rgba(21, 255, 5, 0.2)' },
+      name: 'Precipitacion'
+    };
+    var layout = {
+      bargap: 0.05,
+      bargroupgap: 0.2,
+      barmode: "overlay",
+      //title: "Sampled Results", 
+      xaxis: { title: "Fecha" },
+      yaxis: { title: "Valor Medición" }
+    };
+
+    var data = [trace1];
+
+    Plotly.newPlot(valor, data, layout);
+  }
+
 
   crearGrafico(valor, i, vectorB, r2) {
     new Chart(valor, {
@@ -416,7 +511,59 @@ class Dashboard extends React.Component {
     })
   }
 
-  render() {
+
+  handleChange(event) {
+    var val = (event.target.value).split("-")
+    if (val[1] == 3) {
+      this.setState({ codigoGrafico: val[0] });
+    } else if (val[1] == 2) {
+      this.setState({ fin: val[0] });
+    } else {
+      this.setState({ inicio: val[0] });
+    }
+  }
+
+
+  handleChangeDatos(event) {
+    if(event.target.value == "Temperatura"){
+      this.setState({temPre:true})
+      this.ordenarFuncion()
+    }else if(event.target.value == "Precipitacion"){
+      this.setState({temPre:false})
+      this.ordenarFuncionPre()
+    }
+  }
+
+
+  filtroGrafico3() {
+    $('#serie').removeData();
+    var temMax = []
+    var temMin = []
+    var temMed = []
+    var pre = []
+    var fechas = []
+    var val = this.state.inicio
+    if (val > 0) {
+      for (let i = this.state.fin; i <= val; i++) {
+        temMax.push(this.state.temMaximas[i])
+        temMin.push(this.state.temMinimas[i])
+        temMed.push((parseInt(this.state.temMaximas[i])+parseInt(this.state.temMinimas[i]))/2)
+        pre.push(this.state.precipitaciones[i])
+        fechas.push(this.state.fechas[i])
+      }
+      if(this.state.temPre){
+        this.crearGrafico22('myDiv2', temMax, temMin, temMed, fechas, 'line')
+      }else{
+        this.crearGrafico2Pre('myDiv2', pre, fechas, 'line')
+      }
+      
+    } else {
+      alert("La fecha de fin no puede ser menor a la de inicio")
+    }
+  }
+
+
+  mapasFiltros() {
     return <div>
       <div className="row">
         <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-5">
@@ -425,15 +572,51 @@ class Dashboard extends React.Component {
         </div>
         <div className="col-12 col-xs-12 col-sm-6 col-md-7 col-lg-7">
           <h2 className="text-center"><b>Ubicación estación</b></h2>
-          <iframe width="800" height="250" src={'https://www.google.com/maps/embed/v1/place?key=AIzaSyDx_FE31SZ6Ow8iI57vMSTOHJ823in0k3c&q=' +
+          <iframe width="800" height="280" src={'https://www.google.com/maps/embed/v1/place?key=AIzaSyDx_FE31SZ6Ow8iI57vMSTOHJ823in0k3c&q=' +
             this.state.latitud + ',' + this.state.longitud}></iframe>
         </div>
       </div>
+      <br></br>
+      <div className="row">
+      <div className="col-3 col-12 col-md-2 col-lg-2 col-xl-2">
+          <select className="form-control" onChange={(event) => this.handleChangeDatos(event)}>
+            <option value="-1" >Ver Datos...</option>
+            <option value="Temperatura">Temperatura</option>
+            <option value="Precipitacion">Precipitación</option>
+          </select>
+        </div>
+        <div className="col-3 col-12 col-md-4 col-lg-4 col-xl-4 pb-4">
+          <select className="form-control" value={this.state.fin + "-2"} id="fInicio" onChange={this.handleChange}>
+            <option value="-1" >Fecha Inicio...</option>
+            {this.state.fechas.map((dato, index) => (
+              <option value={index + "-2"}>{dato}</option>
+            ))}
+          </select>
+        </div>
+        <div className="col-3 col-12 col-md-4 col-lg-4 col-xl-4 pb-4">
+          <select className="form-control" value={this.state.inicio + "-1"} id="fFin" onChange={this.handleChange}>
+            <option value="-1" >Fecha Fin...</option>
+            {this.state.fechas.map((dato, index) => (
+              <option value={index + "-1"}>{dato}</option>
+            ))}
+          </select>
+        </div>
+        <div className="col-3 col-12 col-md-2 col-lg-2 col-xl-2">
+          <button className="btn btn-primary" onClick={() => this.filtroGrafico3()}>Filtrar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+
+  render() {
+    return <div>
+      {this.mapasFiltros()}
       <div className="row">
         <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <br></br>
           <div className="form-control text-center"><b>Serie de Tiempo</b></div>
-          <canvas width="400" height="100" ref={ctx => this.tiempo = ctx} />
+            <div id='myDiv2'></div>
         </div>
       </div>
       <div>

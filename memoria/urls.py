@@ -29,8 +29,8 @@ urlpatterns = [
     path('memoria/', include(('apps.ubicacion.urls', 'ubicacion'))),
     path('memoria/', include(('apps.estacion.urls', 'estacion'))),
     path('memoria/', include(('apps.bitacora.urls', 'bitacora'))),
-    path('', include(('apps.inicio.urls', 'inicio'))),
+    path('memoria/', include(('apps.inicio.urls', 'inicio'))),
     path('memoria/', include('django.contrib.auth.urls')),
-    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
+    path('', auth_views.LoginView.as_view(), name='login'),
     path('memoria/login.html/', logoutUsuario, name = 'logout')
 ]
