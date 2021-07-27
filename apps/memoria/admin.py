@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from apps.memoria.forms import MemEmpresaForm
-from apps.memoria.models import MemEmpresa, MemPaisUbicacion, MemRegionUbicacion
+from apps.memoria.models import MemEmpresa, MemPaisUbicacion, MemRegionUbicacion, MemUbicacion
 
 
 class UserCreationForm(forms.ModelForm):
@@ -83,6 +83,7 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(MemEmpresa, UserAdmin)
 admin.site.register(MemPaisUbicacion)
 admin.site.register(MemRegionUbicacion)
+admin.site.register(MemUbicacion)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
