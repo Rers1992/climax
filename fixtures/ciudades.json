@@ -1,0 +1,184 @@
+[
+    {
+        "model": "memoria.mempaisubicacion",
+        "pk": 1,
+        "fields": {
+            "nombrepais": "Chile"
+        }
+    },
+    {
+        "model": "memoria.mempaisubicacion",
+        "pk": 2,
+        "fields": {
+            "nombrepais": "Argentina"
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 1,
+        "fields": {
+            "nombreregion": "Arica y Parinacota",
+            "latitud": -18.365,
+            "longitud": -70.1257,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 2,
+        "fields": {
+            "nombreregion": "Tarapac\u00e1",
+            "latitud": -20.288,
+            "longitud": -70.307,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 3,
+        "fields": {
+            "nombreregion": "Antofagasta",
+            "latitud": -23.524,
+            "longitud": -70.785,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 4,
+        "fields": {
+            "nombreregion": "Atacama",
+            "latitud": -24.5563,
+            "longitud": -69.42218,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 5,
+        "fields": {
+            "nombreregion": "Coquimbo",
+            "latitud": -30.2211,
+            "longitud": -71.6309,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 6,
+        "fields": {
+            "nombreregion": "Valpara\u00edso",
+            "latitud": -29.803,
+            "longitud": -79.585,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 7,
+        "fields": {
+            "nombreregion": "Metropolitana de Santiago",
+            "latitud": -33.4521,
+            "longitud": -70.6886,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 8,
+        "fields": {
+            "nombreregion": "Libertador General Bernardo O\u2019Higgins",
+            "latitud": -34.4296,
+            "longitud": -71.5128,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 9,
+        "fields": {
+            "nombreregion": "Maule",
+            "latitud": -33.46573,
+            "longitud": -70.63575,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 10,
+        "fields": {
+            "nombreregion": "Ñuble",
+            "latitud": -33.4673,
+            "longitud": -70.621,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 11,
+        "fields": {
+            "nombreregion": "Biobío",
+            "latitud": -37.475,
+            "longitud": -73.433,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 12,
+        "fields": {
+            "nombreregion": "La Araucanía",
+            "latitud": -38.617,
+            "longitud": -73.136,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 13,
+        "fields": {
+            "nombreregion": "Los Ríos",
+            "latitud": -39.9876,
+            "longitud": -73.1387,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 14,
+        "fields": {
+            "nombreregion": "Los Lagos",
+            "latitud": -42.18,
+            "longitud": -73.356,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 15,
+        "fields": {
+            "nombreregion": "Aysén del General Carlos Ibáñez del Campo",
+            "latitud": -46.471,
+            "longitud": -73.562,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memregionubicacion",
+        "pk": 16,
+        "fields": {
+            "nombreregion": "Magallanes y la Antártica Chilena",
+            "latitud": -52.5003,
+            "longitud": -73.0007,
+            "pais": 1
+        }
+    },
+    {
+        "model": "memoria.memubicacion",
+        "pk": 1,
+        "fields": {
+            "nombreubicacion": "Iquique",
+            "region": 2
+        }
+    }
+]

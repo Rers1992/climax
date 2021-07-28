@@ -1,0 +1,59 @@
+[
+    {
+        "model": "memoria.memestacionmeteorologica",
+        "pk": 1,
+        "fields": {
+            "codigoubicacion": 1,
+            "rutusuario": "1827767",
+            "nombreestacion": "prueba 1",
+            "fechainstalacion": "2021-04-26",
+            "fechatermino": "2021-06-06",
+            "longitudestacion": "-70.1520",
+            "latitudestacion": "-20.2167",
+            "alturaestacion": "12",
+            "cuenca": "cualquiera",
+            "rio": "loa",
+            "medicionestacion": "todas",
+            "comentario": "macanudo",
+            "estadoestacion": true
+        }
+    },
+    {
+        "model": "memoria.memestacionmeteorologica",
+        "pk": 2,
+        "fields": {
+            "codigoubicacion": 1,
+            "rutusuario": "1827767",
+            "nombreestacion": "prueba 23",
+            "fechainstalacion": "2021-06-03",
+            "fechatermino": "2021-07-11",
+            "longitudestacion": "-70.1520",
+            "latitudestacion": "-20.2167",
+            "alturaestacion": "12",
+            "cuenca": "cualquiera",
+            "rio": "loa",
+            "medicionestacion": "todas",
+            "comentario": "macanudo",
+            "estadoestacion": true
+        }
+    },
+    {
+        "model": "memoria.memestacionmeteorologica",
+        "pk": 3,
+        "fields": {
+            "codigoubicacion": 1,
+            "rutusuario": "prueba",
+            "nombreestacion": "dasdsadad",
+            "fechainstalacion": "2021-07-02",
+            "fechatermino": "2021-07-25",
+            "longitudestacion": "-70.1520",
+            "latitudestacion": "-20.2167",
+            "alturaestacion": "12",
+            "cuenca": "cualquiera",
+            "rio": "loa",
+            "medicionestacion": "todas",
+            "comentario": "macanudo",
+            "estadoestacion": true
+        }
+    }
+]

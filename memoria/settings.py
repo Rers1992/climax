@@ -102,27 +102,27 @@ AUTH_USER_MODEL = 'memoria.MemEmpresa'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'memoria',
-        'USER': 'postgres',
-        'PASSWORD': 'memoria2020',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
-
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'rruiz',
-#        'USER': 'rruiz',
-#        'PASSWORD': 'rsd43ed',
-#        'HOST': 'magallanes.inf.unap.cl',
+#        'NAME': 'memoria',
+#        'USER': 'postgres',
+#        'PASSWORD': 'memoria2020',
+#        'HOST': '127.0.0.1',
 #        'PORT': '5432',
 #    }
 #}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'rruiz',
+        'USER': 'rruiz',
+        'PASSWORD': 'rsd43ed',
+        'HOST': 'magallanes.inf.unap.cl',
+        'PORT': '5432',
+    }
+}
 
 
 # Password validation

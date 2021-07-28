@@ -1,0 +1,100 @@
+[
+    {
+        "model": "memoria.memempresa",
+        "pk": "1827767",
+        "fields": {
+            "password": "pbkdf2_sha256$150000$tvKjmPZg9okJ$n29O28htgWpllJEj18Y4aQK8d0fKVPlkV4xsmpGbVv0=",
+            "last_login": "2021-07-20T20:09:11.125Z",
+            "nombreempresa": "rodolfo",
+            "razonsocialempresa": "cualquiera",
+            "empresa_padre": "18277670k",
+            "is_active": true,
+            "is_empresa": false,
+            "is_admin": false
+        }
+    },
+    {
+        "model": "memoria.memempresa",
+        "pk": "18277670k",
+        "fields": {
+            "password": "pbkdf2_sha256$150000$NkbOkrzVHyWG$71qOVv3KbplwcXNIBC6NbRxGCWr9akENVA7BYz9NlmE=",
+            "last_login": "2021-07-26T22:20:12.254Z",
+            "nombreempresa": "rodolfo",
+            "razonsocialempresa": "cualquiera",
+            "empresa_padre": null,
+            "is_active": true,
+            "is_empresa": true,
+            "is_admin": true
+        }
+    },
+    {
+        "model": "memoria.memempresa",
+        "pk": "dsadsadsa",
+        "fields": {
+            "password": "pbkdf2_sha256$150000$PrZmOwEICQYH$T+wrTDASlwQtnVjopUEBarUanY2v0VC2SD55jABJpIE=",
+            "last_login": null,
+            "nombreempresa": "dasdsadsad",
+            "razonsocialempresa": "sadsadsad",
+            "empresa_padre": "prueba",
+            "is_active": true,
+            "is_empresa": false,
+            "is_admin": false
+        }
+    },
+    {
+        "model": "memoria.memempresa",
+        "pk": "prueba",
+        "fields": {
+            "password": "pbkdf2_sha256$150000$NNsq6vauECpv$m4vPTCc2fmmUoNIzMu0pwzikNU8QV1px88KojCF+S1k=",
+            "last_login": "2021-07-21T22:55:54.006Z",
+            "nombreempresa": "prueba",
+            "razonsocialempresa": "memoria",
+            "empresa_padre": null,
+            "is_active": true,
+            "is_empresa": true,
+            "is_admin": false
+        }
+    },
+    {
+        "model": "memoria.memempresa",
+        "pk": "prueba2",
+        "fields": {
+            "password": "pbkdf2_sha256$150000$mXAdOIhAkf5x$lN+2FFncRd/cJaJDQF53M9Ahmn+ipjntb5RH/AGPOYU=",
+            "last_login": "2021-07-08T19:41:24.055Z",
+            "nombreempresa": "prueba2",
+            "razonsocialempresa": "memoria",
+            "empresa_padre": null,
+            "is_active": true,
+            "is_empresa": false,
+            "is_admin": false
+        }
+    },
+    {
+        "model": "memoria.memempresa",
+        "pk": "pruebaSelect",
+        "fields": {
+            "password": "pbkdf2_sha256$150000$iVkagBfE7klQ$92FUky0T64f/JqtsyazhkSjn8MIwuqqAe940oJfnBMs=",
+            "last_login": null,
+            "nombreempresa": "pruebaSelect",
+            "razonsocialempresa": "mamasan",
+            "empresa_padre": "18277670k",
+            "is_active": true,
+            "is_empresa": false,
+            "is_admin": false
+        }
+    },
+    {
+        "model": "memoria.memempresa",
+        "pk": "pruebaUsuario",
+        "fields": {
+            "password": "pbkdf2_sha256$150000$LSShSxdxHJRN$o+wAY8cozbqInjpFUdMBN+ACjD6uxlCxtblQT/2KoTY=",
+            "last_login": null,
+            "nombreempresa": "pruebaUsuarioNombre",
+            "razonsocialempresa": "mamasan",
+            "empresa_padre": null,
+            "is_active": true,
+            "is_empresa": false,
+            "is_admin": false
+        }
+    }
+]
