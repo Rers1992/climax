@@ -79,23 +79,3 @@ function fn_ModificarEntidad(v_rut) {
         }
     });
 }
-
-var app = new Vue({
-    el: "#app",
-    data: {
-        entidades: []
-    },
-    mounted: function () {
-        console.log("mounted");
-        this.getAllEntidades();
-    },
-    methods: {
-        getAllEntidades: function () {
-            axios.get("consulta/listar")
-                    .then(function (response) {
-                        console.log(response);
-                        app.entidades = response.data;
-                    })
-        }
-    }
-});

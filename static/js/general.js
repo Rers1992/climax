@@ -30,7 +30,10 @@ function fn_abreForm() {
         url: 'crearEntidad',
         success: function (data) {
             $('#employee_detail').html(data);
-            $('#id_empresa_padre').select2();
+            $('#id_empresa_padre').select2({
+                width: '530px',
+                placeholder: "Seleccionar"
+            });
             if(document.getElementById('adminUsuario').value == 'False'){
                 document.getElementById('id_empresa_padre').value = document.getElementById('idrutusuario').value
                 $('#div_id_empresa_padre').hide();
@@ -47,7 +50,10 @@ function fn_abreFormModificar(v_rut) {
         url: 'editarEntidad/'+v_rut,
         success: function (data) {
             $('#employee_detail').html(data);
-            $('#id_empresa_padre').select2();
+            $('#id_empresa_padre').select2({
+                width: '530px',
+                placeholder: "Seleccionar"
+            });
             if(document.getElementById('adminUsuario').value == 'False'){
                 $('#div_id_empresa_padre').hide();
                 $('#div_id_is_admin').hide();

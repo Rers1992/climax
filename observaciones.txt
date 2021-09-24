@@ -18,7 +18,14 @@ cambiar boton a la derecha y hacerlo lista desplegable ** listo
 armar modelo en pd ** listo
 generar un espacio vacio ** listo
 datos de la serie temporal completa (todos los años juntos) ** listo
+titulos en pantalla de inicio ** listo
+pantalla nueva de inicio pero con valores regionales arreglar mapa (contorno en regiones) ** listo
+alargar select2 ** listo
 
 
-pantalla nueva de inicio pero con valores regionales
 valores extremos en diagrama de caja filtrar anormales y atipicos
+arreglar estetica de login
+variable meteorologica
+cargar datos originales
+ajustar formato de entrada para 1 variable
+informe = modelo de solucion, preparacion de datos

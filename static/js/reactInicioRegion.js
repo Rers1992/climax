@@ -239,7 +239,7 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount() {
-        this.state.mymap = L.map('mimapa').setView([this.state.latitud, this.state.longitud], 9)
+        this.state.mymap = L.map('mimapa').setView([this.state.latitud, this.state.longitud], 7)
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
             maxZoom: 25,
             attribution: 'Datos del mapa de &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, ' + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imágenes © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -456,10 +456,8 @@ class Dashboard extends React.Component {
     }
 
     cargarListaEstaciones(data) {
-        console.log(data)
-        console.log(this.state.estaciones)
         this.state.estaciones.map(e => {
-            L.marker([e.latitudestacion, e.longitudestacion]).addTo(this.state.mymap);
+            L.marker([e.latitudestacion, e.longitudestacion]).addTo(this.state.mymap.setZoom(7));
         })
         return <div className="row">
             {data.map((dato) => (

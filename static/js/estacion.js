@@ -4,7 +4,10 @@ function fn_abreFormEstacion() {
         url: 'crearEstacion',
         success: function (data) {
             $('#employee_detail').html(data);
-            $('#id_codigoubicacion').select2();
+            $('#id_codigoubicacion').select2({
+                width: '530px',
+                placeholder: "Seleccionar"
+            });
             $('#div_id_rutusuario').hide();
             document.getElementById('id_rutusuario').value = document.getElementById('idrutusuario').value
             $('#dataModal').modal("show");
@@ -18,7 +21,10 @@ function fn_abreFormModificarUsuario(v_rut) {
         url: 'editarUsuario/'+v_rut,
         success: function (data) {
             $('#employee_detail').html(data);
-            $('#id_codigoubicacion').select2();
+            $('#id_codigoubicacion').select2({
+                width: '530px',
+                placeholder: "Seleccionar"
+            });
             $('#div_id_contrasenausuario').hide();
             $('#dataModal').modal("show");
         }
