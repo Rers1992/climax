@@ -31,7 +31,7 @@ def regiones(request):
     return render(request, 'memoria/inicioRegion/index.html')
 
 def regionesJson(request):
-    regiones = serializers.RegionUbicacionSerializer(MemRegionUbicacion.objects.all(), many=True).data
+    regiones = serializers.RegionUbicacionSerializer(MemRegionUbicacion.objects.all().order_by('codigoregion'), many=True).data
     estaciones = serializers.EstacionmeteorologicaSerializer(
         MemEstacionmeteorologica.objects.all(), many=True).data
     return JsonResponse({'regiones':regiones, 'estaciones':estaciones})

@@ -31,10 +31,10 @@ def estacion(request):
 
 def estacionJson(request):
     json = []
-    estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True).select_related('rutusuario')
+    estaciones = MemEstacionmeteorologica.objects.filter(estadoestacion = True).select_related('rutusuario').order_by('codigoestacion')
     for x in estaciones:
-        json.append({'codigo': x.codigoestacion, 'nombre' : x.nombreestacion, 'propietario': x.rutusuario.nombreempresa, 'latitud': x.latitudestacion,
-        'longitud': x.longitudestacion})
+        json.append({'codigo': x.codigoestacion, 'nombre' : x.nombreestacion, 'propietario': x.rutusuario.nombreempresa, 
+        'latitud': x.latitudestacion, 'longitud': x.longitudestacion})
 
     return JsonResponse({'estacionesJson': json})
 

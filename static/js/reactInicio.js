@@ -602,7 +602,7 @@ class Dashboard extends React.Component {
               </div>
             </div>
             <div className="row" id="seriecon">
-            <div id='myDiv1'></div>
+            <div className="col-11" id='myDiv1'></div>
             </div>
           </div>
         </div>

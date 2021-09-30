@@ -733,7 +733,7 @@ class Dashboard extends React.Component {
       <div className="row">
       <div className="col-3 col-12 col-md-2 col-lg-2 col-xl-2">
           <select className="form-control" onChange={(event) => this.handleChangeDatos(event)}>
-            <option value="-1" >Ver Datos...</option>
+            <option value="-1" >Variable Meteorológica...</option>
             <option value="Temperatura">Temperatura</option>
             <option value="Precipitacion">Precipitación</option>
           </select>
