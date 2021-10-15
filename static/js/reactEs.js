@@ -17,6 +17,8 @@ class Dashboard extends React.Component {
       fechas: [],
       temMaximas: [],
       temMinimas: [],
+      temMedias: [],
+      temMedia: [],
       precipitaciones: [],
       temPre: true,
       temPreMensaje:"Ver Precipitación"
@@ -373,16 +375,17 @@ class Dashboard extends React.Component {
     }
     //this.crearGrafico2('myDiv2', this.state.temMaximas, this.state.temMinimas,
     //  this.state.precipitaciones, this.state.fechas, 'line')
-    var arrayTemMedia = []
-    for (let j = 0; j < (this.state.temMaximas).length; j++) {
-      arrayTemMedia.push((parseInt(this.state.temMinimas[j]) + parseInt(this.state.temMaximas[j])) / 2)
-    }
+    //var arrayTemMedia = []
+    //for (let j = 0; j < (this.state.temMaximas).length; j++) {
+    //  arrayTemMedia.push((parseInt(this.state.temMinimas[j]) + parseInt(this.state.temMaximas[j])) / 2)
+    //}
+    //this.setState({temMedia:arrayTemMedia})
     this.crearGrafico2('myDiv2', this.state.temMaximas, this.state.temMinimas,
-      arrayTemMedia, this.state.fechas, 'line')
+      this.state.temMedias, this.state.fechas, 'line')
     this.crearGraficoHistograma('myDiv1', this.state.temMaximas, this.state.temMinimas,
-      arrayTemMedia, this.state.fechas, 'histogram')
+      this.state.temMedias, this.state.fechas, 'histogram')
     this.crearGrafico3(this.tiempoC, this.state.temMaximas, this.state.temMinimas,
-      arrayTemMedia, this.state.fechas, 'boxplot')
+      this.state.temMedias, this.state.fechas, 'boxplot')
     this.crearGrafico(this.mediaG, mediamax, mediamin, mediapre, años, 'line')
     this.crearGrafico(this.medianaG, medianamax, medianamin, medianapre, años, 'line')
     //this.crearGrafico(this.modaG, modamax, modamin, modapre, años, 'line')
@@ -627,7 +630,7 @@ class Dashboard extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({
         data: data.estadisticas, estacion: data.estacion, longitud: data.estacion.long, latitud: data.estacion.lat,
-        fechas: data.fechas, temMaximas: data.temMax, temMinimas: data.temMin, precipitaciones: data.preci
+        fechas: data.fechas, temMaximas: data.temMax, temMinimas: data.temMin, temMedias: data.temMed,precipitaciones: data.preci
       }))
       .then(data => this.ordenarFuncion())
   }
@@ -641,6 +644,12 @@ class Dashboard extends React.Component {
     } else {
       this.setState({ inicio: val[0] });
     }
+  }
+
+  filtrarAtipicos(){
+    console.log(this.state.temMedias)
+    this.crearGrafico3(this.tiempoC, this.state.temMaximas, this.state.temMinimas,
+      arrayTemMedia, this.state.fechas, 'boxplot')
   }
 
   handleChangeDatos(event) {
@@ -889,6 +898,7 @@ class Dashboard extends React.Component {
           <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <br></br>
             <div className="form-control text-center"><b>Diagrama de Cajas</b></div>
+            <button className="btn btn-info btn-lg">Filtrar valores Anormales y Atipicos</button>
             <div id='myDiv'></div>
           </div>
         </div>

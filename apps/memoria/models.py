@@ -249,6 +249,7 @@ class MemSeriedetiempo(models.Model):
     temperaturamaxserie = models.FloatField(blank=True, null=True)
     temperaturaminserie = models.FloatField(blank=True, null=True)
     precipitacionserie = models.FloatField(blank=True, null=True)
+    temperaturamedserie = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = True
