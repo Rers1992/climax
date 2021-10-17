@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
   //$('#fInicio').select2();
   //$('#fFin').select2();
 });
@@ -20,8 +20,25 @@ class Dashboard extends React.Component {
       temMedias: [],
       temMedia: [],
       precipitaciones: [],
+      añosEs: [],
+      medianamaxA: [],
+      mediamaxA: [],
+      desviacionesmaxA: [],
+      varianzamaxA: [],
+      mediaminA: [],
+      medianaminA: [],
+      desviacionesminA: [],
+      varianzaminA: [],
+      mediaproA: [],
+      medianaproA: [],
+      desviacionesproA: [],
+      varianzaproA: [],
+      mediapreA: [],
+      medianapreA: [],
+      desviacionespreA: [],
+      varianzapreA: [],
       temPre: true,
-      temPreMensaje:"Ver Precipitación"
+      temPreMensaje: "Ver Precipitación"
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -93,7 +110,6 @@ class Dashboard extends React.Component {
 
   renderTablaTemMax() {
     return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <caption><div className="form-control text-center">Temperatura Maxima</div></caption>
       <thead>
         <tr>
           <th>año</th>
@@ -133,13 +149,13 @@ class Dashboard extends React.Component {
             <td>{dato.q1max}</td>
             <td>{dato.q3max}</td>
             <td>{dato.iqrmax}</td>
-            <td>{(dato.q1max - 1.5 * dato.iqrmax).toFixed(1)}</td>
+            <td>{parseFloat(dato.val1max).toFixed(1)}</td>
             <td>{dato.atipicoinfmax}</td>
-            <td>{parseFloat(dato.q3max + 1.5 * dato.iqrmax).toFixed(1)}</td>
+            <td>{parseFloat(dato.val2max).toFixed(1)}</td>
             <td>{dato.atipicosupmax}</td>
-            <td>{(dato.q1max - 3 * dato.iqrmax).toFixed(1)}</td>
+            <td>{parseFloat(dato.val3max).toFixed(1)}</td>
             <td>{dato.extremoinfmax}</td>
-            <td>{parseFloat(dato.q3max + 3 * dato.iqrmax).toFixed(1)}</td>
+            <td>{parseFloat(dato.val4max).toFixed(1)}</td>
             <td>{dato.extremosupmax}</td>
             <td>{dato.kstestmax}</td>
             <td>{dato.kstestpmax}</td>
@@ -155,7 +171,6 @@ class Dashboard extends React.Component {
 
   renderTablaTemMin() {
     return <table className="table-bordered col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <caption><div className="form-control text-center">Temperatura Minima</div></caption>
       <thead>
         <tr>
           <th>año</th>
@@ -195,13 +210,13 @@ class Dashboard extends React.Component {
             <td>{dato.q1min}</td>
             <td>{dato.q3min}</td>
             <td>{dato.iqrmin}</td>
-            <td>{(dato.q1min - 1.5 * dato.iqrmin).toFixed(1)}</td>
+            <td>{parseFloat(dato.val1min).toFixed(1)}</td>
             <td>{dato.atipicoinfmin}</td>
-            <td>{parseFloat(dato.q3min + 1.5 * dato.iqrmin).toFixed(1)}</td>
+            <td>{parseFloat(dato.val2min).toFixed(1)}</td>
             <td>{dato.atipicosupmin}</td>
-            <td>{(dato.q1min - 3 * dato.iqrmin).toFixed(1)}</td>
+            <td>{parseFloat(dato.val3min).toFixed(1)}</td>
             <td>{dato.extremoinfmin}</td>
-            <td>{parseFloat(dato.q3min + 3 * dato.iqrmin).toFixed(1)}</td>
+            <td>{parseFloat(dato.val4min).toFixed(1)}</td>
             <td>{dato.extremosupmin}</td>
             <td>{dato.kstestmin}</td>
             <td>{dato.kstestpmin}</td>
@@ -257,13 +272,13 @@ class Dashboard extends React.Component {
             <td>{dato.q1pre}</td>
             <td>{dato.q3pre}</td>
             <td>{dato.iqrpre}</td>
-            <td>{(dato.q1pre - 1.5 * dato.iqrpre).toFixed(1)}</td>
+            <td>{parseFloat(dato.val1pre).toFixed(1)}</td>
             <td>{dato.atipicoinfpre}</td>
-            <td>{parseFloat(dato.q3pre + 1.5 * dato.iqrpre).toFixed(1)}</td>
+            <td>{parseFloat(dato.val2pre).toFixed(1)}</td>
             <td>{dato.atipicosuppre}</td>
-            <td>{(dato.q1pre - 3 * dato.iqrpre).toFixed(1)}</td>
+            <td>{parseFloat(dato.val3pre).toFixed(1)}</td>
             <td>{dato.extremoinfpre}</td>
-            <td>{parseFloat(dato.q3pre + 3 * dato.iqrpre).toFixed(1)}</td>
+            <td>{parseFloat(dato.val4pre).toFixed(1)}</td>
             <td>{dato.extremosuppre}</td>
             <td>{dato.kstestpre}</td>
             <td>{dato.kstestppre}</td>
@@ -346,76 +361,27 @@ class Dashboard extends React.Component {
 
 
   ordenarFuncion() {
-    var mediamax = [], mediamin = [], mediapre = [], medianamax = [],
-      medianamin = [], medianapre = [], modamax = [], modamin = [], modapre = [],
-      desviacionesmax = [], desviacionesmin = [], desviacionespre = [], varianzamax = [],
-      varianzamin = [], varianzapre = []
-    var años = []
-    for (let i = 1; i < this.state.data.length; i++) {
-      años.push(this.state.data[i]['ano'])
-      mediamax.push(this.state.data[i]['mediamax'])
-      mediamin.push(this.state.data[i]['mediamin'])
-      mediapre.push((parseInt(
-        this.state.data[i]['mediamin'])+parseInt(this.state.data[i]['mediamax']))/2)
-      medianamax.push(this.state.data[i]['medianamax'])
-      medianamin.push(this.state.data[i]['medianamin'])
-      medianapre.push(
-        parseInt(this.state.data[i]['medianamax'])+parseInt(this.state.data[i]['medianamin'])/2)
-      //modamax.push(this.state.data[i]['modamax'])
-      //modamin.push(this.state.data[i]['modamin'])
-      //modapre.push(this.state.data[i]['modapre'])
-      desviacionesmax.push(this.state.data[i]['desviacionesmax'])
-      desviacionesmin.push(this.state.data[i]['desviacionesmin'])
-      desviacionespre.push(
-        (parseInt(this.state.data[i]['desviacionesmax'])+parseInt(this.state.data[i]['desviacionesmin']))/2)
-      varianzamax.push(this.state.data[i]['varianzamax'])
-      varianzamin.push(this.state.data[i]['varianzamin'])
-      varianzapre.push((parseInt(
-        this.state.data[i]['varianzamax'])+parseInt(this.state.data[i]['varianzamin']))/2)
-    }
-    //this.crearGrafico2('myDiv2', this.state.temMaximas, this.state.temMinimas,
-    //  this.state.precipitaciones, this.state.fechas, 'line')
-    //var arrayTemMedia = []
-    //for (let j = 0; j < (this.state.temMaximas).length; j++) {
-    //  arrayTemMedia.push((parseInt(this.state.temMinimas[j]) + parseInt(this.state.temMaximas[j])) / 2)
-    //}
-    //this.setState({temMedia:arrayTemMedia})
     this.crearGrafico2('myDiv2', this.state.temMaximas, this.state.temMinimas,
       this.state.temMedias, this.state.fechas, 'line')
     this.crearGraficoHistograma('myDiv1', this.state.temMaximas, this.state.temMinimas,
       this.state.temMedias, this.state.fechas, 'histogram')
     this.crearGrafico3(this.tiempoC, this.state.temMaximas, this.state.temMinimas,
       this.state.temMedias, this.state.fechas, 'boxplot')
-    this.crearGrafico(this.mediaG, mediamax, mediamin, mediapre, años, 'line')
-    this.crearGrafico(this.medianaG, medianamax, medianamin, medianapre, años, 'line')
-    //this.crearGrafico(this.modaG, modamax, modamin, modapre, años, 'line')
-    this.crearGrafico(this.desEG, desviacionesmax, desviacionesmin, desviacionespre, años, 'line')
-    this.crearGrafico(this.varianzaG, varianzamax, varianzamin, varianzapre, años, 'line')
+    this.crearGrafico(this.mediaG, this.state.mediamaxA, this.state.mediaminA, this.state.mediaproA, this.state.añosEs, 'line')
+    this.crearGrafico(this.medianaG, this.state.medianamaxA, this.state.medianaminA, this.state.medianaproA, this.state.añosEs, 'line')
+    this.crearGrafico(this.desEG, this.state.desviacionesmaxA, this.state.desviacionesminA, this.state.desviacionesproA, this.state.añosEs, 'line')
+    this.crearGrafico(this.varianzaG, this.state.varianzamaxA, this.state.varianzaminA, this.state.varianzaproA, this.state.añosEs, 'line')
   }
 
   ordenarFuncionPre() {
-    var mediamax = [], mediamin = [], mediapre = [], medianamax = [],
-      medianamin = [], medianapre = [], modamax = [], modamin = [], modapre = [],
-      desviacionesmax = [], desviacionesmin = [], desviacionespre = [], varianzamax = [],
-      varianzamin = [], varianzapre = []
-    var años = []
-    for (let i = 1; i < this.state.data.length; i++) {
-      años.push(this.state.data[i]['ano'])
-      mediapre.push(this.state.data[i]['mediapre'])
-      medianapre.push(this.state.data[i]['medianapre'])
-      //modapre.push(this.state.data[i]['modapre'])
-      desviacionespre.push(this.state.data[i]['desviacionespre'])
-      varianzapre.push(this.state.data[i]['varianzapre'])
-    }
 
     this.crearGrafico2Pre('myDiv2', this.state.precipitaciones, this.state.fechas, 'line')
     this.crearGraficoHistogramaPre('myDiv1', this.state.precipitaciones, this.state.fechas, 'histogram')
     this.crearGrafico3Pre(this.tiempoC, this.state.precipitaciones, this.state.fechas, 'boxplot')
-    this.crearGraficoPre(this.mediaG, mediapre, años, 'line')
-    this.crearGraficoPre(this.medianaG, medianapre, años, 'line')
-    //this.crearGrafico(this.modaG, modamax, modamin, modapre, años, 'line')
-    this.crearGraficoPre(this.desEG, desviacionespre, años, 'line')
-    this.crearGraficoPre(this.varianzaG, varianzapre, años, 'line')
+    this.crearGraficoPre(this.mediaG, this.state.mediapreA, años, 'line')
+    this.crearGraficoPre(this.medianaG, this.state.medianapreA, años, 'line')
+    this.crearGraficoPre(this.desEG, this.state.desviacionespreA, años, 'line')
+    this.crearGraficoPre(this.varianzaG, this.state.varianzapreA, años, 'line')
   }
 
 
@@ -562,41 +528,41 @@ class Dashboard extends React.Component {
 
 
   crearGrafico(valor, temMax, temMin, Pre, años, grafico) {
-      new Chart(valor, {
-        type: grafico,
-        data: {
-          labels: años,
-          datasets: [{
-            label: "Tem. Maxima",
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1,
-            data: temMax,
-            fill: false,
-          }, {
-            label: "Tem. Minima",
-            backgroundColor: 'rgba(63, 121, 191, 0.2)',
-            borderColor: 'rgba(63, 121, 191, 1)',
-            borderWidth: 1,
-            data: temMin,
-            fill: false,
-          }, {
-            label: "Tem. Media",
-            data: Pre,
-            backgroundColor: 'rgba(21, 255, 5, 0.2)',
-            borderColor: 'rgba(21, 255, 5, 1)',
-            borderWidth: 1,
-            fill: false,
-          },
-          ]
+    new Chart(valor, {
+      type: grafico,
+      data: {
+        labels: años,
+        datasets: [{
+          label: "Tem. Maxima",
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1,
+          data: temMax,
+          fill: false,
+        }, {
+          label: "Tem. Minima",
+          backgroundColor: 'rgba(63, 121, 191, 0.2)',
+          borderColor: 'rgba(63, 121, 191, 1)',
+          borderWidth: 1,
+          data: temMin,
+          fill: false,
+        }, {
+          label: "Tem. Media",
+          data: Pre,
+          backgroundColor: 'rgba(21, 255, 5, 0.2)',
+          borderColor: 'rgba(21, 255, 5, 1)',
+          borderWidth: 1,
+          fill: false,
         },
-        options: {
-          responsive: true,
-          legend: {
-            position: 'top',
-          }
+        ]
+      },
+      options: {
+        responsive: true,
+        legend: {
+          position: 'top',
         }
-      })
+      }
+    })
   }
 
 
@@ -622,7 +588,7 @@ class Dashboard extends React.Component {
         }
       }
     })
-}
+  }
 
 
   componentDidMount() {
@@ -630,7 +596,12 @@ class Dashboard extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({
         data: data.estadisticas, estacion: data.estacion, longitud: data.estacion.long, latitud: data.estacion.lat,
-        fechas: data.fechas, temMaximas: data.temMax, temMinimas: data.temMin, temMedias: data.temMed,precipitaciones: data.preci
+        fechas: data.fechas, temMaximas: data.temMax, temMinimas: data.temMin, temMedias: data.temMed, precipitaciones: data.preci,
+        añosEs: data.añosEs, medianamaxA: data.medianamaxA, mediamaxA: data.mediamaxA, desviacionesmaxA: data.desviacionesmaxA,
+        varianzamaxA: data.varianzamaxA, mediaminA: data.mediaminA, medianaminA: data.medianaminA, desviacionesminA: data.desviacionesminA,
+        varianzaminA: data.varianzaminA, mediaproA: data.mediaproA, medianaproA: data.medianaproA, desviacionesproA: data.desviacionesproA,
+        varianzaproA: data.varianzaproA, mediapreA: data.mediapreA, medianapreA: data.medianapreA, desviacionespreA: data.desviacionespreA,
+        varianzapreA: data.varianzapreA
       }))
       .then(data => this.ordenarFuncion())
   }
@@ -646,18 +617,18 @@ class Dashboard extends React.Component {
     }
   }
 
-  filtrarAtipicos(){
+  filtrarAtipicos() {
     console.log(this.state.temMedias)
     this.crearGrafico3(this.tiempoC, this.state.temMaximas, this.state.temMinimas,
       arrayTemMedia, this.state.fechas, 'boxplot')
   }
 
   handleChangeDatos(event) {
-    if(event.target.value == "Temperatura"){
-      this.setState({temPre:true})
+    if (event.target.value == "Temperatura") {
+      this.setState({ temPre: true })
       this.ordenarFuncion()
-    }else if(event.target.value == "Precipitacion"){
-      this.setState({temPre:false})
+    } else if (event.target.value == "Precipitacion") {
+      this.setState({ temPre: false })
       this.ordenarFuncionPre()
     }
   }
@@ -674,53 +645,58 @@ class Dashboard extends React.Component {
       for (let i = this.state.fin; i <= val; i++) {
         temMax.push(this.state.temMaximas[i])
         temMin.push(this.state.temMinimas[i])
-        temMed.push((parseInt(this.state.temMaximas[i])+parseInt(this.state.temMinimas[i]))/2)
+        temMed.push((parseInt(this.state.temMaximas[i]) + parseInt(this.state.temMinimas[i])) / 2)
         pre.push(this.state.precipitaciones[i])
         fechas.push(this.state.fechas[i])
       }
-      if(this.state.temPre){
+      if (this.state.temPre) {
         this.crearGrafico3(this.tiempoC, temMax, temMin, temMed, fechas, 'boxplot')
         this.crearGrafico2('myDiv2', temMax, temMin, temMed, fechas, 'line')
         this.crearGraficoHistograma('myDiv1', temMax, temMin, temMed, fechas, 'histogram')
-      }else{
+      } else {
         this.crearGrafico3Pre(this.tiempoC, pre, fechas, 'boxplot')
         this.crearGrafico2Pre('myDiv2', pre, fechas, 'line')
         this.crearGraficoHistogramaPre('myDiv1', pre, fechas, 'histogram')
       }
-      
+
     } else {
       alert("La fecha de fin no puede ser menor a la de inicio")
     }
   }
 
 
-  temPreFun(){
-    if(this.state.temPre){
-      this.setState({temPre:false, temPreMensaje:"Ver Temperatura"})
+  temPreFun() {
+    if (this.state.temPre) {
+      this.setState({ temPre: false, temPreMensaje: "Ver Temperatura" })
       this.ordenarFuncionPre()
-    }else{
-      this.setState({temPre:true, temPreMensaje:"Ver Precipitación"})
+    } else {
+      this.setState({ temPre: true, temPreMensaje: "Ver Precipitación" })
       this.ordenarFuncion()
     }
-    
+
   }
 
-  tablasTemPreFun(){
-    if(this.state.temPre){
+  tablasTemPreFun() {
+    if (this.state.temPre) {
       return <div className="row">
-      <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        {this.renderTablaTemMax()}
+        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <br></br>
+          <div className="form-control text-center col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">Temperatura Maxima</div>
+          {this.renderTablaTemMax()}
+        </div>
+        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <br></br>
+          <div className="form-control text-center col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">Temperatura Minima</div>
+          {this.renderTablaTemMin()}
+        </div>
       </div>
-      <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        {this.renderTablaTemMin()}
-      </div>
-    </div>
-    }else{
+    } else {
       return <div className="row">
-      <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        {this.renderTablaPre()}
+        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <br></br>
+          {this.renderTablaPre()}
+        </div>
       </div>
-    </div>
     }
   }
 
@@ -740,7 +716,7 @@ class Dashboard extends React.Component {
       </div>
       <br></br>
       <div className="row">
-      <div className="col-3 col-12 col-md-2 col-lg-2 col-xl-2">
+        <div className="col-3 col-12 col-md-2 col-lg-2 col-xl-2">
           <select className="form-control" onChange={(event) => this.handleChangeDatos(event)}>
             <option value="-1" >Variable Meteorológica...</option>
             <option value="Temperatura">Temperatura</option>
@@ -878,61 +854,61 @@ class Dashboard extends React.Component {
 
 
   render() {
-      return <div>
-        {this.mapasFiltros()}
-        <div className="row">
-          <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <br></br>
-            <div className="form-control text-center"><b>Serie de Tiempo</b></div>
-            <div id='myDiv2'></div>
-          </div>
+    return <div>
+      {this.mapasFiltros()}
+      <div className="row">
+        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <br></br>
+          <div className="form-control text-center"><b>Serie de Tiempo</b></div>
+          <div id='myDiv2'></div>
         </div>
-        <div className="row">
-          <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <br></br>
-            <div className="form-control text-center"><b>Distribucion de Variables</b></div>
-            <div id='myDiv1'></div>
-          </div>
+      </div>
+      <div className="row">
+        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <br></br>
+          <div className="form-control text-center"><b>Distribucion de Variables</b></div>
+          <div id='myDiv1'></div>
         </div>
-        <div className="row">
-          <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <br></br>
-            <div className="form-control text-center"><b>Diagrama de Cajas</b></div>
-            <button className="btn btn-info btn-lg">Filtrar valores Anormales y Atipicos</button>
-            <div id='myDiv'></div>
-          </div>
+      </div>
+      <div className="row">
+        <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <br></br>
+          <div className="form-control text-center"><b>Diagrama de Cajas</b></div>
+          <button className="btn btn-info btn-lg">Filtrar valores Anormales y Atipicos</button>
+          <div id='myDiv'></div>
         </div>
-        <br></br>
-        {this.leyendasTabla()}
-        {this.tablasTemPreFun()}
-        <div className="row">
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
-            <br></br>
-            <div className="form-control text-center">Media</div>
-            <canvas width="400" height="400" ref={ctx => this.mediaG = ctx} />
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
-            <br></br>
-            <div className="form-control text-center">Mediana</div>
-            <canvas width="400" height="400" ref={ctx => this.medianaG = ctx} />
-          </div>
-          {/*<div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
+      </div>
+      <br></br>
+      {this.leyendasTabla()}
+      {this.tablasTemPreFun()}
+      <div className="row">
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
+          <br></br>
+          <div className="form-control text-center">Media</div>
+          <canvas width="400" height="400" ref={ctx => this.mediaG = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
+          <br></br>
+          <div className="form-control text-center">Mediana</div>
+          <canvas width="400" height="400" ref={ctx => this.medianaG = ctx} />
+        </div>
+        {/*<div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
           <br></br>
           <div className="form-control text-center">Moda</div>
           <canvas width="400" height="400" ref={ctx => this.modaG = ctx} />
         </div>*/}
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
-            <br></br>
-            <div className="form-control text-center">Desviación Estandar</div>
-            <canvas width="400" height="400" ref={ctx => this.desEG = ctx} />
-          </div>
-          <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
-            <br></br>
-            <div className="form-control text-center">Varianza</div>
-            <canvas width="400" height="400" ref={ctx => this.varianzaG = ctx} />
-          </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
+          <br></br>
+          <div className="form-control text-center">Desviación Estandar</div>
+          <canvas width="400" height="400" ref={ctx => this.desEG = ctx} />
+        </div>
+        <div className="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3">
+          <br></br>
+          <div className="form-control text-center">Varianza</div>
+          <canvas width="400" height="400" ref={ctx => this.varianzaG = ctx} />
         </div>
       </div>
+    </div>
 
   }
 }

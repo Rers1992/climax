@@ -51,6 +51,23 @@ def estadisticasJson(request, codigoEstacion):
     temMin = []
     preci = []
     temMed = []
+    añosEs = []
+    medianamaxA = []
+    mediamaxA = []
+    desviacionesmaxA = []
+    varianzamaxA = []
+    mediaminA = []
+    medianaminA = []
+    desviacionesminA = []
+    varianzaminA = []
+    mediaproA = []
+    medianaproA = []
+    desviacionesproA = []
+    varianzaproA = []
+    mediapreA = []
+    medianapreA = []
+    desviacionespreA = []
+    varianzapreA = []
     mediamax = 0
     mediamin = 0
     mediapre = 0
@@ -116,7 +133,12 @@ def estadisticasJson(request, codigoEstacion):
     'lat': estaciones[0].latitudestacion, 'altura': estaciones[0].alturaestacion, 'cuenca': estaciones[0].cuenca, 'rio': estaciones[0].rio, 
     'medi': estaciones[0].medicionestacion, 'comentario': estaciones[0].comentario}
     for x in estadisticas:
+        añosEs.append(x.codigoano.ano)
         if x.mediamax:
+            medianamaxA.append(x.mediamax)
+            mediamaxA.append(x.medianamax)
+            desviacionesmaxA.append(x.desviacionesmax)
+            varianzamaxA.append(x.varianzamax)
             mediamax += x.mediamax
             modamax += x.modamax
             medianamax += x.medianamax
@@ -134,7 +156,16 @@ def estadisticasJson(request, codigoEstacion):
             shapiromax += x.shapiromax
             shapiropmax += x.shapiropmax
             kurtosismax += x.kurtosismax
+        if x.medianamax and x.medianamin:
+            mediaproA.append((x.mediamax+x.mediamin)/2)
+            medianaproA.append((x.medianamax+x.medianamin)/2)
+            desviacionesproA.append((x.desviacionesmax+x.desviacionesmin)/2)
+            varianzaproA.append((x.varianzamax+x.varianzamin)/2)
         if x.mediamin:
+            mediaminA.append(x.mediamin)
+            medianaminA.append(x.medianamin)
+            desviacionesminA.append(x.desviacionesmin)
+            varianzaminA.append(x.varianzamin)
             mediamin += x.mediamin
             medianamin += x.medianamin
             modamin += x.modamin
@@ -153,6 +184,10 @@ def estadisticasJson(request, codigoEstacion):
             shapiropmin += x.shapiropmin
             kurtosismin += x.kurtosismin
         if x.mediapre:
+            mediapreA.append(x.mediapre)
+            medianapreA.append(x.medianapre)
+            desviacionespreA.append(x.desviacionespre)
+            varianzapreA.append(x.varianzapre)
             mediapre += x.mediapre
             medianapre += x.medianapre
             modapre += x.modapre 
@@ -175,8 +210,24 @@ def estadisticasJson(request, codigoEstacion):
         'medianapre' : x.medianapre, 'modamax' : x.modamax, 'modamin' : x.modamin, 'modapre' : x.modapre, 
         'desviacionesmax' : x.desviacionesmax, 'desviacionesmin' : x.desviacionesmin, 
         'desviacionespre' : x.desviacionespre, 'varianzamax' : x.varianzamax, 
-        'varianzamin' : x.varianzamin, 'varianzapre' : x.varianzapre, 'q1max': x.cuartil1max, 'q1min': x.cuartil1min,
-        'q1pre': x.cuartil1pre, 'q3max': x.cuartil3max, 'q3min': x.cuartil3min, 'q3pre': x.cuartil3pre, 'iqrmax': x.intecuartilmax, 
+        'varianzamin' : x.varianzamin, 'varianzapre' : x.varianzapre, 'q1max': x.cuartil1max, 
+        'val1max': float(x.cuartil1max)-1.5 * float(x.intecuartilmax),'q1min': x.cuartil1min,
+        'val1min': float(x.cuartil1min)-1.5 * float(x.intecuartilmin),
+        'q1pre': x.cuartil1pre, 
+        'val1pre': float(x.cuartil1pre)-1.5 * float(x.intecuartilpre),
+        'q3max': x.cuartil3max, 
+        'val2max': float(x.cuartil3max)+1.5* float(x.intecuartilmax),
+        'val3max': float(x.cuartil1max)-3 * float(x.intecuartilmax),
+        'val4max': float(x.cuartil3max)+3* float(x.intecuartilmax),
+        'q3min': x.cuartil3min, 
+        'val2min': float(x.cuartil3min)+1.5* float(x.intecuartilmin),
+        'val3min': float(x.cuartil1min)-3 * float(x.intecuartilmin),
+        'val4min': float(x.cuartil3min)+3* float(x.intecuartilmin),
+        'q3pre': x.cuartil3pre, 
+        'val2pre': float(x.cuartil3pre)+1.5* float(x.intecuartilpre),
+        'val3pre': float(x.cuartil1pre)-3 * float(x.intecuartilpre),
+        'val4pre': float(x.cuartil3pre)+3* float(x.intecuartilpre),
+        'iqrmax': x.intecuartilmax, 
         'iqrmin': x.intecuartilmin, 'iqrpre': x.intecuartilpre, 'atipicoinfmax': x.atipicoinfmax, 'atipicosupmax': x.atipicosupmax,
         'atipicoinfmin': x.atipicoinfmin, 'atipicosupmin': x.atipicosupmin, 'atipicoinfpre': x.atipicoinfpre, 
         'atipicosuppre': x.atipicosuppre, 'extremoinfmax': x.extremoinfmax, 'extremosupmax': x.extremosupmax,
@@ -191,23 +242,40 @@ def estadisticasJson(request, codigoEstacion):
     if len(estadisticas):
         estadisticasJson.insert(0,{'ano': 'todos','mediamax' : "{:.1f}".format(mediamax/len(estadisticas)), 
             'mediamin' : "{:.1f}".format(mediamin/len(estadisticas)), 
-            'mediapre' : "{:.1f}".format(mediapre/len(estadisticas)), 'medianamax' : "{:.1f}".format(medianamax/len(estadisticas)), 
+            'mediapre' : "{:.1f}".format(mediapre/len(estadisticas)), 
+            'medianamax' : "{:.1f}".format(medianamax/len(estadisticas)), 
             'medianamin' : "{:.1f}".format(medianamin/len(estadisticas)), 
-            'medianapre' : "{:.1f}".format(medianapre/len(estadisticas)), 'modamax' : "{:.1f}".format(modamax/len(estadisticas)), 
-            'modamin' : "{:.1f}".format(modamin/len(estadisticas)), 'modapre' : "{:.1f}".format(modapre/len(estadisticas)), 
+            'medianapre' : "{:.1f}".format(medianapre/len(estadisticas)), 
+            'modamax' : "{:.1f}".format(modamax/len(estadisticas)), 
+            'modamin' : "{:.1f}".format(modamin/len(estadisticas)), 
+            'modapre' : "{:.1f}".format(modapre/len(estadisticas)), 
             'desviacionesmax' : "{:.1f}".format(desviacionesmax/len(estadisticas)), 
             'desviacionesmin' : "{:.1f}".format(desviacionesmin/len(estadisticas)), 
             'desviacionespre' : "{:.1f}".format(desviacionespre/len(estadisticas)), 
             'varianzamax' : "{:.1f}".format(varianzamax/len(estadisticas)), 
             'varianzamin' : "{:.1f}".format(varianzamin/len(estadisticas)), 
             'varianzapre' : "{:.1f}".format(varianzapre/len(estadisticas)), 
-            'q1max': "{:.1f}".format(cuartil1max/len(estadisticas)), 
+            'q1max': "{:.1f}".format(cuartil1max/len(estadisticas)),
+            'val1max':  "{:.1f}".format(float(cuartil1max/len(estadisticas))-1.5 * float(intecuartilmax/len(estadisticas))),
             'q1min': "{:.1f}".format(cuartil1min/len(estadisticas)),
+            'val1min':  "{:.1f}".format(float(cuartil1min/len(estadisticas))-1.5 * float(intecuartilmin/len(estadisticas))),
             'q1pre': "{:.1f}".format(cuartil1pre/len(estadisticas)), 
+            'val1pre':  "{:.1f}".format(float(cuartil1pre/len(estadisticas))-1.5 * float(intecuartilpre/len(estadisticas))),
             'q3max': "{:.1f}".format(cuartil3max/len(estadisticas)), 
-            'q3min': "{:.1f}".format(cuartil3min/len(estadisticas)), 'q3pre': "{:.1f}".format(cuartil3pre/len(estadisticas)), 
+            'val2max':  "{:.1f}".format(float(cuartil3max/len(estadisticas))-1.5 * float(intecuartilmax/len(estadisticas))),
+            'val3max':  "{:.1f}".format(float(cuartil1max/len(estadisticas))-3 * float(intecuartilmax/len(estadisticas))),
+            'val4max':  "{:.1f}".format(float(cuartil3max/len(estadisticas))-3 * float(intecuartilmax/len(estadisticas))),
+            'q3min': "{:.1f}".format(cuartil3min/len(estadisticas)),
+            'val2min':  "{:.1f}".format(float(cuartil3min/len(estadisticas))-1.5 * float(intecuartilmin/len(estadisticas))),
+            'val3min':  "{:.1f}".format(float(cuartil1min/len(estadisticas))-3 * float(intecuartilmin/len(estadisticas))),
+            'val4min':  "{:.1f}".format(float(cuartil3min/len(estadisticas))-3 * float(intecuartilmin/len(estadisticas))), 
+            'q3pre': "{:.1f}".format(cuartil3pre/len(estadisticas)), 
+            'val2pre':  "{:.1f}".format(float(cuartil3pre/len(estadisticas))-1.5 * float(intecuartilpre/len(estadisticas))),
+            'val3pre':  "{:.1f}".format(float(cuartil1pre/len(estadisticas))-3 * float(intecuartilpre/len(estadisticas))),
+            'val4pre':  "{:.1f}".format(float(cuartil3pre/len(estadisticas))-3 * float(intecuartilpre/len(estadisticas))),
             'iqrmax': "{:.1f}".format(intecuartilmax/len(estadisticas)), 
-            'iqrmin': "{:.1f}".format(intecuartilmin/len(estadisticas)), 'iqrpre': "{:.1f}".format(intecuartilpre/len(estadisticas)), 
+            'iqrmin': "{:.1f}".format(intecuartilmin/len(estadisticas)), 
+            'iqrpre': "{:.1f}".format(intecuartilpre/len(estadisticas)), 
             'atipicoinfmax': "{:.0f}".format(atipicoinfmax/len(estadisticas)), 
             'atipicosupmax': "{:.0f}".format(atipicosupmax/len(estadisticas)),
             'atipicoinfmin': "{:.0f}".format(atipicoinfmin/len(estadisticas)), 
@@ -231,7 +299,11 @@ def estadisticasJson(request, codigoEstacion):
             'kurtosismin': "{:.1f}".format(kurtosismin/len(estadisticas)), 
             'kurtosispre': "{:.1f}".format(kurtosispre/len(estadisticas))})
     return JsonResponse({'estadisticas': estadisticasJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
-    'preci': preci, 'temMed':temMed})
+    'preci': preci, 'temMed':temMed , 'añosEs': añosEs, 'medianamaxA': medianamaxA, 'mediamaxA': mediamaxA, 'desviacionesmaxA': desviacionesmaxA,
+    'varianzamaxA': varianzamaxA, 'mediaminA': mediaminA, 'medianaminA': medianaminA, 'desviacionesminA': desviacionesminA,
+    'varianzaminA': varianzaminA, 'mediaproA': mediaproA, 'medianaproA': medianaproA, 'desviacionesproA': desviacionesproA,
+    'varianzaproA': varianzaproA, 'mediapreA': mediapreA, 'medianapreA': medianapreA, 'desviacionespreA': desviacionespreA,
+    'varianzapreA': varianzapreA})
 
 def get_my_key(obj):
   return obj['ano']
