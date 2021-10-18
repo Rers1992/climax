@@ -37,6 +37,9 @@ class Dashboard extends React.Component {
       medianapreA: [],
       desviacionespreA: [],
       varianzapreA: [],
+      atipicosmaxA: [],
+      atipicosminA: [],
+      atipicospreA: [],
       temPre: true,
       temPreMensaje: "Ver Precipitación"
     }
@@ -378,10 +381,10 @@ class Dashboard extends React.Component {
     this.crearGrafico2Pre('myDiv2', this.state.precipitaciones, this.state.fechas, 'line')
     this.crearGraficoHistogramaPre('myDiv1', this.state.precipitaciones, this.state.fechas, 'histogram')
     this.crearGrafico3Pre(this.tiempoC, this.state.precipitaciones, this.state.fechas, 'boxplot')
-    this.crearGraficoPre(this.mediaG, this.state.mediapreA, años, 'line')
-    this.crearGraficoPre(this.medianaG, this.state.medianapreA, años, 'line')
-    this.crearGraficoPre(this.desEG, this.state.desviacionespreA, años, 'line')
-    this.crearGraficoPre(this.varianzaG, this.state.varianzapreA, años, 'line')
+    this.crearGraficoPre(this.mediaG, this.state.mediapreA, this.state.añosEs, 'line')
+    this.crearGraficoPre(this.medianaG, this.state.medianapreA, this.state.añosEs, 'line')
+    this.crearGraficoPre(this.desEG, this.state.desviacionespreA, this.state.añosEs, 'line')
+    this.crearGraficoPre(this.varianzaG, this.state.varianzapreA, this.state.añosEs, 'line')
   }
 
 
@@ -601,7 +604,7 @@ class Dashboard extends React.Component {
         varianzamaxA: data.varianzamaxA, mediaminA: data.mediaminA, medianaminA: data.medianaminA, desviacionesminA: data.desviacionesminA,
         varianzaminA: data.varianzaminA, mediaproA: data.mediaproA, medianaproA: data.medianaproA, desviacionesproA: data.desviacionesproA,
         varianzaproA: data.varianzaproA, mediapreA: data.mediapreA, medianapreA: data.medianapreA, desviacionespreA: data.desviacionespreA,
-        varianzapreA: data.varianzapreA
+        varianzapreA: data.varianzapreA, atipicosmaxA: data.atipicosmaxA, atipicosminA: data.atipicosminA, atipicospreA: data.atipicospreA
       }))
       .then(data => this.ordenarFuncion())
   }
@@ -618,9 +621,12 @@ class Dashboard extends React.Component {
   }
 
   filtrarAtipicos() {
-    console.log(this.state.temMedias)
-    this.crearGrafico3(this.tiempoC, this.state.temMaximas, this.state.temMinimas,
+    var arrayTemMedia = []
+    console.log(this.state.atipicospreA)
+    this.crearGrafico3(this.tiempoC, this.state.atipicosmaxA, this.state.atipicosminA,
       arrayTemMedia, this.state.fechas, 'boxplot')
+    this.crearGrafico3Pre(this.tiempoC, this.state.atipicospreA, this.state.fechas, 'boxplot')
+      
   }
 
   handleChangeDatos(event) {
@@ -874,7 +880,7 @@ class Dashboard extends React.Component {
         <div className="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <br></br>
           <div className="form-control text-center"><b>Diagrama de Cajas</b></div>
-          <button className="btn btn-info btn-lg">Filtrar valores Anormales y Atipicos</button>
+          <button className="btn btn-info btn-lg" onClick={() => this.filtrarAtipicos()}>Filtrar valores Anormales y Atipicos</button>
           <div id='myDiv'></div>
         </div>
       </div>

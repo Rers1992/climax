@@ -120,12 +120,6 @@ def estadisticasJson(request, codigoEstacion):
     kurtosismin = 0
     kurtosispre = 0
     serie = MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion).order_by('fechaserie')
-    for i in serie:
-        años.append(i.fechaserie)
-        temMax.append(i.temperaturamaxserie)
-        temMin.append(i.temperaturaminserie)
-        preci.append(i.precipitacionserie)
-        temMed.append(i.temperaturamedserie)
     estadisticas = MemEstadisticas.objects.filter(codigoestacion = codigoEstacion).select_related('codigoano')
     estaciones = MemEstacionmeteorologica.objects.filter(codigoestacion = codigoEstacion).select_related('codigoubicacion')
     estacionJson = {'codigo': codigoEstacion, 'ubicacion': estaciones[0].codigoubicacion.nombreubicacion, 'nombre': estaciones[0].nombreestacion,
@@ -298,12 +292,33 @@ def estadisticasJson(request, codigoEstacion):
             'shapiroppre': "{:.1f}".format(shapiroppre/len(estadisticas)), 'kurtosismax': "{:.1f}".format(kurtosismax/len(estadisticas)), 
             'kurtosismin': "{:.1f}".format(kurtosismin/len(estadisticas)), 
             'kurtosispre': "{:.1f}".format(kurtosispre/len(estadisticas))})
+    atipicosmaxA = []
+    atipicosminA = []
+    atipicospreA = []
+    for i in serie:
+        años.append(i.fechaserie)
+        temMax.append(i.temperaturamaxserie)
+        temMin.append(i.temperaturaminserie)
+        preci.append(i.precipitacionserie)
+        temMed.append(i.temperaturamedserie)
+        if i.temperaturamaxserie and 'val1max' in estadisticasJson[0]: 
+            if (float(estadisticasJson[0]['val1max']) < float(i.temperaturamaxserie) and float(estadisticasJson[0]['val2max']) > float(i.temperaturamaxserie) 
+            and float(estadisticasJson[0]['val3max']) < float(i.temperaturamaxserie) and float(estadisticasJson[0]['val2max']) > float(i.temperaturamaxserie)):
+                atipicosmaxA.append(i.temperaturamaxserie)
+        if i.temperaturaminserie and 'val1min' in estadisticasJson[0]:
+            if (float(estadisticasJson[0]['val1min']) < float(i.temperaturaminserie) and float(estadisticasJson[0]['val2min']) > float(i.temperaturaminserie) 
+            and float(estadisticasJson[0]['val3min']) < float(i.temperaturaminserie) and float(estadisticasJson[0]['val2min']) > float(i.temperaturaminserie)):
+                atipicosminA.append(i.temperaturaminserie)
+        if i.precipitacionserie and 'val1pre' in estadisticasJson[1]:
+            if (float(estadisticasJson[1]['val1pre']) < float(i.precipitacionserie) and float(estadisticasJson[1]['val2pre']) > float(i.precipitacionserie) 
+            and float(estadisticasJson[1]['val3pre']) < float(i.precipitacionserie) and float(estadisticasJson[1]['val2pre']) > float(i.precipitacionserie)):
+                atipicospreA.append(i.precipitacionserie)
     return JsonResponse({'estadisticas': estadisticasJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci, 'temMed':temMed , 'añosEs': añosEs, 'medianamaxA': medianamaxA, 'mediamaxA': mediamaxA, 'desviacionesmaxA': desviacionesmaxA,
     'varianzamaxA': varianzamaxA, 'mediaminA': mediaminA, 'medianaminA': medianaminA, 'desviacionesminA': desviacionesminA,
     'varianzaminA': varianzaminA, 'mediaproA': mediaproA, 'medianaproA': medianaproA, 'desviacionesproA': desviacionesproA,
     'varianzaproA': varianzaproA, 'mediapreA': mediapreA, 'medianapreA': medianapreA, 'desviacionespreA': desviacionespreA,
-    'varianzapreA': varianzapreA})
+    'varianzapreA': varianzapreA, 'atipicosmaxA': atipicosmaxA, 'atipicosminA':atipicosminA, 'atipicospreA': atipicospreA})
 
 def get_my_key(obj):
   return obj['ano']

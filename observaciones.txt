@@ -25,9 +25,9 @@ arreglar estetica de login ** listo
 Variable Meteorológica (en select) ** listo
 grafico serie temporal de inicio se ve pequeño ** listo
 ajustar formato de entrada para 1 variable ** listo
+valores extremos en diagrama de caja filtrar anormales y atipicos ** listo
 
 
-valores extremos en diagrama de caja filtrar anormales y atipicos
 cargar datos originales
 
 
