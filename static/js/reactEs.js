@@ -40,6 +40,7 @@ class Dashboard extends React.Component {
       atipicosmaxA: [],
       atipicosminA: [],
       atipicospreA: [],
+      atipicosmedA: [],
       temPre: true,
       temPreMensaje: "Ver Precipitación"
     }
@@ -604,7 +605,8 @@ class Dashboard extends React.Component {
         varianzamaxA: data.varianzamaxA, mediaminA: data.mediaminA, medianaminA: data.medianaminA, desviacionesminA: data.desviacionesminA,
         varianzaminA: data.varianzaminA, mediaproA: data.mediaproA, medianaproA: data.medianaproA, desviacionesproA: data.desviacionesproA,
         varianzaproA: data.varianzaproA, mediapreA: data.mediapreA, medianapreA: data.medianapreA, desviacionespreA: data.desviacionespreA,
-        varianzapreA: data.varianzapreA, atipicosmaxA: data.atipicosmaxA, atipicosminA: data.atipicosminA, atipicospreA: data.atipicospreA
+        varianzapreA: data.varianzapreA, atipicosmaxA: data.atipicosmaxA, atipicosminA: data.atipicosminA, atipicospreA: data.atipicospreA, 
+        atipicosmedA: data.atipicosmedA
       }))
       .then(data => this.ordenarFuncion())
   }
@@ -621,11 +623,13 @@ class Dashboard extends React.Component {
   }
 
   filtrarAtipicos() {
-    var arrayTemMedia = []
-    console.log(this.state.atipicospreA)
-    this.crearGrafico3(this.tiempoC, this.state.atipicosmaxA, this.state.atipicosminA,
-      arrayTemMedia, this.state.fechas, 'boxplot')
-    this.crearGrafico3Pre(this.tiempoC, this.state.atipicospreA, this.state.fechas, 'boxplot')
+    if (this.state.temPre){
+      this.crearGrafico3(this.tiempoC, this.state.atipicosmaxA, this.state.atipicosminA,
+        this.state.atipicosmedA, this.state.fechas, 'boxplot')
+    }
+    else{
+      this.crearGrafico3Pre(this.tiempoC, this.state.atipicospreA, this.state.fechas, 'boxplot')
+    }
       
   }
 

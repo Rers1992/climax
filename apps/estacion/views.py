@@ -199,28 +199,56 @@ def estadisticasJson(request, codigoEstacion):
             shapiropre += x.shapiropre
             shapiroppre += x.shapiroppre
             kurtosispre += x.kurtosispre
+        val1max =  None
+        val2max= None
+        val3max= None
+        val4max= None
+        val1min =  None
+        val2min= None
+        val3min= None
+        val4min= None
+        val1pre =  None
+        val2pre= None
+        val3pre= None
+        val4pre= None
+
+        if x.cuartil1max:
+            val1max =  float(x.cuartil1max)-1.5 * float(x.intecuartilmax)
+            val2max= float(x.cuartil3max)+1.5* float(x.intecuartilmax)
+            val3max= float(x.cuartil1max)-3 * float(x.intecuartilmax)
+            val4max= float(x.cuartil3max)+3* float(x.intecuartilmax)
+        if x.cuartil1min:
+            val1min =  float(x.cuartil1min)-1.5 * float(x.intecuartilmin)
+            val2min= float(x.cuartil3min)+1.5* float(x.intecuartilmin)
+            val3min= float(x.cuartil1min)-3 * float(x.intecuartilmin)
+            val4min= float(x.cuartil3min)+3* float(x.intecuartilmin)
+        if x.cuartil1pre:
+            val1pre =  float(x.cuartil1pre)-1.5 * float(x.intecuartilpre)
+            val2pre= float(x.cuartil3pre)+1.5* float(x.intecuartilpre)
+            val3pre= float(x.cuartil1pre)-3 * float(x.intecuartilpre)
+            val4pre= float(x.cuartil3pre)+3* float(x.intecuartilpre)
         estadisticasJson.append({'ano': x.codigoano.ano,'mediamax' : x.mediamax, 'mediamin' : x.mediamin, 
         'mediapre' : x.mediapre, 'medianamax' : x.medianamax, 'medianamin' : x.medianamin, 
         'medianapre' : x.medianapre, 'modamax' : x.modamax, 'modamin' : x.modamin, 'modapre' : x.modapre, 
         'desviacionesmax' : x.desviacionesmax, 'desviacionesmin' : x.desviacionesmin, 
         'desviacionespre' : x.desviacionespre, 'varianzamax' : x.varianzamax, 
         'varianzamin' : x.varianzamin, 'varianzapre' : x.varianzapre, 'q1max': x.cuartil1max, 
-        'val1max': float(x.cuartil1max)-1.5 * float(x.intecuartilmax),'q1min': x.cuartil1min,
-        'val1min': float(x.cuartil1min)-1.5 * float(x.intecuartilmin),
+        'val1max': val1max,'q1min': x.cuartil1min,
+        'val1min': val1min,
         'q1pre': x.cuartil1pre, 
-        'val1pre': float(x.cuartil1pre)-1.5 * float(x.intecuartilpre),
+        'val1pre': val1pre,
         'q3max': x.cuartil3max, 
-        'val2max': float(x.cuartil3max)+1.5* float(x.intecuartilmax),
-        'val3max': float(x.cuartil1max)-3 * float(x.intecuartilmax),
-        'val4max': float(x.cuartil3max)+3* float(x.intecuartilmax),
+        'val2max': val2max,
+        'val3max': val3max,
+        'val4max': val4max,
         'q3min': x.cuartil3min, 
-        'val2min': float(x.cuartil3min)+1.5* float(x.intecuartilmin),
-        'val3min': float(x.cuartil1min)-3 * float(x.intecuartilmin),
-        'val4min': float(x.cuartil3min)+3* float(x.intecuartilmin),
+        'val2min': val2min,
+        'val3min': val3min,
+        'val4min': val4min,
         'q3pre': x.cuartil3pre, 
-        'val2pre': float(x.cuartil3pre)+1.5* float(x.intecuartilpre),
-        'val3pre': float(x.cuartil1pre)-3 * float(x.intecuartilpre),
-        'val4pre': float(x.cuartil3pre)+3* float(x.intecuartilpre),
+        'val2pre': val2pre,
+        'val3pre': val3pre,
+        'val4pre': val4pre,
         'iqrmax': x.intecuartilmax, 
         'iqrmin': x.intecuartilmin, 'iqrpre': x.intecuartilpre, 'atipicoinfmax': x.atipicoinfmax, 'atipicosupmax': x.atipicosupmax,
         'atipicoinfmin': x.atipicoinfmin, 'atipicosupmin': x.atipicosupmin, 'atipicoinfpre': x.atipicoinfpre, 
@@ -295,6 +323,7 @@ def estadisticasJson(request, codigoEstacion):
     atipicosmaxA = []
     atipicosminA = []
     atipicospreA = []
+    atipicosmedA = []
     for i in serie:
         años.append(i.fechaserie)
         temMax.append(i.temperaturamaxserie)
@@ -313,12 +342,18 @@ def estadisticasJson(request, codigoEstacion):
             if (float(estadisticasJson[1]['val1pre']) < float(i.precipitacionserie) and float(estadisticasJson[1]['val2pre']) > float(i.precipitacionserie) 
             and float(estadisticasJson[1]['val3pre']) < float(i.precipitacionserie) and float(estadisticasJson[1]['val2pre']) > float(i.precipitacionserie)):
                 atipicospreA.append(i.precipitacionserie)
+        if i.temperaturamedserie and 'val1max' in estadisticasJson[0] and 'val1min' in estadisticasJson[0]: 
+            if ((float(estadisticasJson[0]['val1max'])+ float(estadisticasJson[0]['val1min']))/2 < float(i.temperaturamedserie) 
+            and (float(estadisticasJson[0]['val2max']) + float(estadisticasJson[0]['val2min']))/2 > float(i.temperaturamedserie) 
+            and (float(estadisticasJson[0]['val3max']) + float(estadisticasJson[0]['val3min']))/2 < float(i.temperaturamedserie) 
+            and (float(estadisticasJson[0]['val2max']) + float(estadisticasJson[0]['val2min']))/2 > float(i.temperaturamedserie)):
+                atipicosmedA.append(i.temperaturamedserie)
     return JsonResponse({'estadisticas': estadisticasJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci, 'temMed':temMed , 'añosEs': añosEs, 'medianamaxA': medianamaxA, 'mediamaxA': mediamaxA, 'desviacionesmaxA': desviacionesmaxA,
     'varianzamaxA': varianzamaxA, 'mediaminA': mediaminA, 'medianaminA': medianaminA, 'desviacionesminA': desviacionesminA,
     'varianzaminA': varianzaminA, 'mediaproA': mediaproA, 'medianaproA': medianaproA, 'desviacionesproA': desviacionesproA,
     'varianzaproA': varianzaproA, 'mediapreA': mediapreA, 'medianapreA': medianapreA, 'desviacionespreA': desviacionespreA,
-    'varianzapreA': varianzapreA, 'atipicosmaxA': atipicosmaxA, 'atipicosminA':atipicosminA, 'atipicospreA': atipicospreA})
+    'varianzapreA': varianzapreA, 'atipicosmaxA': atipicosmaxA, 'atipicosminA':atipicosminA, 'atipicospreA': atipicospreA, 'atipicosmedA':atipicosmedA})
 
 def get_my_key(obj):
   return obj['ano']
@@ -470,11 +505,11 @@ def importarEstacion(request, codigoEstacion):
             temMaxPercentiles = []
             temMinPercentiles = []
             contador = 0
-            fecha_año = imported_data['fechaserie'][0].split('-')
+            fecha_año = str(imported_data['fechaserie'][0]).split('-')
             año_cambio= fecha_año[0]
             años.append(fecha_año[0])
             for i in imported_data:
-                año_for = i[2].split('-')  
+                año_for = str(i[2]).split('-')  
                 if(año_for[0] != año_cambio):
                     años.append(año_for[0])
                     año_cambio = año_for[0]
@@ -485,7 +520,7 @@ def importarEstacion(request, codigoEstacion):
                 temperaturaMinEs.append([])
                 precipitacionEs.append([])
                 for k in imported_data:
-                    año_for_k = k[2].split('-')
+                    año_for_k = str(k[2]).split('-')
                     if(j == año_for_k[0]):
                         separar_anos[largoAños].append(k)
                         if k[5]:
@@ -639,7 +674,7 @@ def importarEstacion(request, codigoEstacion):
                     temperaturamedserie = x[6])
                     serieTiempo.save()
                     auxBool = False
-                    fecha_mes = x[2].split('-')
+                    fecha_mes = str(x[2]).split('-')
                     if x[3] and x[4] and x[5]:
                         auxBool = True
                         cddCount = funcion_cdd(x[5], largo, cddCount, ciclo)
