@@ -158,6 +158,8 @@ class MemIndicesextremosclimaticos(models.Model):
     temmax = models.DecimalField(max_digits=1000, blank=True, null=True, decimal_places=1)
     temmin = models.DecimalField(max_digits=1000, blank=True, null=True, decimal_places=1)
     premax = models.DecimalField(max_digits=1000, blank=True, null=True, decimal_places=1)
+    periodoInicio = models.IntegerField(blank=True, null=True)
+    periodoFin = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = True

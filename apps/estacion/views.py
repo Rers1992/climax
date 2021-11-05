@@ -26,7 +26,7 @@ def estacion(request):
     estaciones = MemEstacionmeteorologica.objects.filter(
         estadoestacion = True, rutusuario__in=list(
             empresasHijas.values_list('rutempresa', flat=True)
-        )).select_related('codigoubicacion')
+        )).select_related('codigoubicacion').order_by('codigoestacion')
     return render(request, 'memoria/estacion/index.html', {'estaciones':estaciones})
 
 def estacionJson(request):
@@ -196,8 +196,9 @@ def estadisticasJson(request, codigoEstacion):
             extremosuppre += x.extremosuppre
             kstestpre += x.kstestpre
             kstestppre += x.kstestppre
-            shapiropre += x.shapiropre
-            shapiroppre += x.shapiroppre
+            if x.shapiroppre:
+                shapiropre += x.shapiropre
+                shapiroppre += x.shapiroppre
             kurtosispre += x.kurtosispre
         val1max =  None
         val2max= None
@@ -330,24 +331,26 @@ def estadisticasJson(request, codigoEstacion):
         temMin.append(i.temperaturaminserie)
         preci.append(i.precipitacionserie)
         temMed.append(i.temperaturamedserie)
-        if i.temperaturamaxserie and 'val1max' in estadisticasJson[0]: 
-            if (float(estadisticasJson[0]['val1max']) < float(i.temperaturamaxserie) and float(estadisticasJson[0]['val2max']) > float(i.temperaturamaxserie) 
-            and float(estadisticasJson[0]['val3max']) < float(i.temperaturamaxserie) and float(estadisticasJson[0]['val2max']) > float(i.temperaturamaxserie)):
-                atipicosmaxA.append(i.temperaturamaxserie)
-        if i.temperaturaminserie and 'val1min' in estadisticasJson[0]:
-            if (float(estadisticasJson[0]['val1min']) < float(i.temperaturaminserie) and float(estadisticasJson[0]['val2min']) > float(i.temperaturaminserie) 
-            and float(estadisticasJson[0]['val3min']) < float(i.temperaturaminserie) and float(estadisticasJson[0]['val2min']) > float(i.temperaturaminserie)):
-                atipicosminA.append(i.temperaturaminserie)
-        if i.precipitacionserie and 'val1pre' in estadisticasJson[1]:
-            if (float(estadisticasJson[1]['val1pre']) < float(i.precipitacionserie) and float(estadisticasJson[1]['val2pre']) > float(i.precipitacionserie) 
-            and float(estadisticasJson[1]['val3pre']) < float(i.precipitacionserie) and float(estadisticasJson[1]['val2pre']) > float(i.precipitacionserie)):
-                atipicospreA.append(i.precipitacionserie)
-        if i.temperaturamedserie and 'val1max' in estadisticasJson[0] and 'val1min' in estadisticasJson[0]: 
-            if ((float(estadisticasJson[0]['val1max'])+ float(estadisticasJson[0]['val1min']))/2 < float(i.temperaturamedserie) 
-            and (float(estadisticasJson[0]['val2max']) + float(estadisticasJson[0]['val2min']))/2 > float(i.temperaturamedserie) 
-            and (float(estadisticasJson[0]['val3max']) + float(estadisticasJson[0]['val3min']))/2 < float(i.temperaturamedserie) 
-            and (float(estadisticasJson[0]['val2max']) + float(estadisticasJson[0]['val2min']))/2 > float(i.temperaturamedserie)):
-                atipicosmedA.append(i.temperaturamedserie)
+        if len(estadisticasJson):
+            if i.temperaturamaxserie and 'val1max' in estadisticasJson[0]: 
+                if (float(estadisticasJson[0]['val1max']) < float(i.temperaturamaxserie) and float(estadisticasJson[0]['val2max']) > float(i.temperaturamaxserie) 
+                and float(estadisticasJson[0]['val3max']) < float(i.temperaturamaxserie) and float(estadisticasJson[0]['val2max']) > float(i.temperaturamaxserie)):
+                    atipicosmaxA.append(i.temperaturamaxserie)
+            if i.temperaturaminserie and 'val1min' in estadisticasJson[0]:
+                if (float(estadisticasJson[0]['val1min']) < float(i.temperaturaminserie) and float(estadisticasJson[0]['val2min']) > float(i.temperaturaminserie) 
+                and float(estadisticasJson[0]['val3min']) < float(i.temperaturaminserie) and float(estadisticasJson[0]['val2min']) > float(i.temperaturaminserie)):
+                    atipicosminA.append(i.temperaturaminserie)
+            if i.precipitacionserie and 'val1pre' in estadisticasJson[1]:
+                if estadisticasJson[1]['val1pre']:
+                    if (float(estadisticasJson[1]['val1pre']) < float(i.precipitacionserie) and float(estadisticasJson[1]['val2pre']) > float(i.precipitacionserie) 
+                    and float(estadisticasJson[1]['val3pre']) < float(i.precipitacionserie) and float(estadisticasJson[1]['val2pre']) > float(i.precipitacionserie)):
+                        atipicospreA.append(i.precipitacionserie)
+            if i.temperaturamedserie and 'val1max' in estadisticasJson[0] and 'val1min' in estadisticasJson[0]: 
+                if ((float(estadisticasJson[0]['val1max'])+ float(estadisticasJson[0]['val1min']))/2 < float(i.temperaturamedserie) 
+                and (float(estadisticasJson[0]['val2max']) + float(estadisticasJson[0]['val2min']))/2 > float(i.temperaturamedserie) 
+                and (float(estadisticasJson[0]['val3max']) + float(estadisticasJson[0]['val3min']))/2 < float(i.temperaturamedserie) 
+                and (float(estadisticasJson[0]['val2max']) + float(estadisticasJson[0]['val2min']))/2 > float(i.temperaturamedserie)):
+                    atipicosmedA.append(i.temperaturamedserie)
     return JsonResponse({'estadisticas': estadisticasJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci, 'temMed':temMed , 'añosEs': añosEs, 'medianamaxA': medianamaxA, 'mediamaxA': mediamaxA, 'desviacionesmaxA': desviacionesmaxA,
     'varianzamaxA': varianzamaxA, 'mediaminA': mediaminA, 'medianaminA': medianaminA, 'desviacionesminA': desviacionesminA,
@@ -449,24 +452,27 @@ def tablaHecho(request, codigoEstacion):
         'tr20' : x.tr20, 'tx10p' : x.tx10p,
         'tx90p' : x.tx90p, 'tnx' : x.tnx, 'txx' : x.txx, 'wsdi' : x.wsdi, 'temmax': x.temmax, 'temmin': x.temmin, 'premax': x.premax})
     indicesJson.sort(key=get_my_key)
-    indicesJson.insert(0,{'ano': "todos",'cdd' : "{:.1f}".format(cdd/len(indices)), 'csdi' : "{:.1f}".format(csdi/len(indices)), 
-    'cwd' : "{:.1f}".format(cwd/len(indices)), 
-        'dtr' : "{:.1f}".format(dtr/len(indices)), 'fd0' : "{:.1f}".format(fd0/len(indices)), 
-        'gsl' : "{:.1f}".format(gsl/len(indices)),
-        'gsl2' : "{:.1f}".format(gsl2/len(indices)), 'id0' : "{:.1f}".format(id0/len(indices)), 
-        'prcptot' : "{:.1f}".format(prcptot/len(indices)), 
-        'r10mm' : "{:.1f}".format(r10mm/len(indices)), 'r20mm' : "{:.1f}".format(r20mm/len(indices)), 
-        'r95p' : "{:.1f}".format(r95p/len(indices)),
-        'r99p' : "{:.1f}".format(r99p/len(indices)), 'r50mm' : "{:.1f}".format(r50mm/len(indices)), 
-        'rx1day' : "{:.1f}".format(rx1day/len(indices)), 'rx5day' : "{:.1f}".format(rx5day/len(indices)),
-        'sdii' : "{:.1f}".format(sdii/len(indices)), 'su25' : "{:.1f}".format(su25/len(indices)),
-        'tn10p' : "{:.1f}".format(tn10p/len(indices)), 'tn90p' : "{:.1f}".format(tn90p/len(indices)), 
-        'tnn' : "{:.1f}".format(tnn/len(indices)), 'txn' : "{:.1f}".format(txn/len(indices)), 
-        'tr20' : "{:.1f}".format(tr20/len(indices)), 'tx10p' : "{:.1f}".format(tx10p/len(indices)),
-        'tx90p' : "{:.1f}".format(tx90p/len(indices)), 'tnx' : "{:.1f}".format(tnx/len(indices)), 
-        'txx' : "{:.1f}".format(txx/len(indices)), 'wsdi' : "{:.1f}".format(wsdi/len(indices)), 
-        'temmax': "{:.1f}".format(temmax/len(indices)), 'temmin': "{:.1f}".format(temmin/len(indices)), 
-        'premax': "{:.1f}".format(premax/len(indices))})
+    divisor = 1
+    if len(indices):
+        divisor = len(indices)
+    indicesJson.insert(0,{'ano': "todos",'cdd' : "{:.1f}".format(cdd/divisor), 'csdi' : "{:.1f}".format(csdi/divisor), 
+    'cwd' : "{:.1f}".format(cwd/divisor), 
+        'dtr' : "{:.1f}".format(dtr/divisor), 'fd0' : "{:.1f}".format(fd0/divisor), 
+        'gsl' : "{:.1f}".format(gsl/divisor),
+        'gsl2' : "{:.1f}".format(gsl2/divisor), 'id0' : "{:.1f}".format(id0/divisor), 
+        'prcptot' : "{:.1f}".format(prcptot/divisor), 
+        'r10mm' : "{:.1f}".format(r10mm/divisor), 'r20mm' : "{:.1f}".format(r20mm/divisor), 
+        'r95p' : "{:.1f}".format(r95p/divisor),
+        'r99p' : "{:.1f}".format(r99p/divisor), 'r50mm' : "{:.1f}".format(r50mm/divisor), 
+        'rx1day' : "{:.1f}".format(rx1day/divisor), 'rx5day' : "{:.1f}".format(rx5day/divisor),
+        'sdii' : "{:.1f}".format(sdii/divisor), 'su25' : "{:.1f}".format(su25/divisor),
+        'tn10p' : "{:.1f}".format(tn10p/divisor), 'tn90p' : "{:.1f}".format(tn90p/divisor), 
+        'tnn' : "{:.1f}".format(tnn/divisor), 'txn' : "{:.1f}".format(txn/divisor), 
+        'tr20' : "{:.1f}".format(tr20/divisor), 'tx10p' : "{:.1f}".format(tx10p/divisor),
+        'tx90p' : "{:.1f}".format(tx90p/divisor), 'tnx' : "{:.1f}".format(tnx/divisor), 
+        'txx' : "{:.1f}".format(txx/divisor), 'wsdi' : "{:.1f}".format(wsdi/divisor), 
+        'temmax': "{:.1f}".format(temmax/divisor), 'temmin': "{:.1f}".format(temmin/divisor), 
+        'premax': "{:.1f}".format(premax/divisor)})
     return JsonResponse({'indices':indicesJson, 'estacion': estacionJson, 'fechas': años, 'temMax': temMax, 'temMin':temMin,
     'preci': preci})
 
@@ -485,6 +491,7 @@ def takeFecha(elem):
 
 def importarEstacion(request, codigoEstacion):
    if request.method == 'POST':  
+     estacion = MemEstacionmeteorologica.objects.get(codigoestacion = codigoEstacion)
      serie_resource = SerieTiempoResource()  
      dataset = Dataset()
      fechaInicio= request.POST['fecha1']
@@ -514,6 +521,7 @@ def importarEstacion(request, codigoEstacion):
                     años.append(año_for[0])
                     año_cambio = año_for[0]
             largoAños = 0
+            diasCompletos(int(años[0]), int(años[len(años)-1]), estacion)
             for j in años:
                 separar_anos.append([])
                 temperaturaMaxEs.append([])
@@ -573,7 +581,8 @@ def importarEstacion(request, codigoEstacion):
                     desviacionEsMax = np.std(temperaturaMaxEs[contAños])
                     kstestMax, kstestPMax = stats.kstest(temperaturaMaxEs[contAños], cdf='norm',
                     args=(mediaMax, desviacionEsMax), N=largo)
-                    shapiroMax, shapiroPMax = stats.shapiro(temperaturaMaxEs[contAños])
+                    if len(temperaturaMaxEs[contAños]) >= 3:
+                        shapiroMax, shapiroPMax = stats.shapiro(temperaturaMaxEs[contAños])
                     varianzaMax = np.var(temperaturaMaxEs[contAños])
                     q1max = funcion_percentil(temperaturaMaxEs[contAños], 0.25)
                     q3max = funcion_percentil(temperaturaMaxEs[contAños], 0.75)
@@ -607,7 +616,8 @@ def importarEstacion(request, codigoEstacion):
                     desviacionEsMin = np.std(temperaturaMinEs[contAños])
                     kstestMin, kstestPMin = stats.kstest(temperaturaMinEs[contAños], cdf='norm',
                     args=(medianaMin, desviacionEsMin), N=largo)
-                    shapiroMin, shapiroPMin = stats.shapiro(temperaturaMinEs[contAños])
+                    if len(temperaturaMinEs[contAños]) >= 3:
+                        shapiroMin, shapiroPMin = stats.shapiro(temperaturaMinEs[contAños])
                     varianzaMin = np.var(temperaturaMinEs[contAños])
                     q1min = funcion_percentil(temperaturaMinEs[contAños], 0.25)
                     q3min = funcion_percentil(temperaturaMinEs[contAños], 0.75)
@@ -641,7 +651,8 @@ def importarEstacion(request, codigoEstacion):
                     desviacionEsPre = np.std(precipitacionEs[contAños])
                     kstestPre, kstestPPre = stats.kstest(precipitacionEs[contAños], cdf='norm',
                     args=(mediaPre, medianaPre), N=largo)
-                    shapiroPre, shapiroPPre = stats.shapiro(precipitacionEs[contAños])
+                    if len(precipitacionEs[contAños]) >= 3:
+                        shapiroPre, shapiroPPre = stats.shapiro(precipitacionEs[contAños])
                     varianzaPre = np.var(precipitacionEs[contAños])
                     q1pre = funcion_percentil(precipitacionEs[contAños], 0.25)
                     q3pre = funcion_percentil(precipitacionEs[contAños], 0.75)
@@ -666,14 +677,14 @@ def importarEstacion(request, codigoEstacion):
                     z.sort(key = takeFecha)
                 contAños += 1
                 ciclo = 0
+                auxBool = False
                 for x in z:
                     ciclo += 1
-                    MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion).filter(fechaserie=x[2]).delete()
-                    serieTiempo = MemSeriedetiempo(codigoestacion = MemEstacionmeteorologica.objects.get(codigoestacion = codigoEstacion), 
+                    MemSeriedetiempo.objects.filter(codigoestacion=codigoEstacion, fechaserie=x[2]).delete()
+                    serieTiempo = MemSeriedetiempo(codigoestacion = estacion, 
                     fechaserie = x[2], temperaturamaxserie = x[3], temperaturaminserie = x[4], precipitacionserie = x[5], 
                     temperaturamedserie = x[6])
                     serieTiempo.save()
-                    auxBool = False
                     fecha_mes = str(x[2]).split('-')
                     if x[3] and x[4] and x[5]:
                         auxBool = True
@@ -709,39 +720,120 @@ def importarEstacion(request, codigoEstacion):
                         sdii = sdiiCount[1]/sdiiCount[0]
                     else:
                         sdii = sdiiCount[1]
-                    MemIndicesextremosclimaticos.objects.filter(codigoano=año).filter(codigoestacion=codigoEstacion).delete()
-                    MemEstadisticas.objects.filter(codigoano=año).filter(codigoestacion=codigoEstacion).delete()
-                    indices = MemIndicesextremosclimaticos(codigoano = MemAno.objects.get(codigoano=año),
-                    codigoestacion = MemEstacionmeteorologica.objects.get(codigoestacion=codigoEstacion),
-                    cdd = cddCount[1], csdi = csdiCount[1], cwd = cwdCount[1], dtr = dtr, fd0 = fd0, gsl = glsCount[1],
-                    gsl2 = glsCount1[1], id0 = id0, prcptot = prcptot, r10mm = r10mm, r20mm = r20mm, r95p = r95p,
-                    r99p = r99p, r50mm = r50mm, rx1day = rx1day, rx5day = rx5day, sdii = sdii, su25 = su25,
-                    tn10p = tn10p, tn90p = tn90p, tnn = tnn, txn = txn, tr20 = tr20Count[0], tx10p = tx10p,
-                    tx90p = tx90p, tnx = tnx, txx = txx, wsdi = wsdi[1], temmax = temMax, temmin = temMin, premax = preMax)
-                    indices.save()
+                    try:
+                        MemIndicesextremosclimaticos.objects.filter(codigoano=año, codigoestacion=codigoEstacion).delete()
+                        indices = MemIndicesextremosclimaticos(codigoano = MemAno.objects.get(codigoano=año),
+                        codigoestacion = estacion,
+                        cdd = cddCount[1], csdi = csdiCount[1], cwd = cwdCount[1], dtr = dtr, fd0 = fd0, gsl = glsCount[1],
+                        gsl2 = glsCount1[1], id0 = id0, prcptot = prcptot, r10mm = r10mm, r20mm = r20mm, r95p = r95p,
+                        r99p = r99p, r50mm = r50mm, rx1day = rx1day, rx5day = rx5day, sdii = sdii, su25 = su25,
+                        tn10p = tn10p, tn90p = tn90p, tnn = tnn, txn = txn, tr20 = tr20Count[0], tx10p = tx10p,
+                        tx90p = tx90p, tnx = tnx, txx = txx, wsdi = wsdi[1], temmax = temMax, temmin = temMin, premax = preMax, 
+                        periodoInicio = fechaInicio,periodoFin = fechaFin)
+                        indices.save()
+                    except Exception as e:
+                        print("error en indices")
+                        print(e)
                 if modaMax:
                     modaMax = modaMax.mode[0]
                 if modaMin:
                     modaMin = modaMin.mode[0]
                 if modaPre:
                     modaPre = modaPre.mode[0]
-                estadisticas = MemEstadisticas(codigoano = MemAno.objects.get(codigoano=año),
-                    codigoestacion = MemEstacionmeteorologica.objects.get(codigoestacion=codigoEstacion), mediamax = mediaMax,
-                    mediamin = mediaMin, mediapre = mediaPre, medianamax = medianaMax, medianamin = medianaMin, 
-                    medianapre = medianaPre, modamax = modaMax, modamin = modaMin, modapre = modaPre, 
-                    desviacionesmax = desviacionEsMax, desviacionesmin = desviacionEsMin, desviacionespre = desviacionEsPre,
-                    varianzamax = varianzaMax, varianzamin = varianzaMin, varianzapre = varianzaPre, cuartil1max = q1max, cuartil1min = q1min,
-                    cuartil1pre = q1pre, cuartil3max = q3max, cuartil3min = q3min, cuartil3pre = q3pre, intecuartilmax = iqrmax, intecuartilmin = iqrmin, 
-                    intecuartilpre = iqrpre, atipicoinfmax = atipicoInfMax, atipicoinfmin = atipicoInfMin, atipicoinfpre = atipicoInfPre,
-                    atipicosupmax = atipicoSupMax, atipicosupmin= atipicoSupMin, atipicosuppre= atipicoSupPre, extremoinfmax = extremoInfMax, 
-                    extremoinfmin = extremoInfMin, extremoinfpre = extremoInfPre, extremosupmax = extremoSupMax, extremosupmin= extremoSupMin, 
-                    extremosuppre= extremoSupPre, kstestmax= kstestMax, kstestpmax= kstestPMax, kstestmin=kstestMin, 
-                    kstestpmin = kstestPMin, kstestpre= kstestPre, kstestppre= kstestPPre, shapiromax= shapiroMax,
-                    shapiropmax= shapiroPMax, shapiromin= shapiroMin, shapiropmin= shapiroPMin, shapiropre= shapiroPre, 
-                    shapiroppre= shapiroPPre, kurtosismax= kurtosisMax, kurtosismin= kurtosisMin, kurtosispre= kurtosisPre)
-                estadisticas.save()
+                try:
+                    MemEstadisticas.objects.filter(codigoano=año, codigoestacion=codigoEstacion).delete()
+                    estadisticas = MemEstadisticas(codigoano = MemAno.objects.get(codigoano=año),
+                        codigoestacion = estacion, mediamax = mediaMax,
+                        mediamin = mediaMin, mediapre = mediaPre, medianamax = medianaMax, medianamin = medianaMin, 
+                        medianapre = medianaPre, modamax = modaMax, modamin = modaMin, modapre = modaPre, 
+                        desviacionesmax = desviacionEsMax, desviacionesmin = desviacionEsMin, desviacionespre = desviacionEsPre,
+                        varianzamax = varianzaMax, varianzamin = varianzaMin, varianzapre = varianzaPre, cuartil1max = q1max, cuartil1min = q1min,
+                        cuartil1pre = q1pre, cuartil3max = q3max, cuartil3min = q3min, cuartil3pre = q3pre, intecuartilmax = iqrmax, intecuartilmin = iqrmin, 
+                        intecuartilpre = iqrpre, atipicoinfmax = atipicoInfMax, atipicoinfmin = atipicoInfMin, atipicoinfpre = atipicoInfPre,
+                        atipicosupmax = atipicoSupMax, atipicosupmin= atipicoSupMin, atipicosuppre= atipicoSupPre, extremoinfmax = extremoInfMax, 
+                        extremoinfmin = extremoInfMin, extremoinfpre = extremoInfPre, extremosupmax = extremoSupMax, extremosupmin= extremoSupMin, 
+                        extremosuppre= extremoSupPre, kstestmax= kstestMax, kstestpmax= kstestPMax, kstestmin=kstestMin, 
+                        kstestpmin = kstestPMin, kstestpre= kstestPre, kstestppre= kstestPPre, shapiromax= shapiroMax,
+                        shapiropmax= shapiroPMax, shapiromin= shapiroMin, shapiropmin= shapiroPMin, shapiropre= shapiroPre, 
+                        shapiroppre= shapiroPPre, kurtosismax= kurtosisMax, kurtosismin= kurtosisMin, kurtosispre= kurtosisPre)
+                    estadisticas.save()
+                except Exception as e:
+                        print("error en estadisticos")
+                        print(e)
             return redirect ('estacion:estacion')
    return render(request, 'memoria/estacion/importar.html', {'codigoEstacion':codigoEstacion})
 
 
+def diasCompletos(Inicio, Fin, estacion):
+    for z in range(Inicio, Fin+1):
+        for y in range(1,13):
+            if y == 4 or y == 6 or y == 9 or y == 11:
+                for x in range(1, 31):
+                    dia = str(x)
+                    if x < 10:
+                        dia = '0'+dia
+                    if y < 10:
+                        mes = '0'+str(y) 
+                    try:
+                        existe1 = MemSeriedetiempo.objects.filter(codigoestacion=estacion.codigoestacion, fechaserie = str(z)+'-'+str(mes)+'-'+dia)
+                        if not len(existe1):
+                            serieTiempo = MemSeriedetiempo(codigoestacion = estacion, 
+                            fechaserie = str(z)+'-'+str(mes)+'-'+dia, temperaturamaxserie = None, temperaturaminserie = None, precipitacionserie = None, 
+                            temperaturamedserie = None)
+                            serieTiempo.save()
+                    except Exception as e:
+                        print("error4")
+                        print(e)
+            elif y == 2:
+                if z%4 == 0:
+                    for x2 in range(1, 30):
+                        dia = str(x2)
+                        if x2 < 10:
+                            dia = '0'+dia
+                        try:
+                            existe2 = MemSeriedetiempo.objects.filter(codigoestacion=estacion.codigoestacion, fechaserie = str(z)+'-02-'+dia)
+                            if not len(existe2):
+                                serieTiempo = MemSeriedetiempo(codigoestacion = estacion, 
+                                fechaserie = str(z)+'-02-'+dia, temperaturamaxserie = None, temperaturaminserie = None, precipitacionserie = None, 
+                                temperaturamedserie = None)
+                                serieTiempo.save()
+                        except Exception as e:
+                            print("error2")
+                            print(e)
+                else:
+                    for x3 in range(1, 29):
+                        dia = str(x3)
+                        if x3 < 10:
+                            dia = '0'+dia
+                        try:
+                            existe3 = MemSeriedetiempo.objects.filter(codigoestacion=estacion.codigoestacion, fechaserie = str(z)+'-02-'+dia)
+                            if not len(existe3):
+                                serieTiempo = MemSeriedetiempo(codigoestacion = estacion, 
+                                fechaserie = str(z)+'-02-'+dia, temperaturamaxserie = None, temperaturaminserie = None, precipitacionserie = None, 
+                                temperaturamedserie = None)
+                                serieTiempo.save()
+                        except Exception as e:
+                            print("error3")
+                            print(e)
+            else:
+                if y != 9:
+                    for x1 in range(1, 32):
+                        dia = str(x1)
+                        if x1 < 10:
+                            dia = '0'+dia
+                        if y < 10:
+                            mes = '0'+str(y) 
+                        try:
+                            existe4 = MemSeriedetiempo.objects.filter(codigoestacion=estacion.codigoestacion, fechaserie = str(z)+'-'+str(mes)+'-'+dia)
+                            if not len(existe4):
+                                serieTiempo = MemSeriedetiempo(codigoestacion = estacion, 
+                                fechaserie = str(z)+'-'+str(mes)+'-'+dia, temperaturamaxserie = None, temperaturaminserie = None, precipitacionserie = None, 
+                                temperaturamedserie = None)
+                                serieTiempo.save()
+                        except Exception as e:
+                            print("error1")
+                            print(e)
+            
+
+    
    

@@ -17,9 +17,11 @@ def temMaxima(datos):
     return temMax[len(datos)-1]
 
 def temMinima(datos):
-    temMax = datos
-    temMax.sort
-    return temMax[0]
+    if len(datos):
+        temMax = datos
+        temMax.sort
+        return temMax[0]
+    return 0
 
 def funcion_percentil(datos, percentil):
       mayores = datos
@@ -40,10 +42,12 @@ def funcion_percentil_95(datos, percentil):
       mayores.sort()
       n = len(mayores)
       i = n * percentil
-      if(i % 1 == 0):
-          p = (mayores[int(i)] + mayores[int(i-1)])/2
-      else:
-          p = mayores[math.ceil(i-1)]
+      p = 0
+      if n > 0:
+        if(i % 1 == 0):
+            p = (mayores[int(i)] + mayores[int(i-1)])/2
+        else:
+            p = mayores[math.ceil(i-1)]
       return p
 
 def atipicoInferior(aI, datos):
@@ -171,18 +175,27 @@ def funcion_r50mm(precipitacion, r50mm):
     return r50mm
 
 def funcion_rx1day(datos, largo):
-    datos.sort(key = takePrecipitacion)
-    return datos[largo-1][5]
+    retorno = None
+    filtro = []
+    for x in datos:
+        if x[5]:
+            filtro.append(x[5])
+    largo = len(filtro)
+    if len(datos):
+        filtro.sort()
+        retorno = filtro[largo-1]
+    return retorno
 
 def funcion_rx5day(precipitacion, rx5day): 
     ciclo = 0
     largo = len(precipitacion) 
     for x in precipitacion:
         if(ciclo+4 != largo-1):
-            suma = precipitacion[ciclo][5] + precipitacion[ciclo+1][5] + precipitacion[ciclo+2][5] 
-            + precipitacion[ciclo+3][5] + precipitacion[ciclo+4][5]
-            if(rx5day < suma):
-                rx5day = suma
+            if precipitacion[ciclo][5] and precipitacion[ciclo+1][5] and precipitacion[ciclo+2][5] and precipitacion[ciclo+3][5] and precipitacion[ciclo+4][5]: 
+                suma = precipitacion[ciclo][5] + precipitacion[ciclo+1][5] + precipitacion[ciclo+2][5] 
+                + precipitacion[ciclo+3][5] + precipitacion[ciclo+4][5]
+                if(rx5day < suma):
+                    rx5day = suma
         else: 
             break
         ciclo += 1
@@ -218,12 +231,20 @@ def funcion_tn90p(percentil_90, temMinima, ciclo, largo, tn90p):
     return tn90p
 
 def funcion_tnn(datos):
-    datos.sort(key = takeTemMin)
-    return datos[0][4] 
+    aux = []
+    for x in datos:
+        if x[4]:
+            aux.append(x[4])
+    aux.sort()
+    return aux[0] 
 
 def funcion_txn(datos):
-    datos.sort(key = takeTemMax)
-    return datos[0][3]
+    aux = []
+    for x in datos:
+        if x[3]:
+            aux.append(x[3])
+    aux.sort()
+    return aux[0]
 
 def funcion_tr20(temMin, largoExcel, tr20Count, ciclo):
     if( float(temMin) > 20):
@@ -249,12 +270,20 @@ def funcion_tx90p(percentil_90, temMaxima, ciclo, largo, tx90p):
     return tx90p
 
 def funcion_tnx(datos):
-    datos.sort(key = takeTemMin)
-    return datos[len(datos)-1][4] 
+    aux = []
+    for x in datos:
+        if x[4]:
+            aux.append(x[4])
+    aux.sort()
+    return aux[len(aux)-1] 
 
 def funcion_txx(datos):
-    datos.sort(key = takeTemMax)
-    return datos[len(datos)-1][3]
+    aux = []
+    for x in datos:
+        if x[3]:
+            aux.append(x[3])
+    aux.sort()
+    return aux[len(aux)-1]
 
 def funcion_wsdi(percentil_90, temMax, wsdi):
     if(percentil_90 < temMax):
